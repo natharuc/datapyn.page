@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataPyn - IDE moderna para SQL + Python</title>
+    <meta name="description" content="DataPyn é uma IDE open-source que unifica SQL e Python em uma única interface. Execute queries, manipule dados com Pandas e visualize resultados de forma integrada.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/datapyn-logo.ico">
+    
+    <!-- DaisyUI + Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        code, .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .highlight-text {
+            color: #3b82f6;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .code-block {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-icon {
+            background: rgba(59, 130, 246, 0.15);
+        }
+        
+        .db-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-base-300 min-h-screen">
+    
+    <!-- Navbar -->
+    <div class="navbar bg-base-100 fixed top-0 z-50 border-b border-base-content/10 px-2">
+        <div class="navbar-start">
+            <!-- Mobile Menu -->
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-sm lg:hidden">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#databases">Bancos</a></li>
+                    <li><a href="#quickstart">Início Rápido</a></li>
+                    <li><a href="#docs">Documentação</a></li>
+                    <li><a href="https://github.com/natharuc/datapyn" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+            <a href="#" class="flex items-center gap-2 ml-1">
+                <img src="assets/datapyn_logo.svg" alt="DataPyn Logo" class="h-7 w-7">
+                <span class="font-bold text-lg hidden sm:inline">DataPyn</span>
+            </a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1 gap-1">
+                <li><a href="#features" class="rounded-lg">Features</a></li>
+                <li><a href="#databases" class="rounded-lg">Bancos</a></li>
+                <li><a href="#quickstart" class="rounded-lg">Início Rápido</a></li>
+                <li><a href="#docs" class="rounded-lg">Documentação</a></li>
+            </ul>
+        </div>
+        <div class="navbar-end gap-1">
+            <a href="https://github.com/natharuc/datapyn" target="_blank" class="btn btn-ghost btn-circle btn-sm">
+                <i data-lucide="github" class="w-5 h-5"></i>
+            </a>
+            <a href="https://github.com/natharuc/datapyn" target="_blank" class="btn btn-primary btn-sm gap-1 hidden sm:flex">
+                <i data-lucide="star" class="w-4 h-4"></i>
+                <span class="hidden md:inline">Star no GitHub</span>
+                <span class="md:hidden">Star</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="bg-base-300 min-h-screen pt-16">
+        <div class="container mx-auto px-4 py-8 md:py-16">
+            <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                <!-- Hero Content -->
+                <div class="flex-1 text-center lg:text-left">
+                    <div class="badge badge-primary badge-outline gap-2 mb-6">
+                        <i data-lucide="sparkles" class="w-3 h-3"></i>
+                        Open Source & Gratuito
+                    </div>
+                    
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 md:mb-6">
+                        SQL + Python em uma
+                        <span class="text-primary"> única interface</span>
+                    </h1>
+                    
+                    <p class="text-base md:text-lg text-base-content/70 mb-6 max-w-2xl">
+                        DataPyn é uma IDE moderna para analistas de dados. Execute queries SQL, 
+                        manipule resultados com Python e visualize dados — tudo integrado.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                        <a href="https://github.com/natharuc/datapyn/releases" target="_blank" class="btn btn-primary btn-md sm:btn-lg gap-2">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                            Download Grátis
+                        </a>
+                        <a href="https://github.com/natharuc/datapyn" target="_blank" class="btn btn-outline btn-md sm:btn-lg gap-2">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                            Ver no GitHub
+                        </a>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-4 md:gap-6 mt-6 justify-center lg:justify-start text-xs sm:text-sm text-base-content/60">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-success"></i>
+                            Windows, Linux, macOS
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-success"></i>
+                            MIT License
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hero Code Preview -->
+                <div class="flex-1 w-full max-w-2xl">
+                    <div class="code-block rounded-xl overflow-hidden shadow-2xl">
+                        <div class="flex items-center gap-2 px-3 py-2 bg-base-300/50 border-b border-base-content/10">
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-error"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-warning"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-success"></div>
+                            </div>
+                            <span class="text-xs text-base-content/50 ml-2">analise_vendas.dmp</span>
+                        </div>
+                        <div class="p-3 sm:p-4 md:p-6 overflow-x-auto">
+                            <div class="mb-4">
+                                <div class="badge badge-sm badge-primary mb-2">SQL</div>
+                                <pre class="text-xs sm:text-sm whitespace-pre-wrap sm:whitespace-pre"><code class="font-mono"><span class="text-purple-400">SELECT</span> 
+    c.nome <span class="text-purple-400">AS</span> cliente,
+    <span class="text-blue-400">COUNT</span>(p.id) <span class="text-purple-400">AS</span> total_pedidos,
+    <span class="text-blue-400">SUM</span>(p.valor) <span class="text-purple-400">AS</span> valor_total
+<span class="text-purple-400">FROM</span> clientes c
+<span class="text-purple-400">INNER JOIN</span> pedidos p <span class="text-purple-400">ON</span> c.id = p.cliente_id
+<span class="text-purple-400">GROUP BY</span> c.nome
+<span class="text-purple-400">ORDER BY</span> valor_total <span class="text-purple-400">DESC</span>;</code></pre>
+                            </div>
+                            <div class="divider my-2 text-xs text-base-content/30">resultado disponível como df</div>
+                            <div>
+                                <div class="badge badge-sm badge-secondary mb-2">Python</div>
+                                <pre class="text-xs sm:text-sm whitespace-pre-wrap sm:whitespace-pre"><code class="font-mono"><span class="text-green-400"># Top 10 clientes em gráfico</span>
+<span class="text-purple-400">import</span> matplotlib.pyplot <span class="text-purple-400">as</span> plt
+
+top_10 = df.head(<span class="text-orange-400">10</span>)
+plt.barh(top_10[<span class="text-yellow-400">'cliente'</span>], top_10[<span class="text-yellow-400">'valor_total'</span>])
+plt.title(<span class="text-yellow-400">'Top 10 Clientes'</span>)
+plt.show()</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-12 md:py-20 bg-base-200">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Por que escolher o DataPyn?</h2>
+                <p class="text-base-content/70 max-w-2xl mx-auto">
+                    Desenvolvido para analistas que precisam de produtividade real no dia-a-dia
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Feature 1 -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body p-4 md:p-6">
+                        <div class="feature-icon w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4">
+                            <i data-lucide="layers" class="w-5 h-5 md:w-6 md:h-6 text-primary"></i>
+                        </div>
+                        <h3 class="card-title text-base md:text-lg">Blocos Mistos</h3>
+                        <p class="text-sm md:text-base text-base-content/70">
+                            Escreva SQL e Python no mesmo documento. O resultado do SQL 
+                            está automaticamente disponível como DataFrame.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body p-4 md:p-6">
+                        <div class="feature-icon w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4">
+                            <i data-lucide="monitor" class="w-5 h-5 md:w-6 md:h-6 text-primary"></i>
+                        </div>
+                        <h3 class="card-title text-base md:text-lg">Múltiplas Sessões</h3>
+                        <p class="text-sm md:text-base text-base-content/70">
+                            Cada aba tem sua própria conexão e namespace Python. 
+                            Compare dados entre ambientes facilmente.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body p-4 md:p-6">
+                        <div class="feature-icon w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4">
+                            <i data-lucide="upload" class="w-5 h-5 md:w-6 md:h-6 text-primary"></i>
+                        </div>
+                        <h3 class="card-title text-base md:text-lg">Import Inteligente</h3>
+                        <p class="text-sm md:text-base text-base-content/70">
+                            Arraste CSV, JSON ou Excel para o editor. 
+                            Código de importação gerado automaticamente.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body p-4 md:p-6">
+                        <div class="feature-icon w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4">
+                            <i data-lucide="keyboard" class="w-5 h-5 md:w-6 md:h-6 text-primary"></i>
+                        </div>
+                        <h3 class="card-title text-base md:text-lg">Atalhos Poderosos</h3>
+                        <p class="text-sm md:text-base text-base-content/70">
+                            <kbd class="kbd kbd-sm">F5</kbd> para SQL, 
+                            <kbd class="kbd kbd-sm">Shift+F5</kbd> para Python. 
+                            Produtividade máxima.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body p-4 md:p-6">
+                        <div class="feature-icon w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5 md:w-6 md:h-6 text-primary"></i>
+                        </div>
+                        <h3 class="card-title text-base md:text-lg">Visualização Integrada</h3>
+                        <p class="text-sm md:text-base text-base-content/70">
+                            Matplotlib integrado. Crie gráficos diretamente 
+                            a partir dos resultados das suas queries.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body p-4 md:p-6">
+                        <div class="feature-icon w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4">
+                            <i data-lucide="moon" class="w-5 h-5 md:w-6 md:h-6 text-primary"></i>
+                        </div>
+                        <h3 class="card-title text-base md:text-lg">Temas Claro e Escuro</h3>
+                        <p class="text-sm md:text-base text-base-content/70">
+                            Interface adaptável ao seu estilo. 
+                            Syntax highlighting otimizado para cada tema.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Databases Section -->
+    <section id="databases" class="py-12 md:py-20 bg-base-300">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Bancos de Dados Suportados</h2>
+                <p class="text-base-content/70 max-w-2xl mx-auto">
+                    Conecte-se aos principais bancos de dados do mercado
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 max-w-4xl mx-auto">
+                <!-- SQL Server -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body items-center text-center p-3 md:p-4">
+                        <img src="assets/sqlserver.svg" alt="SQL Server" class="db-logo mb-2">
+                        <h3 class="font-semibold text-xs md:text-sm">SQL Server</h3>
+                        <p class="text-xs text-base-content/60">Windows & SQL Auth</p>
+                    </div>
+                </div>
+                
+                <!-- MySQL -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body items-center text-center p-3 md:p-4">
+                        <img src="assets/mysql.svg" alt="MySQL" class="db-logo mb-2">
+                        <h3 class="font-semibold text-xs md:text-sm">MySQL</h3>
+                        <p class="text-xs text-base-content/60">Charset configurável</p>
+                    </div>
+                </div>
+                
+                <!-- PostgreSQL -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body items-center text-center p-3 md:p-4">
+                        <img src="assets/postgresql.svg" alt="PostgreSQL" class="db-logo mb-2">
+                        <h3 class="font-semibold text-xs md:text-sm">PostgreSQL</h3>
+                        <p class="text-xs text-base-content/60">Schemas suportados</p>
+                    </div>
+                </div>
+                
+                <!-- MariaDB -->
+                <div class="card bg-base-100 card-hover">
+                    <div class="card-body items-center text-center p-3 md:p-4">
+                        <img src="assets/mariadb.svg" alt="MariaDB" class="db-logo mb-2">
+                        <h3 class="font-semibold text-xs md:text-sm">MariaDB</h3>
+                        <p class="text-xs text-base-content/60">MySQL compatível</p>
+                    </div>
+                </div>
+                
+                <!-- SQLite -->
+                <div class="card bg-base-100 card-hover col-span-2 sm:col-span-1">
+                    <div class="card-body items-center text-center p-3 md:p-4">
+                        <img src="assets/sqlite.svg" alt="SQLite" class="db-logo mb-2">
+                        <h3 class="font-semibold text-xs md:text-sm">SQLite</h3>
+                        <p class="text-xs text-base-content/60">Arquivo local</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="py-12 md:py-20 bg-base-200">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Início Rápido</h2>
+                <p class="text-base-content/70 max-w-2xl mx-auto">
+                    Comece a usar o DataPyn em menos de 5 minutos
+                </p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <!-- Step 1 -->
+                <div class="flex gap-3 md:gap-4 mb-6 md:mb-8">
+                    <div class="flex-none">
+                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center font-bold text-sm md:text-base">1</div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-base md:text-lg mb-2">Clone o repositório</h3>
+                        <div class="mockup-code bg-base-300 text-xs sm:text-sm overflow-x-auto">
+                            <pre data-prefix="$"><code>git clone https://github.com/natharuc/datapyn.git</code></pre>
+                            <pre data-prefix="$"><code>cd datapyn</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="flex gap-3 md:gap-4 mb-6 md:mb-8">
+                    <div class="flex-none">
+                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center font-bold text-sm md:text-base">2</div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-base md:text-lg mb-2">Instale as dependências</h3>
+                        <div class="mockup-code bg-base-300 text-xs sm:text-sm overflow-x-auto">
+                            <pre data-prefix="$"><code>python -m venv venv</code></pre>
+                            <pre data-prefix="$"><code>venv\Scripts\activate</code></pre>
+                            <pre data-prefix="$"><code>pip install -r requirements.txt</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="flex gap-3 md:gap-4 mb-6 md:mb-8">
+                    <div class="flex-none">
+                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center font-bold text-sm md:text-base">3</div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-base md:text-lg mb-2">Execute o DataPyn</h3>
+                        <div class="mockup-code bg-base-300 text-xs sm:text-sm overflow-x-auto">
+                            <pre data-prefix="$"><code>python source/main.py</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Alternative -->
+                <div class="alert bg-base-100 border border-primary/20">
+                    <i data-lucide="info" class="w-5 h-5 text-primary"></i>
+                    <div>
+                        <h4 class="font-semibold">Prefere executável?</h4>
+                        <p class="text-sm text-base-content/70">
+                            Baixe a versão standalone em 
+                            <a href="https://github.com/natharuc/datapyn/releases" target="_blank" class="link link-primary">Releases</a> 
+                            — não requer Python instalado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="py-12 md:py-20 bg-base-300">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Documentação</h2>
+                <p class="text-base-content/70 max-w-2xl mx-auto">
+                    Tudo que você precisa para dominar o DataPyn
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-5xl mx-auto">
+                <a href="assets/docs/GETTING_STARTED.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="rocket" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">Início Rápido</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Primeiros passos</p>
+                    </div>
+                </a>
+                
+                <a href="assets/docs/FEATURES.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="sparkles" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">Features</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Todas funcionalidades</p>
+                    </div>
+                </a>
+                
+                <a href="assets/docs/EXAMPLES.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="code" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">Exemplos</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Casos de uso práticos</p>
+                    </div>
+                </a>
+                
+                <a href="assets/docs/SHORTCUTS.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="keyboard" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">Atalhos</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Produtividade máxima</p>
+                    </div>
+                </a>
+                
+                <a href="assets/docs/ARCHITECTURE.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="boxes" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">Arquitetura</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Estrutura técnica</p>
+                    </div>
+                </a>
+                
+                <a href="assets/docs/INSTALL.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="download" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">Instalação</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Guia completo</p>
+                    </div>
+                </a>
+                
+                <a href="assets/docs/FAQ.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="help-circle" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">FAQ</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Perguntas frequentes</p>
+                    </div>
+                </a>
+                
+                <a href="assets/docs/CHANGELOG.md" class="card bg-base-100 card-hover">
+                    <div class="card-body p-4">
+                        <i data-lucide="history" class="w-5 h-5 md:w-6 md:h-6 text-primary mb-2"></i>
+                        <h3 class="font-semibold text-sm md:text-base">Changelog</h3>
+                        <p class="text-xs md:text-sm text-base-content/60">Histórico de versões</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Open Source Section -->
+    <section class="py-12 md:py-20 bg-base-200">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="badge badge-primary gap-2 mb-4 md:mb-6">
+                    <i data-lucide="heart" class="w-3 h-3"></i>
+                    Open Source
+                </div>
+                
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6">
+                    Código aberto, para a comunidade
+                </h2>
+                
+                <p class="text-base md:text-lg text-base-content/70 mb-6 md:mb-8 max-w-2xl mx-auto">
+                    DataPyn é 100% open source sob licença MIT. Contribua, reporte bugs, 
+                    sugira features ou simplesmente use livremente em seus projetos.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="https://github.com/natharuc/datapyn" target="_blank" class="btn btn-primary btn-md sm:btn-lg gap-2">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                        Ver Repositório
+                    </a>
+                    <a href="https://github.com/natharuc/datapyn/issues" target="_blank" class="btn btn-outline btn-md sm:btn-lg gap-2">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        Reportar Issue
+                    </a>
+                </div>
+                
+                <div class="flex justify-center gap-6 md:gap-8 mt-8 md:mt-12 text-base-content/60">
+                    <div class="text-center">
+                        <i data-lucide="scale" class="w-6 h-6 md:w-8 md:h-8 mx-auto mb-1 md:mb-2"></i>
+                        <p class="text-xs md:text-sm">MIT License</p>
+                    </div>
+                    <div class="text-center">
+                        <i data-lucide="git-fork" class="w-6 h-6 md:w-8 md:h-8 mx-auto mb-1 md:mb-2"></i>
+                        <p class="text-xs md:text-sm">Fork Welcome</p>
+                    </div>
+                    <div class="text-center">
+                        <i data-lucide="git-pull-request" class="w-6 h-6 md:w-8 md:h-8 mx-auto mb-1 md:mb-2"></i>
+                        <p class="text-xs md:text-sm">PRs Accepted</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-12 md:py-20 bg-primary/10">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6">
+                Pronto para simplificar sua análise de dados?
+            </h2>
+            <p class="text-sm md:text-base text-base-content/70 mb-6 md:mb-8 max-w-xl mx-auto">
+                Baixe o DataPyn gratuitamente e una SQL + Python em um único fluxo de trabalho.
+            </p>
+            <a href="https://github.com/natharuc/datapyn/releases" target="_blank" class="btn btn-primary btn-md sm:btn-lg gap-2">
+                <i data-lucide="download" class="w-5 h-5"></i>
+                Download Gratuito
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-6 md:p-10 bg-base-300 text-base-content border-t border-base-content/10">
+        <aside>
+            <img src="assets/datapyn_logo.svg" alt="DataPyn" class="w-10 h-10 md:w-12 md:h-12 mb-2">
+            <p class="font-bold">DataPyn</p>
+            <p class="text-xs md:text-sm text-base-content/60">IDE moderna para SQL + Python</p>
+            <p class="text-xs text-base-content/40 mt-2">Licença MIT — Uso livre para projetos pessoais e comerciais</p>
+        </aside>
+        <nav>
+            <div class="grid grid-flow-col gap-4">
+                <a href="https://github.com/natharuc/datapyn" target="_blank" class="btn btn-ghost btn-circle btn-sm md:btn-md">
+                    <i data-lucide="github" class="w-5 h-5 md:w-6 md:h-6"></i>
+                </a>
+            </div>
+        </nav>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+    
+    <!-- Smooth Scroll -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

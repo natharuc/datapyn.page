@@ -1,0 +1,103 @@
+-- ================================================
+-- Exemplo Completo: Blocos Mistos SQL + Python
+-- ================================================
+-- Este arquivo demonstra o uso de blocos mistos
+-- onde SQL e Python se alternam no mesmo documento
+-- ================================================
+
+-- @language: sql
+-- Bloco 1: Buscar dados de clientes
+SELECT 
+    id,
+    nome,
+    email,
+    cidade,
+    estado,
+    data_cadastro,
+    total_compras
+FROM clientes
+WHERE ativo = 1
+ORDER BY total_compras DESC;
+
+-- @language: python
+# Bloco 2: Analise inicial dos dados
+print(f"Total de clientes ativos: {len(df)}")
+print(f"\nDistribuicao por estado:")
+print(df['estado'].value_counts())
+
+# Salvar para uso posterior
+clientes = df.copy()
+
+-- @language: sql
+-- Bloco 3: Buscar pedidos recentes
+SELECT 
+    p.id AS pedido_id,
+    p.cliente_id,
+    p.valor_total,
+    p.data_pedido,
+    p.status
+FROM pedidos p
+WHERE p.data_pedido >= DATEADD(day, -30, GETDATE())
+ORDER BY p.data_pedido DESC;
+
+-- @language: python
+# Bloco 4: Combinar clientes e pedidos
+import pandas as pd
+
+pedidos = df.copy()
+print(f"Pedidos nos ultimos 30 dias: {len(pedidos)}")
+
+# Merge para analise combinada
+analise = pedidos.merge(
+    clientes[['id', 'nome', 'cidade', 'estado']], 
+    left_on='cliente_id', 
+    right_on='id',
+    suffixes=('_pedido', '_cliente')
+)
+
+# Resumo por cliente
+resumo_cliente = analise.groupby('nome').agg({
+    'pedido_id': 'count',
+    'valor_total': 'sum'
+}).rename(columns={
+    'pedido_id': 'qtd_pedidos',
+    'valor_total': 'total_gasto'
+}).sort_values('total_gasto', ascending=False)
+
+print("\n--- Top 10 Clientes (ultimos 30 dias) ---")
+print(resumo_cliente.head(10))
+
+-- @language: python
+# Bloco 5: Visualizacao final
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+# Grafico 1: Pedidos por status
+status_count = pedidos['status'].value_counts()
+axes[0, 0].pie(status_count, labels=status_count.index, autopct='%1.1f%%')
+axes[0, 0].set_title('Pedidos por Status')
+
+# Grafico 2: Valor por estado
+valor_estado = analise.groupby('estado')['valor_total'].sum().sort_values(ascending=True)
+valor_estado.plot(kind='barh', ax=axes[0, 1], color='teal')
+axes[0, 1].set_title('Vendas por Estado')
+axes[0, 1].set_xlabel('Valor Total (R$)')
+
+# Grafico 3: Timeline de pedidos
+pedidos['data_pedido'] = pd.to_datetime(pedidos['data_pedido'])
+timeline = pedidos.groupby(pedidos['data_pedido'].dt.date)['valor_total'].sum()
+timeline.plot(ax=axes[1, 0], marker='o', color='green')
+axes[1, 0].set_title('Vendas Diarias')
+axes[1, 0].tick_params(axis='x', rotation=45)
+
+# Grafico 4: Distribuicao de valores
+axes[1, 1].hist(pedidos['valor_total'], bins=20, color='coral', edgecolor='black')
+axes[1, 1].set_title('Distribuicao de Valores de Pedido')
+axes[1, 1].set_xlabel('Valor (R$)')
+axes[1, 1].set_ylabel('Frequencia')
+
+plt.tight_layout()
+plt.show()
+
+print("\n=== Analise Concluida ===")
