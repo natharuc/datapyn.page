@@ -8,7 +8,9 @@ Referencia rapida do DataPyn.
 
 | Acao | Atalho |
 |------|--------|
-| Executar bloco | `Ctrl+Enter` ou `F5` |
+| Executar bloco | `F5` |
+| Executar todos | `Ctrl+F5` |
+| Executar e avancar | `Shift+Enter` |
 | Nova aba | `Ctrl+T` |
 | Fechar aba | `Ctrl+W` |
 | Salvar | `Ctrl+S` |

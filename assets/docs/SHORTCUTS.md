@@ -8,10 +8,10 @@ Referencia completa de atalhos do DataPyn.
 
 | Atalho | Acao | Contexto |
 |--------|------|----------|
-| `Ctrl+Enter` | Executar bloco atual | Executa o bloco SQL/Python onde o cursor esta |
-| `F5` | Executar bloco atual | Alternativa ao Ctrl+Enter |
-| `Shift+F5` | Executar como Python | Forca execucao Python independente do tipo de bloco |
-| `Ctrl+Shift+Enter` | Executar todos os blocos | Executa todos os blocos da aba em sequencia |
+| `F5` | Executar inteligente | Se houver selecao, executa selecao; senao executa todos os blocos |
+| `Ctrl+F5` | Executar todos | Executa todos os blocos da aba em sequencia |
+| `Shift+Enter` | Executar e avancar | Executa bloco atual e move foco para o proximo |
+| `Ctrl+Enter` | Executar todos | Executa todos os blocos em sequencia |
 
 ---
 
@@ -72,8 +72,8 @@ Referencia completa de atalhos do DataPyn.
 
 | Atalho | Acao | Descricao |
 |--------|------|-----------|
-| `Ctrl+Shift+A` | Adicionar bloco | Adiciona novo bloco apos o atual |
-| `Ctrl+Shift+D` | Duplicar bloco | Duplica bloco atual |
+| `Ctrl+Shift+B` | Adicionar bloco | Adiciona novo bloco apos o atual |
+| `Ctrl+Shift+D` | Nova conexao | Abre dialogo de nova conexao |
 | `Alt+Up` | Mover bloco acima | Move bloco para cima |
 | `Alt+Down` | Mover bloco abaixo | Move bloco para baixo |
 | `Ctrl+Shift+Delete` | Remover bloco | Remove bloco atual |

@@ -73,10 +73,10 @@ Cada aba pode conectar a um banco diferente:
 
 | Atalho | Acao |
 |--------|------|
-| `F5` | Executar bloco SQL atual |
-| `Shift+F5` | Executar bloco Python atual |
-| `Ctrl+Enter` | Executar bloco atual (auto-detecta linguagem) |
-| `Ctrl+Shift+Enter` | Executar todos os blocos |
+| `F5` | Executar bloco atual (se houver selecao, executa selecao; senao executa todos) |
+| `Ctrl+F5` | Executar todos os blocos em sequencia |
+| `Shift+Enter` | Executar bloco atual e avancar para o proximo |
+| `Ctrl+Enter` | Executar todos os blocos |
 
 ### Execucao SQL
 
