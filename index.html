@@ -140,9 +140,9 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                        <a href="https://github.com/natharuc/datapyn/releases" target="_blank" class="btn btn-primary btn-md sm:btn-lg gap-2">
+                        <a id="download-btn-hero" href="https://github.com/natharuc/datapyn/releases/latest" target="_blank" class="btn btn-primary btn-md sm:btn-lg gap-2">
                             <i data-lucide="download" class="w-5 h-5"></i>
-                            Download Grátis
+                            <span id="download-text-hero">Download para Windows</span>
                         </a>
                         <a href="https://github.com/natharuc/datapyn" target="_blank" class="btn btn-outline btn-md sm:btn-lg gap-2">
                             <i data-lucide="github" class="w-5 h-5"></i>
@@ -262,11 +262,11 @@ plt.show()</code></pre>
                         <div class="feature-icon w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4">
                             <i data-lucide="keyboard" class="w-5 h-5 md:w-6 md:h-6 text-primary"></i>
                         </div>
-                        <h3 class="card-title text-base md:text-lg">Atalhos Poderosos</h3>
+                        <h3 class="card-title text-base md:text-lg">Editor por Blocos</h3>
                         <p class="text-sm md:text-base text-base-content/70">
-                            <kbd class="kbd kbd-sm">F5</kbd> para SQL, 
-                            <kbd class="kbd kbd-sm">Shift+F5</kbd> para Python. 
-                            Produtividade máxima.
+                            <kbd class="kbd kbd-sm">F5</kbd> executa o bloco atual,
+                            <kbd class="kbd kbd-sm">Ctrl+F5</kbd> executa todos.
+                            Cada bloco e independente.
                         </p>
                     </div>
                 </div>
@@ -564,9 +564,9 @@ plt.show()</code></pre>
             <p class="text-sm md:text-base text-base-content/70 mb-6 md:mb-8 max-w-xl mx-auto">
                 Baixe o DataPyn gratuitamente e una SQL + Python em um único fluxo de trabalho.
             </p>
-            <a href="https://github.com/natharuc/datapyn/releases" target="_blank" class="btn btn-primary btn-md sm:btn-lg gap-2">
+            <a id="download-btn-cta" href="https://github.com/natharuc/datapyn/releases/latest" target="_blank" class="btn btn-primary btn-md sm:btn-lg gap-2">
                 <i data-lucide="download" class="w-5 h-5"></i>
-                Download Gratuito
+                <span id="download-text-cta">Download para Windows</span>
             </a>
         </div>
     </section>
@@ -613,6 +613,46 @@ plt.show()</code></pre>
                 }
             });
         });
+    </script>
+    
+    <!-- Dynamic Download Links for Latest MSI -->
+    <script>
+        (async function() {
+            const isWindows = navigator.platform.indexOf('Win') !== -1;
+            const downloadBtnHero = document.getElementById('download-btn-hero');
+            const downloadBtnCta = document.getElementById('download-btn-cta');
+            const downloadTextHero = document.getElementById('download-text-hero');
+            const downloadTextCta = document.getElementById('download-text-cta');
+            
+            // Atualiza texto baseado no OS
+            if (!isWindows) {
+                if (downloadTextHero) downloadTextHero.textContent = 'Ver Releases';
+                if (downloadTextCta) downloadTextCta.textContent = 'Ver Releases';
+            }
+            
+            // Busca o ultimo release do GitHub para obter link direto do MSI
+            try {
+                const response = await fetch('https://api.github.com/repos/natharuc/datapyn/releases/latest');
+                if (response.ok) {
+                    const release = await response.json();
+                    // Busca o asset MSI
+                    const msiAsset = release.assets.find(a => a.name.endsWith('.msi'));
+                    
+                    if (msiAsset && isWindows) {
+                        const downloadUrl = msiAsset.browser_download_url;
+                        const version = release.tag_name.replace('v', '');
+                        
+                        if (downloadBtnHero) downloadBtnHero.href = downloadUrl;
+                        if (downloadBtnCta) downloadBtnCta.href = downloadUrl;
+                        if (downloadTextHero) downloadTextHero.textContent = `Download v${version} (Windows)`;
+                        if (downloadTextCta) downloadTextCta.textContent = `Download v${version}`;
+                    }
+                }
+            } catch (e) {
+                // Silently fail - keeps default link to releases page
+                console.log('Could not fetch latest release info');
+            }
+        })();
     </script>
 </body>
 </html>

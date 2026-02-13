@@ -95,7 +95,7 @@ Os resultados aparecem no painel **Results** na parte inferior.
 
 ### Passo 1: Adicionar Bloco Python
 
-Clique em **"+ Python"** ou pressione `Ctrl+Shift+P`.
+Clique no botao **"+"** no final do ultimo bloco e escolha **"Python"**, ou clique no seletor de linguagem do bloco para trocar.
 
 ### Passo 2: Usar o Resultado SQL
 
@@ -115,7 +115,7 @@ df['Estado'].value_counts().plot(kind='bar')
 
 ### Passo 3: Executar Python
 
-Pressione **Shift+F5** ou clique em **Executar**.
+Pressione **F5** ou clique em **Executar**. O sistema detecta automaticamente a linguagem do bloco.
 
 ---
 
@@ -125,7 +125,7 @@ Pressione **Shift+F5** ou clique em **Executar**.
 1. Conectar ao banco
         |
         v
-2. Escrever query SQL
+2. Escrever query SQL no bloco
         |
         v
 3. Executar (F5)
@@ -134,10 +134,10 @@ Pressione **Shift+F5** ou clique em **Executar**.
 4. Analisar resultado
         |
         v
-5. Adicionar bloco Python para manipulacao
+5. Adicionar novo bloco Python (botao +)
         |
         v
-6. Executar Python (Shift+F5)
+6. Executar Python (F5)
         |
         v
 7. Exportar ou continuar analise
@@ -151,9 +151,10 @@ Pressione **Shift+F5** ou clique em **Executar**.
 
 | Acao | Atalho |
 |------|--------|
-| Executar SQL | `F5` |
-| Executar Python | `Shift+F5` |
-| Nova aba | `Ctrl+N` |
+| Executar bloco atual | `F5` |
+| Executar todos os blocos | `Ctrl+F5` |
+| Executar e avancar | `Shift+Enter` |
+| Nova aba | `Ctrl+T` |
 | Salvar | `Ctrl+S` |
 | Configuracoes | `Ctrl+,` |
 
