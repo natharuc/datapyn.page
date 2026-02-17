@@ -954,35 +954,68 @@ plt.show()</code></pre>
                         text.textContent = translations[currentLang]['download.releases'];
                     }
                 });
+                return; // No need to fetch MSI info for non-Windows
             }
             
-            // Fetch latest release for direct MSI link
+            // Cache key and duration (2 hours)
+            const CACHE_KEY = 'datapyn-release-cache';
+            const CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours in ms
+            
+            // Try to get cached data first
+            let releaseData = null;
             try {
-                const response = await fetch('https://api.github.com/repos/natharuc/datapyn/releases/latest');
-                if (response.ok) {
-                    const release = await response.json();
-                    const msiAsset = release.assets.find(a => a.name.endsWith('.msi'));
-                    
-                    if (msiAsset && isWindows) {
-                        const downloadUrl = msiAsset.browser_download_url;
-                        const version = release.tag_name.replace('v', '');
-                        
-                        downloadBtns.forEach(({btn, text}) => {
-                            if (btn) btn.href = downloadUrl;
-                            if (text) {
-                                // Remove data-i18n to prevent override
-                                text.removeAttribute('data-i18n');
-                                if (text.id === 'download-text-nav') {
-                                    text.textContent = `v${version}`;
-                                } else {
-                                    text.textContent = `Download v${version}`;
-                                }
-                            }
-                        });
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_DURATION) {
+                        releaseData = data;
                     }
                 }
             } catch (e) {
-                console.log('Could not fetch latest release info');
+                // Ignore cache errors
+            }
+            
+            // Fetch from API only if no valid cache
+            if (!releaseData) {
+                try {
+                    const response = await fetch('https://api.github.com/repos/natharuc/datapyn/releases/latest');
+                    if (response.ok) {
+                        releaseData = await response.json();
+                        // Save to cache
+                        try {
+                            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                                data: releaseData,
+                                timestamp: Date.now()
+                            }));
+                        } catch (e) {
+                            // Ignore cache save errors
+                        }
+                    }
+                } catch (e) {
+                    console.log('Could not fetch latest release info');
+                }
+            }
+            
+            // Apply release data if available
+            if (releaseData) {
+                const msiAsset = releaseData.assets.find(a => a.name.endsWith('.msi'));
+                
+                if (msiAsset) {
+                    const downloadUrl = msiAsset.browser_download_url;
+                    const version = releaseData.tag_name.replace('v', '');
+                    
+                    downloadBtns.forEach(({btn, text}) => {
+                        if (btn) btn.href = downloadUrl;
+                        if (text) {
+                            text.removeAttribute('data-i18n');
+                            if (text.id === 'download-text-nav') {
+                                text.textContent = `v${version}`;
+                            } else {
+                                text.textContent = `Download v${version}`;
+                            }
+                        }
+                    });
+                }
             }
         })();
     </script>
