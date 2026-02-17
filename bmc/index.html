@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support DataPyn - Buy Me a Coffee</title>
+    <meta name="description" content="Support DataPyn development with a donation. Your contribution helps keep this open-source project alive.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/datapyn-logo.ico">
+    
+    <!-- DaisyUI + Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .card-base {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        
+        .card-base:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .coffee-icon {
+            animation: steam 2s ease-in-out infinite;
+        }
+        
+        @keyframes steam {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        
+        .paypal-btn {
+            background: #0070ba;
+            transition: all 0.2s ease;
+        }
+        
+        .paypal-btn:hover {
+            background: #003087;
+            transform: scale(1.02);
+        }
+        
+        .amount-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .amount-btn:hover, .amount-btn.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .amount-btn.active {
+            background: rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="py-6 border-b border-gray-700">
+        <div class="container mx-auto px-6">
+            <a href="../" class="flex items-center gap-3 w-fit">
+                <img src="../assets/datapyn-logo.png" alt="DataPyn" class="w-8 h-8">
+                <span class="text-xl font-semibold">DataPyn</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center py-16 px-6">
+        <div class="max-w-lg w-full">
+            <!-- Card -->
+            <div class="card-base rounded-2xl p-8 text-center">
+                <!-- Coffee Icon -->
+                <div class="coffee-icon inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-500/10 mb-6">
+                    <i data-lucide="coffee" class="w-10 h-10 text-amber-500"></i>
+                </div>
+                
+                <!-- Title -->
+                <h1 class="text-3xl font-bold mb-3" data-i18n="bmc.title">Buy Me a Coffee</h1>
+                <p class="text-gray-400 mb-8" data-i18n="bmc.subtitle">
+                    Support DataPyn development and help keep this open-source project alive.
+                </p>
+                
+                <!-- Amount Selection -->
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <button class="amount-btn border border-gray-600 rounded-xl py-4 text-lg font-semibold" data-amount="5">
+                        $5
+                    </button>
+                    <button class="amount-btn border border-gray-600 rounded-xl py-4 text-lg font-semibold active" data-amount="10">
+                        $10
+                    </button>
+                    <button class="amount-btn border border-gray-600 rounded-xl py-4 text-lg font-semibold" data-amount="25">
+                        $25
+                    </button>
+                </div>
+                
+                <!-- Custom Amount -->
+                <div class="mb-8">
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">$</span>
+                        <input type="number" id="custom-amount" placeholder="Custom amount" min="1" 
+                               class="w-full bg-transparent border border-gray-600 rounded-xl py-4 pl-8 pr-4 text-center text-lg focus:border-blue-500 focus:outline-none">
+                    </div>
+                </div>
+                
+                <!-- PayPal Button -->
+                <a href="#" id="paypal-btn" class="paypal-btn w-full inline-flex items-center justify-center gap-3 py-4 px-6 rounded-xl text-white font-semibold text-lg">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.82c.06-.347.358-.6.71-.6h7.02c2.358 0 4.162.564 5.255 1.64.95.935 1.348 2.278 1.18 3.994-.01.11-.02.22-.04.33l-.03.18v.22c-.32 2.11-1.408 3.56-2.848 4.42-1.38.82-3.148 1.25-5.108 1.25h-1.31c-.39 0-.722.28-.79.67l-.93 6.14c-.05.32-.32.56-.65.56l-.33-.29zM19.13 7.62c-.01.08-.02.16-.03.24-.68 3.48-3.2 4.84-6.39 4.84H11.4c-.39 0-.72.28-.79.67l-.82 5.37-.23 1.53c-.04.27.16.51.43.51h3.04c.34 0 .63-.25.68-.58l.03-.15.54-3.5.03-.18c.06-.33.34-.58.68-.58h.43c2.77 0 4.94-.94 5.58-3.68.26-1.14.13-2.09-.57-2.76-.21-.2-.47-.37-.76-.51l-.01-.22z"/>
+                    </svg>
+                    <span data-i18n="bmc.donate">Donate with PayPal</span>
+                </a>
+                
+                <!-- Info -->
+                <p class="mt-6 text-sm text-gray-500" data-i18n="bmc.info">
+                    Secure payment via PayPal. No account required.
+                </p>
+            </div>
+            
+            <!-- Thank You Message -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-400" data-i18n="bmc.thanks">
+                    Thank you for your support! Every contribution helps.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 border-t border-gray-700">
+        <div class="container mx-auto px-6 text-center text-gray-500 text-sm">
+            <a href="../" class="hover:text-white transition-colors">&larr; Back to DataPyn</a>
+        </div>
+    </footer>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+    
+    <!-- i18n -->
+    <script>
+        const translations = {
+            en: {
+                'bmc.title': 'Buy Me a Coffee',
+                'bmc.subtitle': 'Support DataPyn development and help keep this open-source project alive.',
+                'bmc.donate': 'Donate with PayPal',
+                'bmc.info': 'Secure payment via PayPal. No account required.',
+                'bmc.thanks': 'Thank you for your support! Every contribution helps.'
+            },
+            pt: {
+                'bmc.title': 'Me Pague um Cafe',
+                'bmc.subtitle': 'Apoie o desenvolvimento do DataPyn e ajude a manter este projeto open-source vivo.',
+                'bmc.donate': 'Doar com PayPal',
+                'bmc.info': 'Pagamento seguro via PayPal. Nao precisa de conta.',
+                'bmc.thanks': 'Obrigado pelo seu apoio! Cada contribuicao ajuda.'
+            }
+        };
+        
+        let currentLang = localStorage.getItem('datapyn-lang') || (navigator.language.startsWith('pt') ? 'pt' : 'en');
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('datapyn-lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+        
+        setLanguage(currentLang);
+    </script>
+    
+    <!-- Amount Selection & PayPal -->
+    <script>
+        const PAYPAL_EMAIL = 'nathanarrudacamara@gmail.com';
+        let selectedAmount = 10;
+        
+        // Amount buttons
+        document.querySelectorAll('.amount-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedAmount = parseInt(btn.dataset.amount);
+                document.getElementById('custom-amount').value = '';
+                updatePayPalLink();
+            });
+        });
+        
+        // Custom amount input
+        document.getElementById('custom-amount').addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            if (value > 0) {
+                selectedAmount = value;
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+            }
+            updatePayPalLink();
+        });
+        
+        // Update PayPal link
+        function updatePayPalLink() {
+            const paypalUrl = `https://www.paypal.com/donate/?business=${encodeURIComponent(PAYPAL_EMAIL)}&amount=${selectedAmount}&currency_code=USD&item_name=${encodeURIComponent('DataPyn Support')}`;
+            document.getElementById('paypal-btn').href = paypalUrl;
+        }
+        
+        // Initialize
+        updatePayPalLink();
+    </script>
+</body>
+</html>
