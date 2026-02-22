@@ -128,6 +128,135 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
+
+        /* Copilot Chat Animation */
+        .chat-window {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 420px;
+        }
+
+        .chat-header {
+            background: #6366f1;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-messages {
+            padding: 16px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .chat-msg.user {
+            align-self: flex-end;
+            background: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-msg.copilot {
+            align-self: flex-start;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-msg.copilot .copilot-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #a78bfa;
+            margin-bottom: 6px;
+        }
+
+        .chat-msg.action {
+            align-self: center;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px dashed #22c55e;
+            color: #22c55e;
+            font-size: 11px;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 14px;
+            align-self: flex-start;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-4px); }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Staggered animation delays */
+        .chat-msg:nth-child(1) { animation-delay: 0.5s; }
+        .chat-msg:nth-child(2) { animation-delay: 2s; }
+        .chat-msg:nth-child(3) { animation-delay: 3.5s; }
+        .chat-msg:nth-child(4) { animation-delay: 5s; }
+        .chat-msg:nth-child(5) { animation-delay: 6.5s; }
+        .chat-msg:nth-child(6) { animation-delay: 8s; }
+
+        /* Code in chat */
+        .chat-code {
+            background: rgba(0,0,0,0.3);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            margin-top: 8px;
+            overflow-x: auto;
+        }
         
         .lang-btn:hover {
             color: #f8fafc;
@@ -164,9 +293,10 @@
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center gap-6">
                     <a href="#features" class="text-sm text-[#94a3b8] hover:text-white transition-colors" data-i18n="nav.features">Features</a>
+                    <a href="#copilot" class="text-sm text-[#94a3b8] hover:text-white transition-colors" data-i18n="nav.ai">AI</a>
                     <a href="#databases" class="text-sm text-[#94a3b8] hover:text-white transition-colors" data-i18n="nav.databases">Databases</a>
                     <a href="#quickstart" class="text-sm text-[#94a3b8] hover:text-white transition-colors" data-i18n="nav.quickstart">Quick Start</a>
-                    <a href="#docs" class="text-sm text-[#94a3b8] hover:text-white transition-colors" data-i18n="nav.docs">Docs</a>
+                    <a href="docs.html" class="text-sm text-[#94a3b8] hover:text-white transition-colors" data-i18n="nav.docs">Docs</a>
                 </div>
                 
                 <!-- Actions -->
@@ -201,9 +331,10 @@
         <div id="mobile-menu" class="hidden md:hidden border-t border-[#334155] bg-[#0f172a]">
             <div class="px-4 py-3 space-y-2">
                 <a href="#features" class="block py-2 text-sm text-[#94a3b8] hover:text-white" data-i18n="nav.features">Features</a>
+                <a href="#copilot" class="block py-2 text-sm text-[#94a3b8] hover:text-white" data-i18n="nav.ai">AI</a>
                 <a href="#databases" class="block py-2 text-sm text-[#94a3b8] hover:text-white" data-i18n="nav.databases">Databases</a>
                 <a href="#quickstart" class="block py-2 text-sm text-[#94a3b8] hover:text-white" data-i18n="nav.quickstart">Quick Start</a>
-                <a href="#docs" class="block py-2 text-sm text-[#94a3b8] hover:text-white" data-i18n="nav.docs">Docs</a>
+                <a href="docs.html" class="block py-2 text-sm text-[#94a3b8] hover:text-white" data-i18n="nav.docs">Docs</a>
                 <!-- Mobile Language Selector -->
                 <div class="flex gap-2 pt-2 border-t border-[#334155] mt-2">
                     <button class="lang-btn flex-1" data-lang="en" onclick="setLanguage('en')">English</button>
@@ -219,7 +350,13 @@
             <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 <!-- Hero Content -->
                 <div>
-                    <p class="text-sm font-medium text-blue-400 mb-4" data-i18n="hero.badge">Open Source IDE</p>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-sm font-medium text-blue-400" data-i18n="hero.badge">Open Source IDE</span>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold bg-purple-600/20 text-purple-400 rounded-full border border-purple-500/30">
+                            <img src="assets/copilot-purple.svg" alt="Copilot" class="w-4 h-4">
+                            <span data-i18n="hero.copilot_badge">AI-Powered</span>
+                        </span>
+                    </div>
                     
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
                         <span data-i18n="hero.title1">SQL and Python.</span><br>
@@ -242,56 +379,69 @@
                         </a>
                     </div>
                     
-                    <div class="flex flex-wrap items-center gap-6 text-sm text-[#94a3b8]">
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-[#94a3b8]">
                         <div class="flex items-center gap-2">
                             <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
                             <span>Windows, Linux, macOS</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                            <span data-i18n="hero.license">MIT License</span>
+                            <img src="assets/copilot-purple.svg" alt="Copilot" class="w-5 h-5">
+                            <span data-i18n="hero.copilot_ready">GitHub Copilot</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                            <span data-i18n="hero.free">Free forever</span>
+                            <i data-lucide="scale" class="w-4 h-4 text-green-500"></i>
+                            <span data-i18n="hero.opensource">Open Source - MIT License</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Code Preview -->
-                <div class="code-window rounded-lg overflow-hidden">
-                    <div class="code-header flex items-center gap-2 px-4 py-3">
-                        <div class="flex gap-1.5">
-                            <div class="w-3 h-3 rounded-full bg-[#ef4444]"></div>
-                            <div class="w-3 h-3 rounded-full bg-[#eab308]"></div>
-                            <div class="w-3 h-3 rounded-full bg-[#22c55e]"></div>
-                        </div>
-                        <span class="text-xs text-[#94a3b8] ml-2 font-mono">sales_analysis.dmp</span>
-                    </div>
-                    <div class="p-4 sm:p-6 overflow-x-auto">
-                        <div class="mb-4">
-                            <span class="inline-block px-2 py-0.5 text-xs font-medium bg-blue-600/20 text-blue-400 rounded mb-2">SQL</span>
-                            <pre class="text-sm leading-relaxed"><code class="font-mono"><span class="text-purple-400">SELECT</span> 
-    c.name <span class="text-purple-400">AS</span> customer,
-    <span class="text-blue-400">COUNT</span>(o.id) <span class="text-purple-400">AS</span> total_orders,
-    <span class="text-blue-400">SUM</span>(o.amount) <span class="text-purple-400">AS</span> total_revenue
-<span class="text-purple-400">FROM</span> customers c
-<span class="text-purple-400">INNER JOIN</span> orders o <span class="text-purple-400">ON</span> c.id = o.customer_id
-<span class="text-purple-400">GROUP BY</span> c.name
-<span class="text-purple-400">ORDER BY</span> total_revenue <span class="text-purple-400">DESC</span>;</code></pre>
-                        </div>
-                        <div class="border-t border-[#334155] my-4 relative">
-                            <span class="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-[#1e293b] px-3 text-xs text-[#64748b]">result available as df</span>
+                <!-- Copilot Chat Demo -->
+                <div class="chat-window mx-auto lg:ml-auto" id="copilot-demo">
+                    <div class="chat-header">
+                        <div class="chat-header-icon">
+                            <img src="assets/copilot-white.svg" alt="Copilot" class="w-6 h-6">
                         </div>
                         <div>
-                            <span class="inline-block px-2 py-0.5 text-xs font-medium bg-green-600/20 text-green-400 rounded mb-2">Python</span>
-                            <pre class="text-sm leading-relaxed"><code class="font-mono"><span class="text-slate-500"># Visualize top customers</span>
-<span class="text-purple-400">import</span> matplotlib.pyplot <span class="text-purple-400">as</span> plt
-
-top_10 = df.head(<span class="text-orange-400">10</span>)
-plt.barh(top_10[<span class="text-yellow-400">'customer'</span>], top_10[<span class="text-yellow-400">'total_revenue'</span>])
-plt.title(<span class="text-yellow-400">'Top 10 Customers by Revenue'</span>)
-plt.show()</code></pre>
+                            <div class="text-sm font-semibold text-white flex items-center gap-1.5">GitHub Copilot</div>
+                            <div class="text-xs text-white/70" data-i18n="copilot.status">Ready to help</div>
+                        </div>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="chat-msg user" data-i18n="copilot.demo.user1">
+                            Show me the top 10 customers by revenue
+                        </div>
+                        <div class="chat-msg copilot">
+                            <div class="copilot-badge">
+                                <img src="assets/copilot-purple.svg" alt="" class="w-3.5 h-3.5"> Copilot
+                            </div>
+                            <span data-i18n="copilot.demo.copilot1">I'll create a SQL block to query that data.</span>
+                            <div class="chat-code">
+                                <span class="text-purple-400">SELECT</span> name, <span class="text-blue-400">SUM</span>(revenue)<br>
+                                <span class="text-purple-400">FROM</span> customers<br>
+                                <span class="text-purple-400">GROUP BY</span> name <span class="text-purple-400">LIMIT</span> <span class="text-orange-400">10</span>
+                            </div>
+                        </div>
+                        <div class="chat-msg action">
+                            <i data-lucide="check-circle" class="w-3 h-3 inline mr-1"></i>
+                            <span data-i18n="copilot.demo.action1">Block created and executed</span>
+                        </div>
+                        <div class="chat-msg user" data-i18n="copilot.demo.user2">
+                            Now create a bar chart with the results
+                        </div>
+                        <div class="chat-msg copilot">
+                            <div class="copilot-badge">
+                                <img src="assets/copilot-purple.svg" alt="" class="w-3.5 h-3.5"> Copilot
+                            </div>
+                            <span data-i18n="copilot.demo.copilot2">Creating a Python block with matplotlib visualization.</span>
+                            <div class="chat-code">
+                                plt.barh(df[<span class="text-yellow-400">'name'</span>], df[<span class="text-yellow-400">'revenue'</span>])<br>
+                                plt.title(<span class="text-yellow-400">'Top Customers'</span>)<br>
+                                plt.show()
+                            </div>
+                        </div>
+                        <div class="chat-msg action">
+                            <i data-lucide="bar-chart-3" class="w-3 h-3 inline mr-1"></i>
+                            <span data-i18n="copilot.demo.action2">Chart rendered</span>
                         </div>
                     </div>
                 </div>
@@ -405,6 +555,82 @@ plt.show()</code></pre>
                         with new features and improvements.
                     </p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI-Powered Section -->
+    <section id="copilot" class="py-16 md:py-24 section-divider">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 mb-4 text-sm font-semibold bg-purple-600/20 text-purple-400 rounded-full border border-purple-500/30">
+                    <img src="assets/copilot-purple.svg" alt="Copilot" class="w-5 h-5">
+                    <span data-i18n="ai.badge">GitHub Copilot Integration</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-bold mb-4" data-i18n="ai.title">Your AI Data Assistant</h2>
+                <p class="text-[#94a3b8] max-w-2xl mx-auto" data-i18n="ai.subtitle">
+                    Chat with GitHub Copilot to create queries, generate visualizations, and manage your data workflow naturally.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- AI Feature 1 -->
+                <div class="card-base rounded-lg p-6 border-purple-500/20 hover:border-purple-500/50">
+                    <div class="w-10 h-10 rounded-lg bg-purple-600/20 flex items-center justify-center mb-4">
+                        <i data-lucide="message-square-text" class="w-5 h-5 text-purple-400"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2" data-i18n="ai.chat.title">Natural Language Queries</h3>
+                    <p class="text-sm text-[#94a3b8]" data-i18n="ai.chat.desc">
+                        Ask questions about your data in plain language. Copilot generates the SQL or Python code automatically.
+                    </p>
+                </div>
+                
+                <!-- AI Feature 2 -->
+                <div class="card-base rounded-lg p-6 border-purple-500/20 hover:border-purple-500/50">
+                    <div class="w-10 h-10 rounded-lg bg-purple-600/20 flex items-center justify-center mb-4">
+                        <i data-lucide="blocks" class="w-5 h-5 text-purple-400"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2" data-i18n="ai.blocks.title">Create & Execute Blocks</h3>
+                    <p class="text-sm text-[#94a3b8]" data-i18n="ai.blocks.desc">
+                        Copilot can create, edit, and execute code blocks directly. Watch your analysis build itself.
+                    </p>
+                </div>
+                
+                <!-- AI Feature 3 -->
+                <div class="card-base rounded-lg p-6 border-purple-500/20 hover:border-purple-500/50">
+                    <div class="w-10 h-10 rounded-lg bg-purple-600/20 flex items-center justify-center mb-4">
+                        <i data-lucide="database" class="w-5 h-5 text-purple-400"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2" data-i18n="ai.schema.title">Schema Awareness</h3>
+                    <p class="text-sm text-[#94a3b8]" data-i18n="ai.schema.desc">
+                        Ask about your tables and columns. Copilot reads the database schema to give accurate suggestions.
+                    </p>
+                </div>
+                
+                <!-- AI Feature 4 -->
+                <div class="card-base rounded-lg p-6 border-purple-500/20 hover:border-purple-500/50">
+                    <div class="w-10 h-10 rounded-lg bg-purple-600/20 flex items-center justify-center mb-4">
+                        <i data-lucide="line-chart" class="w-5 h-5 text-purple-400"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2" data-i18n="ai.viz.title">Instant Visualizations</h3>
+                    <p class="text-sm text-[#94a3b8]" data-i18n="ai.viz.desc">
+                        Say "create a chart" and Copilot generates matplotlib code, executes it, and shows the result.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- CTA for Copilot -->
+            <div class="mt-12 text-center">
+                <p class="text-sm text-[#64748b] mb-4" data-i18n="ai.powered">Powered by GPT-4o, Claude 3.5, and more</p>
+                <div class="inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs">
+                    <i data-lucide="info" class="w-4 h-4 flex-shrink-0"></i>
+                    <span data-i18n="ai.license_notice">Requires a GitHub Copilot subscription (not included with DataPyn)</span>
+                </div>
+                <br>
+                <a href="docs.html#copilot" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors">
+                    <span data-i18n="ai.learn_more">Learn more about Copilot integration</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -556,53 +782,36 @@ plt.show()</code></pre>
                 </p>
             </div>
             
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                <a href="assets/docs/GETTING_STARTED.md" class="card-base rounded-lg p-4 hover:border-blue-500">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto mb-10">
+                <a href="docs.html#introduction" class="card-base rounded-lg p-4 hover:border-blue-500">
                     <i data-lucide="rocket" class="w-5 h-5 text-blue-500 mb-3"></i>
                     <h3 class="font-medium text-sm mb-1" data-i18n="docs.getting_started.title">Getting Started</h3>
                     <p class="text-xs text-[#64748b]" data-i18n="docs.getting_started.desc">First steps</p>
                 </a>
                 
-                <a href="assets/docs/FEATURES.md" class="card-base rounded-lg p-4 hover:border-blue-500">
-                    <i data-lucide="list" class="w-5 h-5 text-blue-500 mb-3"></i>
+                <a href="docs.html#code-blocks" class="card-base rounded-lg p-4 hover:border-blue-500">
+                    <i data-lucide="layers" class="w-5 h-5 text-blue-500 mb-3"></i>
                     <h3 class="font-medium text-sm mb-1" data-i18n="docs.features.title">Features</h3>
                     <p class="text-xs text-[#64748b]" data-i18n="docs.features.desc">All capabilities</p>
                 </a>
                 
-                <a href="assets/docs/EXAMPLES.md" class="card-base rounded-lg p-4 hover:border-blue-500">
-                    <i data-lucide="code" class="w-5 h-5 text-blue-500 mb-3"></i>
-                    <h3 class="font-medium text-sm mb-1" data-i18n="docs.examples.title">Examples</h3>
-                    <p class="text-xs text-[#64748b]" data-i18n="docs.examples.desc">Practical use cases</p>
+                <a href="docs.html#copilot" class="card-base rounded-lg p-4 hover:border-purple-500 border-purple-500/20">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-purple-400 mb-3"></i>
+                    <h3 class="font-medium text-sm mb-1" data-i18n="docs.copilot.title_short">Copilot Integration</h3>
+                    <p class="text-xs text-[#64748b]" data-i18n="docs.copilot.desc_short">AI assistant</p>
                 </a>
                 
-                <a href="assets/docs/SHORTCUTS.md" class="card-base rounded-lg p-4 hover:border-blue-500">
+                <a href="docs.html#shortcuts" class="card-base rounded-lg p-4 hover:border-blue-500">
                     <i data-lucide="keyboard" class="w-5 h-5 text-blue-500 mb-3"></i>
                     <h3 class="font-medium text-sm mb-1" data-i18n="docs.shortcuts.title">Shortcuts</h3>
                     <p class="text-xs text-[#64748b]" data-i18n="docs.shortcuts.desc">Productivity tips</p>
                 </a>
-                
-                <a href="assets/docs/ARCHITECTURE.md" class="card-base rounded-lg p-4 hover:border-blue-500">
-                    <i data-lucide="boxes" class="w-5 h-5 text-blue-500 mb-3"></i>
-                    <h3 class="font-medium text-sm mb-1" data-i18n="docs.architecture.title">Architecture</h3>
-                    <p class="text-xs text-[#64748b]" data-i18n="docs.architecture.desc">Technical structure</p>
-                </a>
-                
-                <a href="assets/docs/INSTALL.md" class="card-base rounded-lg p-4 hover:border-blue-500">
-                    <i data-lucide="download" class="w-5 h-5 text-blue-500 mb-3"></i>
-                    <h3 class="font-medium text-sm mb-1" data-i18n="docs.installation.title">Installation</h3>
-                    <p class="text-xs text-[#64748b]" data-i18n="docs.installation.desc">Full guide</p>
-                </a>
-                
-                <a href="assets/docs/FAQ.md" class="card-base rounded-lg p-4 hover:border-blue-500">
-                    <i data-lucide="help-circle" class="w-5 h-5 text-blue-500 mb-3"></i>
-                    <h3 class="font-medium text-sm mb-1" data-i18n="docs.faq.title">FAQ</h3>
-                    <p class="text-xs text-[#64748b]" data-i18n="docs.faq.desc">Common questions</p>
-                </a>
-                
-                <a href="assets/docs/CHANGELOG.md" class="card-base rounded-lg p-4 hover:border-blue-500">
-                    <i data-lucide="history" class="w-5 h-5 text-blue-500 mb-3"></i>
-                    <h3 class="font-medium text-sm mb-1" data-i18n="docs.changelog.title">Changelog</h3>
-                    <p class="text-xs text-[#64748b]" data-i18n="docs.changelog.desc">Version history</p>
+            </div>
+            
+            <div class="text-center">
+                <a href="docs.html" class="inline-flex items-center gap-2 px-5 py-2.5 border border-[#334155] hover:border-[#475569] text-white font-medium rounded-lg transition-colors">
+                    <span data-i18n="docs.view_all">View Full Documentation</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
             </div>
         </div>
@@ -697,18 +906,30 @@ plt.show()</code></pre>
             en: {
                 // Navigation
                 'nav.features': 'Features',
+                'nav.ai': 'AI',
                 'nav.databases': 'Databases',
                 'nav.quickstart': 'Quick Start',
                 'nav.docs': 'Docs',
                 
                 // Hero
                 'hero.badge': 'Open Source IDE',
+                'hero.copilot_badge': 'AI-Powered',
                 'hero.title1': 'SQL and Python.',
                 'hero.title2': 'One unified workflow.',
                 'hero.description': 'DataPyn is a professional IDE for data analysts. Write SQL queries, process results with Python, and visualize data in a single integrated environment.',
                 'hero.github': 'View on GitHub',
                 'hero.license': 'MIT License',
-                'hero.free': 'Free forever',
+                'hero.copilot_ready': 'GitHub Copilot',
+                'hero.opensource': 'Open Source - MIT License',
+                
+                // Copilot Demo
+                'copilot.status': 'Ready to help',
+                'copilot.demo.user1': 'Show me the top 10 customers by revenue',
+                'copilot.demo.copilot1': "I'll create a SQL block to query that data.",
+                'copilot.demo.action1': 'Block created and executed',
+                'copilot.demo.user2': 'Now create a bar chart with the results',
+                'copilot.demo.copilot2': 'Creating a Python block with matplotlib visualization.',
+                'copilot.demo.action2': 'Chart rendered',
                 
                 // Features
                 'features.title': 'Built for Data Professionals',
@@ -729,6 +950,22 @@ plt.show()</code></pre>
                 'features.export.desc': 'Export your work as standalone Python scripts, ready to run in production or share with your team.',
                 'features.updates.title': 'Auto Updates',
                 'features.updates.desc': 'Automatic update notifications keep you on the latest version with new features and improvements.',
+                
+                // AI Section
+                'ai.badge': 'GitHub Copilot Integration',
+                'ai.title': 'Your AI Data Assistant',
+                'ai.subtitle': 'Chat with GitHub Copilot to create queries, generate visualizations, and manage your data workflow naturally.',
+                'ai.chat.title': 'Natural Language Queries',
+                'ai.chat.desc': 'Ask questions about your data in plain language. Copilot generates the SQL or Python code automatically.',
+                'ai.blocks.title': 'Create & Execute Blocks',
+                'ai.blocks.desc': 'Copilot can create, edit, and execute code blocks directly. Watch your analysis build itself.',
+                'ai.schema.title': 'Schema Awareness',
+                'ai.schema.desc': 'Ask about your tables and columns. Copilot reads the database schema to give accurate suggestions.',
+                'ai.viz.title': 'Instant Visualizations',
+                'ai.viz.desc': "Say 'create a chart' and Copilot generates matplotlib code, executes it, and shows the result.",
+                'ai.powered': 'Powered by GPT-4o, Claude 3.5, and more',
+                'ai.license_notice': 'Requires a GitHub Copilot subscription (not included with DataPyn)',
+                'ai.learn_more': 'Learn more about Copilot integration',
                 
                 // Databases
                 'databases.title': 'Database Support',
@@ -763,6 +1000,9 @@ plt.show()</code></pre>
                 'docs.faq.desc': 'Common questions',
                 'docs.changelog.title': 'Changelog',
                 'docs.changelog.desc': 'Version history',
+                'docs.copilot.title_short': 'Copilot Integration',
+                'docs.copilot.desc_short': 'AI assistant',
+                'docs.view_all': 'View Full Documentation',
                 
                 // Open Source
                 'opensource.badge': 'Open Source',
@@ -787,18 +1027,30 @@ plt.show()</code></pre>
             pt: {
                 // Navigation
                 'nav.features': 'Recursos',
+                'nav.ai': 'IA',
                 'nav.databases': 'Bancos de Dados',
                 'nav.quickstart': 'Inicio Rapido',
                 'nav.docs': 'Docs',
                 
                 // Hero
                 'hero.badge': 'IDE Open Source',
+                'hero.copilot_badge': 'Com IA',
                 'hero.title1': 'SQL e Python.',
                 'hero.title2': 'Um fluxo de trabalho unificado.',
                 'hero.description': 'DataPyn e uma IDE profissional para analistas de dados. Escreva queries SQL, processe resultados com Python e visualize dados em um unico ambiente integrado.',
                 'hero.github': 'Ver no GitHub',
                 'hero.license': 'Licenca MIT',
-                'hero.free': 'Gratis para sempre',
+                'hero.copilot_ready': 'GitHub Copilot',
+                'hero.opensource': 'Open Source - Licenca MIT',
+                
+                // Copilot Demo
+                'copilot.status': 'Pronto para ajudar',
+                'copilot.demo.user1': 'Mostre os 10 principais clientes por receita',
+                'copilot.demo.copilot1': 'Vou criar um bloco SQL para consultar esses dados.',
+                'copilot.demo.action1': 'Bloco criado e executado',
+                'copilot.demo.user2': 'Agora crie um grafico de barras com os resultados',
+                'copilot.demo.copilot2': 'Criando um bloco Python com visualizacao matplotlib.',
+                'copilot.demo.action2': 'Grafico renderizado',
                 
                 // Features
                 'features.title': 'Feito para Profissionais de Dados',
@@ -819,6 +1071,22 @@ plt.show()</code></pre>
                 'features.export.desc': 'Exporte seu trabalho como scripts Python standalone, prontos para rodar em producao ou compartilhar com sua equipe.',
                 'features.updates.title': 'Atualizacoes Automaticas',
                 'features.updates.desc': 'Notificacoes automaticas de atualizacao mantem voce na ultima versao com novos recursos e melhorias.',
+                
+                // AI Section
+                'ai.badge': 'Integracao GitHub Copilot',
+                'ai.title': 'Seu Assistente de Dados com IA',
+                'ai.subtitle': 'Converse com o GitHub Copilot para criar queries, gerar visualizacoes e gerenciar seu fluxo de dados naturalmente.',
+                'ai.chat.title': 'Consultas em Linguagem Natural',
+                'ai.chat.desc': 'Faca perguntas sobre seus dados em linguagem natural. O Copilot gera o codigo SQL ou Python automaticamente.',
+                'ai.blocks.title': 'Criar e Executar Blocos',
+                'ai.blocks.desc': 'O Copilot pode criar, editar e executar blocos de codigo diretamente. Veja sua analise se construindo.',
+                'ai.schema.title': 'Reconhecimento de Schema',
+                'ai.schema.desc': 'Pergunte sobre suas tabelas e colunas. O Copilot le o schema do banco para dar sugestoes precisas.',
+                'ai.viz.title': 'Visualizacoes Instantaneas',
+                'ai.viz.desc': "Diga 'crie um grafico' e o Copilot gera codigo matplotlib, executa e mostra o resultado.",
+                'ai.powered': 'Powered by GPT-4o, Claude 3.5 e mais',
+                'ai.license_notice': 'Requer assinatura do GitHub Copilot (nao inclusa no DataPyn)',
+                'ai.learn_more': 'Saiba mais sobre a integracao Copilot',
                 
                 // Databases
                 'databases.title': 'Bancos de Dados Suportados',
@@ -853,6 +1121,9 @@ plt.show()</code></pre>
                 'docs.faq.desc': 'Perguntas frequentes',
                 'docs.changelog.title': 'Changelog',
                 'docs.changelog.desc': 'Historico de versoes',
+                'docs.copilot.title_short': 'Integracao Copilot',
+                'docs.copilot.desc_short': 'Assistente IA',
+                'docs.view_all': 'Ver Documentacao Completa',
                 
                 // Open Source
                 'opensource.badge': 'Open Source',

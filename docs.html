@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - DataPyn</title>
+    <meta name="description" content="Complete documentation for DataPyn - Professional SQL + Python IDE. Learn features, shortcuts, database connections, and GitHub Copilot integration.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/datapyn-logo.ico">
+    
+    <!-- DaisyUI + Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        code, .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .section-divider {
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Sidebar */
+        .docs-sidebar {
+            position: sticky;
+            top: 72px;
+            height: calc(100vh - 72px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        
+        .docs-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .docs-sidebar::-webkit-scrollbar-thumb {
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 8px 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+        
+        .nav-link.active {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            padding: 16px 12px 8px;
+        }
+        
+        /* Content */
+        .docs-content {
+            max-width: 800px;
+        }
+        
+        .docs-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .docs-content h2:first-child {
+            margin-top: 0;
+            border-top: none;
+            padding-top: 0;
+        }
+        
+        .docs-content h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        
+        .docs-content p {
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+        
+        .docs-content ul, .docs-content ol {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .docs-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .docs-content code:not(pre code) {
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.875em;
+        }
+        
+        .docs-content pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .docs-content pre code {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .docs-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        .docs-content th, .docs-content td {
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+        
+        .docs-content th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .docs-content td {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+        
+        /* Feature Card in docs */
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-card h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-card p {
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+        
+        /* Copilot highlight */
+        .copilot-card {
+            border-color: rgba(139, 92, 246, 0.3);
+            background: var(--bg-secondary);
+        }
+        
+        /* Language Selector */
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #94a3b8;
+            background: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .lang-btn:hover {
+            color: #f8fafc;
+            background: var(--bg-tertiary);
+        }
+        
+        .lang-btn.active {
+            color: #f8fafc;
+            border-color: var(--border-color);
+        }
+        
+        .lang-selector {
+            display: flex;
+            gap: 2px;
+            padding: 2px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        /* Mobile sidebar */
+        @media (max-width: 1023px) {
+            .docs-sidebar {
+                position: fixed;
+                left: -280px;
+                top: 56px;
+                width: 280px;
+                height: calc(100vh - 56px);
+                background: var(--bg-primary);
+                border-right: 1px solid var(--border-color);
+                z-index: 40;
+                transition: left 0.3s ease;
+            }
+            
+            .docs-sidebar.open {
+                left: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                top: 56px;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 30;
+            }
+            
+            .sidebar-overlay.open {
+                display: block;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0f172a]/95 backdrop-blur border-b border-[#334155]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-14">
+                <!-- Logo -->
+                <div class="flex items-center gap-4">
+                    <button id="sidebar-toggle" class="lg:hidden text-[#94a3b8] hover:text-white p-1">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <a href="index.html" class="flex items-center gap-2">
+                        <img src="assets/datapyn_logo.svg" alt="DataPyn" class="h-6 w-6">
+                        <span class="font-semibold text-base">DataPyn</span>
+                    </a>
+                    <span class="hidden sm:inline text-[#64748b] text-sm">/ Documentation</span>
+                </div>
+                
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                    <!-- Language Selector -->
+                    <div class="lang-selector hidden sm:flex">
+                        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+                        <button class="lang-btn" data-lang="pt" onclick="setLanguage('pt')">PT</button>
+                    </div>
+                    
+                    <a href="https://github.com/natharuc/datapyn" target="_blank" class="text-[#94a3b8] hover:text-white transition-colors">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Sidebar Overlay (mobile) -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Main Layout -->
+    <div class="flex pt-14">
+        <!-- Sidebar -->
+        <aside id="docs-sidebar" class="docs-sidebar w-64 flex-shrink-0 border-r border-[#334155] p-4">
+            <nav>
+                <div class="nav-section-title" data-i18n="docs.nav.start">Getting Started</div>
+                <a href="#introduction" class="nav-link active" data-i18n="docs.nav.intro">Introduction</a>
+                <a href="#installation" class="nav-link" data-i18n="docs.nav.install">Installation</a>
+                <a href="#first-connection" class="nav-link" data-i18n="docs.nav.connection">First Connection</a>
+                
+                <div class="nav-section-title" data-i18n="docs.nav.features_section">Features</div>
+                <a href="#code-blocks" class="nav-link" data-i18n="docs.nav.blocks">Code Blocks</a>
+                <a href="#databases" class="nav-link" data-i18n="docs.nav.databases">Database Support</a>
+                <a href="#execution" class="nav-link" data-i18n="docs.nav.execution">Code Execution</a>
+                <a href="#visualization" class="nav-link" data-i18n="docs.nav.visualization">Visualization</a>
+                <a href="#import-export" class="nav-link" data-i18n="docs.nav.import_export">Import & Export</a>
+                
+                <div class="nav-section-title" data-i18n="docs.nav.copilot_section">GitHub Copilot</div>
+                <a href="#copilot" class="nav-link" data-i18n="docs.nav.copilot_intro">Copilot Integration</a>
+                <a href="#copilot-tools" class="nav-link" data-i18n="docs.nav.copilot_tools">Available Tools</a>
+                <a href="#copilot-prompts" class="nav-link" data-i18n="docs.nav.copilot_prompts">Useful Prompts</a>
+                
+                <div class="nav-section-title" data-i18n="docs.nav.reference">Reference</div>
+                <a href="#shortcuts" class="nav-link" data-i18n="docs.nav.shortcuts">Keyboard Shortcuts</a>
+                <a href="#faq" class="nav-link" data-i18n="docs.nav.faq">FAQ</a>
+            </nav>
+        </aside>
+        
+        <!-- Content -->
+        <main class="flex-1 p-6 lg:p-10">
+            <div class="docs-content mx-auto">
+                
+                <!-- Introduction -->
+                <section id="introduction">
+                    <h2 data-i18n="docs.intro.title">Introduction</h2>
+                    <p data-i18n="docs.intro.p1">
+                        DataPyn is a professional IDE designed for data analysts and engineers. It combines SQL and Python 
+                        in a single unified environment, allowing you to query databases, manipulate data with Pandas, 
+                        and visualize results - all without switching tools.
+                    </p>
+                    <p data-i18n="docs.intro.p2">
+                        With native GitHub Copilot integration, you can chat with AI to generate queries, create visualizations, 
+                        and automate your data workflow using natural language.
+                    </p>
+                    
+                    <div class="grid sm:grid-cols-2 gap-4 mt-6">
+                        <div class="feature-card">
+                            <h4><i data-lucide="layers" class="w-4 h-4 inline mr-2 text-blue-500"></i><span data-i18n="docs.intro.f1_title">Mixed Code Blocks</span></h4>
+                            <p data-i18n="docs.intro.f1_desc">Interleave SQL and Python blocks in the same document. SQL results automatically become DataFrames.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><i data-lucide="database" class="w-4 h-4 inline mr-2 text-blue-500"></i><span data-i18n="docs.intro.f2_title">Per-Block Connections</span></h4>
+                            <p data-i18n="docs.intro.f2_desc">Each SQL block can use a different database connection. Query multiple sources in one document.</p>
+                        </div>
+                        <div class="feature-card copilot-card">
+                            <h4><i data-lucide="sparkles" class="w-4 h-4 inline mr-2 text-purple-400"></i><span data-i18n="docs.intro.f3_title">GitHub Copilot</span></h4>
+                            <p data-i18n="docs.intro.f3_desc">Chat with AI to create blocks, run queries, and generate visualizations using natural language.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><i data-lucide="layout-grid" class="w-4 h-4 inline mr-2 text-blue-500"></i><span data-i18n="docs.intro.f4_title">Multiple Sessions</span></h4>
+                            <p data-i18n="docs.intro.f4_desc">Each tab maintains its own Python namespace and connection. Compare data across environments.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Installation -->
+                <section id="installation">
+                    <h2 data-i18n="docs.install.title">Installation</h2>
+                    
+                    <h3 data-i18n="docs.install.windows_title">Windows (Recommended)</h3>
+                    <p data-i18n="docs.install.windows_desc">Download the MSI installer from the GitHub releases page. No Python installation required.</p>
+                    <pre><code><span class="text-[#64748b]"># Or install from source:</span>
+git clone https://github.com/natharuc/datapyn.git
+cd datapyn
+.\scripts\install.bat
+.\scripts\run.bat</code></pre>
+                    
+                    <h3 data-i18n="docs.install.manual_title">Manual Installation</h3>
+                    <p data-i18n="docs.install.manual_desc">For Linux/macOS or custom setups:</p>
+                    <pre><code>python -m venv .venv
+<span class="text-[#64748b]"># Windows:</span>
+.venv\Scripts\activate
+<span class="text-[#64748b]"># Linux/macOS:</span>
+source .venv/bin/activate
+
+pip install -r requirements.txt
+python source/main.py</code></pre>
+                </section>
+                
+                <!-- First Connection -->
+                <section id="first-connection">
+                    <h2 data-i18n="docs.connection.title">First Connection</h2>
+                    <p data-i18n="docs.connection.p1">To start querying data, you need to set up a database connection.</p>
+                    
+                    <ol>
+                        <li data-i18n="docs.connection.step1">Click the database icon in the left sidebar or press <span class="kbd">Ctrl+Shift+C</span></li>
+                        <li data-i18n="docs.connection.step2">Click "New Connection" and fill in your database details</li>
+                        <li data-i18n="docs.connection.step3">Click "Test Connection" to verify the settings</li>
+                        <li data-i18n="docs.connection.step4">Save and double-click the connection to connect</li>
+                    </ol>
+                    
+                    <p data-i18n="docs.connection.p2">Once connected, you can start writing SQL queries in any SQL block.</p>
+                </section>
+                
+                <!-- Code Blocks -->
+                <section id="code-blocks">
+                    <h2 data-i18n="docs.blocks.title">Code Blocks</h2>
+                    <p data-i18n="docs.blocks.p1">DataPyn organizes code into blocks. Each block can be SQL or Python, and blocks execute independently or in sequence.</p>
+                    
+                    <h3 data-i18n="docs.blocks.add_title">Adding Blocks</h3>
+                    <ul>
+                        <li data-i18n="docs.blocks.add1">Click <span class="kbd">+ SQL</span> or <span class="kbd">+ Python</span> button</li>
+                        <li data-i18n="docs.blocks.add2">Use <span class="kbd">Ctrl+Shift+S</span> for SQL, <span class="kbd">Ctrl+Shift+P</span> for Python</li>
+                        <li data-i18n="docs.blocks.add3">Click the language selector to switch an existing block's type</li>
+                    </ul>
+                    
+                    <h3 data-i18n="docs.blocks.naming_title">Block Naming</h3>
+                    <p data-i18n="docs.blocks.naming_desc">
+                        You can name SQL blocks (e.g., "customers"). The result DataFrame will use that name instead of the default "df".
+                        This allows you to reference specific query results by name in Python blocks.
+                    </p>
+                    <pre><code><span class="text-[#64748b]">-- Block named "customers"</span>
+SELECT * FROM customers WHERE active = 1
+
+<span class="text-[#64748b]"># In Python, reference by name:</span>
+print(customers.head())</code></pre>
+                </section>
+                
+                <!-- Databases -->
+                <section id="databases">
+                    <h2 data-i18n="docs.databases.title">Database Support</h2>
+                    <p data-i18n="docs.databases.p1">DataPyn connects to the most popular database systems:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="docs.databases.th_db">Database</th>
+                                <th data-i18n="docs.databases.th_features">Features</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>SQL Server</strong></td>
+                                <td data-i18n="docs.databases.sqlserver">Windows Auth, SQL Auth, dynamic USE database</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MySQL</strong></td>
+                                <td data-i18n="docs.databases.mysql">Multiple databases, configurable charset</td>
+                            </tr>
+                            <tr>
+                                <td><strong>PostgreSQL</strong></td>
+                                <td data-i18n="docs.databases.postgresql">Schema support, custom types</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MariaDB</strong></td>
+                                <td data-i18n="docs.databases.mariadb">MySQL compatible</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SQLite</strong></td>
+                                <td data-i18n="docs.databases.sqlite">Local file, serverless</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Databricks</strong></td>
+                                <td data-i18n="docs.databases.databricks">SQL Warehouse, Unity Catalog</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                
+                <!-- Execution -->
+                <section id="execution">
+                    <h2 data-i18n="docs.execution.title">Code Execution</h2>
+                    <p data-i18n="docs.execution.p1">Execute code using keyboard shortcuts or toolbar buttons:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="docs.execution.th_shortcut">Shortcut</th>
+                                <th data-i18n="docs.execution.th_action">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="kbd">F5</span></td>
+                                <td data-i18n="docs.execution.f5">Execute selection or all blocks</td>
+                            </tr>
+                            <tr>
+                                <td><span class="kbd">Ctrl+F5</span></td>
+                                <td data-i18n="docs.execution.ctrl_f5">Execute all blocks in sequence</td>
+                            </tr>
+                            <tr>
+                                <td><span class="kbd">Shift+Enter</span></td>
+                                <td data-i18n="docs.execution.shift_enter">Execute current block and advance</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3 data-i18n="docs.execution.cross_title">Cross-Syntax Execution</h3>
+                    <p data-i18n="docs.execution.cross_desc">SQL results are automatically available in Python as DataFrames:</p>
+                    <pre><code><span class="text-[#64748b]">-- SQL Block</span>
+<span class="text-purple-400">SELECT</span> * <span class="text-purple-400">FROM</span> sales <span class="text-purple-400">WHERE</span> year = 2024
+
+<span class="text-[#64748b]"># Python Block - df contains SQL result</span>
+total = df[<span class="text-yellow-400">'amount'</span>].sum()
+print(f<span class="text-yellow-400">"Total: ${total:,.2f}"</span>)</code></pre>
+                </section>
+                
+                <!-- Visualization -->
+                <section id="visualization">
+                    <h2 data-i18n="docs.viz.title">Visualization</h2>
+                    <p data-i18n="docs.viz.p1">Create charts directly from your data using Matplotlib:</p>
+                    <pre><code><span class="text-purple-400">import</span> matplotlib.pyplot <span class="text-purple-400">as</span> plt
+
+<span class="text-[#64748b]"># df is your SQL result</span>
+df.plot(kind=<span class="text-yellow-400">'bar'</span>, x=<span class="text-yellow-400">'category'</span>, y=<span class="text-yellow-400">'revenue'</span>)
+plt.title(<span class="text-yellow-400">'Revenue by Category'</span>)
+plt.show()</code></pre>
+                    <p data-i18n="docs.viz.p2">Charts render inline in the results panel. You can also use seaborn, plotly, or any other visualization library.</p>
+                </section>
+                
+                <!-- Import & Export -->
+                <section id="import-export">
+                    <h2 data-i18n="docs.import.title">Import & Export</h2>
+                    
+                    <h3 data-i18n="docs.import.drag_title">Drag and Drop Import</h3>
+                    <p data-i18n="docs.import.drag_desc">Drag files directly into the editor. DataPyn generates import code automatically:</p>
+                    <ul>
+                        <li><strong>.csv</strong> - <code>pd.read_csv()</code></li>
+                        <li><strong>.xlsx</strong> - <code>pd.read_excel()</code></li>
+                        <li><strong>.json</strong> - <code>pd.read_json()</code></li>
+                        <li><strong>.dpconn</strong> - Connection file auto-import</li>
+                    </ul>
+                    
+                    <h3 data-i18n="docs.import.export_title">Export Options</h3>
+                    <p data-i18n="docs.import.export_desc">Export your DataFrames or entire workflow:</p>
+                    <ul>
+                        <li data-i18n="docs.import.export1"><strong>Excel/CSV/JSON</strong> - Right-click results table</li>
+                        <li data-i18n="docs.import.export2"><strong>Python Script</strong> - Menu > Export > Python Script (standalone)</li>
+                        <li data-i18n="docs.import.export3"><strong>Workspace</strong> - Save as .dpw file with all tabs and connections</li>
+                    </ul>
+                </section>
+                
+                <!-- Copilot Integration -->
+                <section id="copilot">
+                    <h2 data-i18n="docs.copilot.title">GitHub Copilot Integration</h2>
+                    
+                    <div class="callout warning" style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 0.5rem;">
+                        <strong style="color: #f59e0b;" data-i18n="docs.copilot.license_title">License Required</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: #94a3b8;" data-i18n="docs.copilot.license_notice">
+                            GitHub Copilot integration requires an active Copilot subscription. DataPyn is free and open source, 
+                            but Copilot is a paid service from GitHub. You can subscribe at 
+                            <a href="https://github.com/features/copilot" target="_blank" style="color: #a78bfa;">github.com/features/copilot</a>.
+                        </p>
+                    </div>
+                    
+                    <p data-i18n="docs.copilot.p1">
+                        DataPyn features deep integration with GitHub Copilot. The AI assistant has full access to your 
+                        session context - it can see your code, understand your database schema, and take actions like 
+                        creating blocks, executing queries, and generating visualizations.
+                    </p>
+                    
+                    <h3 data-i18n="docs.copilot.auth_title">Authentication</h3>
+                    <p data-i18n="docs.copilot.auth_desc">
+                        To use Copilot, you need a GitHub account with Copilot access. On first use, DataPyn will open 
+                        a browser window for GitHub authentication. Once authorized, you can chat with Copilot directly 
+                        in the sidebar panel.
+                    </p>
+                    
+                    <h3 data-i18n="docs.copilot.models_title">Available Models</h3>
+                    <ul>
+                        <li><strong>GPT-4o</strong> - Best for complex analysis</li>
+                        <li><strong>GPT-4o Mini</strong> - Faster, cost-effective</li>
+                        <li><strong>Claude 3.5 Sonnet</strong> - Great for code generation</li>
+                        <li><strong>o3-mini</strong> - Reasoning model</li>
+                    </ul>
+                </section>
+                
+                <!-- Copilot Tools -->
+                <section id="copilot-tools">
+                    <h2 data-i18n="docs.tools.title">Available Copilot Tools</h2>
+                    <p data-i18n="docs.tools.p1">
+                        Copilot has access to specialized tools that let it interact with DataPyn. You don't need to 
+                        memorize these - just ask naturally and Copilot will use the right tools.
+                    </p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-i18n="docs.tools.th_tool">Tool</th>
+                                <th data-i18n="docs.tools.th_desc">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>create_block</code></td>
+                                <td data-i18n="docs.tools.create_block">Create a new SQL or Python block with code</td>
+                            </tr>
+                            <tr>
+                                <td><code>edit_block</code></td>
+                                <td data-i18n="docs.tools.edit_block">Modify code in an existing block</td>
+                            </tr>
+                            <tr>
+                                <td><code>execute_block</code></td>
+                                <td data-i18n="docs.tools.execute_block">Run a block and return results</td>
+                            </tr>
+                            <tr>
+                                <td><code>read_schema</code></td>
+                                <td data-i18n="docs.tools.read_schema">Read database tables and columns</td>
+                            </tr>
+                            <tr>
+                                <td><code>get_context</code></td>
+                                <td data-i18n="docs.tools.get_context">See current code, connection, and state</td>
+                            </tr>
+                            <tr>
+                                <td><code>connect_database</code></td>
+                                <td data-i18n="docs.tools.connect_database">Connect session to a saved connection</td>
+                            </tr>
+                            <tr>
+                                <td><code>get_variables</code></td>
+                                <td data-i18n="docs.tools.get_variables">View Python variables in namespace</td>
+                            </tr>
+                            <tr>
+                                <td><code>write_and_run</code></td>
+                                <td data-i18n="docs.tools.write_and_run">Create, write code, and execute in one action</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                
+                <!-- Copilot Prompts -->
+                <section id="copilot-prompts">
+                    <h2 data-i18n="docs.prompts.title">Useful Prompts</h2>
+                    <p data-i18n="docs.prompts.p1">Here are some example prompts to help you get started with Copilot:</p>
+                    
+                    <div class="feature-card copilot-card">
+                        <h4 data-i18n="docs.prompts.analysis_title">Data Analysis</h4>
+                        <ul class="mt-2 space-y-2">
+                            <li>"Show me the top 10 customers by revenue"</li>
+                            <li>"What tables do I have in my database?"</li>
+                            <li>"Create a monthly sales summary for 2024"</li>
+                            <li>"Find duplicate records in the orders table"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card copilot-card">
+                        <h4 data-i18n="docs.prompts.viz_title">Visualization</h4>
+                        <ul class="mt-2 space-y-2">
+                            <li>"Create a bar chart with the results"</li>
+                            <li>"Plot sales trend over time"</li>
+                            <li>"Show a pie chart of revenue by region"</li>
+                            <li>"Create a heatmap of correlations"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card copilot-card">
+                        <h4 data-i18n="docs.prompts.automation_title">Automation</h4>
+                        <ul class="mt-2 space-y-2">
+                            <li>"Connect to my production database"</li>
+                            <li>"Export data to Excel"</li>
+                            <li>"Clean and transform this data"</li>
+                            <li>"Create a data validation script"</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Shortcuts -->
+                <section id="shortcuts">
+                    <h2 data-i18n="docs.shortcuts.title">Keyboard Shortcuts</h2>
+                    
+                    <h3 data-i18n="docs.shortcuts.exec_title">Execution</h3>
+                    <table>
+                        <tbody>
+                            <tr><td><span class="kbd">F5</span></td><td data-i18n="docs.shortcuts.exec_f5">Execute selection or all blocks</td></tr>
+                            <tr><td><span class="kbd">Ctrl+F5</span></td><td data-i18n="docs.shortcuts.exec_ctrl_f5">Execute all blocks</td></tr>
+                            <tr><td><span class="kbd">Shift+Enter</span></td><td data-i18n="docs.shortcuts.exec_shift_enter">Execute and advance</td></tr>
+                            <tr><td><span class="kbd">Ctrl+Enter</span></td><td data-i18n="docs.shortcuts.exec_ctrl_enter">Execute all</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3 data-i18n="docs.shortcuts.edit_title">Editing</h3>
+                    <table>
+                        <tbody>
+                            <tr><td><span class="kbd">Ctrl+D</span></td><td data-i18n="docs.shortcuts.edit_dup">Duplicate line</td></tr>
+                            <tr><td><span class="kbd">Ctrl+/</span></td><td data-i18n="docs.shortcuts.edit_comment">Toggle comment</td></tr>
+                            <tr><td><span class="kbd">Ctrl+F</span></td><td data-i18n="docs.shortcuts.edit_find">Find</td></tr>
+                            <tr><td><span class="kbd">Ctrl+H</span></td><td data-i18n="docs.shortcuts.edit_replace">Find and replace</td></tr>
+                            <tr><td><span class="kbd">Ctrl+G</span></td><td data-i18n="docs.shortcuts.edit_goto">Go to line</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3 data-i18n="docs.shortcuts.tabs_title">Tabs & Sessions</h3>
+                    <table>
+                        <tbody>
+                            <tr><td><span class="kbd">Ctrl+T</span></td><td data-i18n="docs.shortcuts.tabs_new">New tab</td></tr>
+                            <tr><td><span class="kbd">Ctrl+W</span></td><td data-i18n="docs.shortcuts.tabs_close">Close tab</td></tr>
+                            <tr><td><span class="kbd">Ctrl+Tab</span></td><td data-i18n="docs.shortcuts.tabs_next">Next tab</td></tr>
+                            <tr><td><span class="kbd">Ctrl+1..9</span></td><td data-i18n="docs.shortcuts.tabs_num">Go to tab N</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3 data-i18n="docs.shortcuts.blocks_title">Blocks</h3>
+                    <table>
+                        <tbody>
+                            <tr><td><span class="kbd">Ctrl+Shift+B</span></td><td data-i18n="docs.shortcuts.blocks_add">Add new block</td></tr>
+                            <tr><td><span class="kbd">Alt+Up/Down</span></td><td data-i18n="docs.shortcuts.blocks_move">Move block</td></tr>
+                            <tr><td><span class="kbd">Ctrl+Shift+Delete</span></td><td data-i18n="docs.shortcuts.blocks_delete">Delete block</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+                
+                <!-- FAQ -->
+                <section id="faq">
+                    <h2 data-i18n="docs.faq.title">Frequently Asked Questions</h2>
+                    
+                    <h3 data-i18n="docs.faq.q1">How do I connect to SQL Server with Windows Authentication?</h3>
+                    <p data-i18n="docs.faq.a1">In the connection dialog, select "Windows Auth" as the authentication type. DataPyn will use your current Windows credentials.</p>
+                    
+                    <h3 data-i18n="docs.faq.q2">Can I use multiple database connections in the same document?</h3>
+                    <p data-i18n="docs.faq.a2">Yes! Each SQL block can have its own connection. Click the connection selector in the block header to choose a different database.</p>
+                    
+                    <h3 data-i18n="docs.faq.q3">Where are my credentials stored?</h3>
+                    <p data-i18n="docs.faq.a3">Database passwords are encrypted using AES-256 and stored locally in your user profile. They never leave your machine.</p>
+                    
+                    <h3 data-i18n="docs.faq.q4">How do I access GitHub Copilot?</h3>
+                    <p data-i18n="docs.faq.a4">Click the Copilot icon in the sidebar or press Ctrl+Shift+I. You'll need to authenticate with your GitHub account on first use.</p>
+                    
+                    <h3 data-i18n="docs.faq.q5">Can I export my work as a Python script?</h3>
+                    <p data-i18n="docs.faq.a5">Yes! Go to Menu > Export > Python Script. DataPyn generates a standalone .py file with all your SQL queries embedded as strings and your Python code ready to run.</p>
+                </section>
+                
+                <!-- Footer -->
+                <div class="mt-16 pt-8 border-t border-[#334155] text-center text-sm text-[#64748b]">
+                    <p>DataPyn - MIT License</p>
+                    <p class="mt-2">
+                        <a href="https://github.com/natharuc/datapyn" target="_blank" class="text-blue-400 hover:underline">GitHub</a>
+                        <span class="mx-2">|</span>
+                        <a href="https://github.com/natharuc/datapyn/issues" target="_blank" class="text-blue-400 hover:underline">Report Issue</a>
+                        <span class="mx-2">|</span>
+                        <a href="bmc/" class="text-amber-400 hover:underline">Support</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Internationalization
+        const translations = {
+            en: {
+                // Navigation
+                'docs.nav.start': 'Getting Started',
+                'docs.nav.intro': 'Introduction',
+                'docs.nav.install': 'Installation',
+                'docs.nav.connection': 'First Connection',
+                'docs.nav.features_section': 'Features',
+                'docs.nav.blocks': 'Code Blocks',
+                'docs.nav.databases': 'Database Support',
+                'docs.nav.execution': 'Code Execution',
+                'docs.nav.visualization': 'Visualization',
+                'docs.nav.import_export': 'Import & Export',
+                'docs.nav.copilot_section': 'GitHub Copilot',
+                'docs.nav.copilot_intro': 'Copilot Integration',
+                'docs.nav.copilot_tools': 'Available Tools',
+                'docs.nav.copilot_prompts': 'Useful Prompts',
+                'docs.nav.reference': 'Reference',
+                'docs.nav.shortcuts': 'Keyboard Shortcuts',
+                'docs.nav.faq': 'FAQ',
+                
+                // Introduction
+                'docs.intro.title': 'Introduction',
+                'docs.intro.p1': 'DataPyn is a professional IDE designed for data analysts and engineers. It combines SQL and Python in a single unified environment, allowing you to query databases, manipulate data with Pandas, and visualize results - all without switching tools.',
+                'docs.intro.p2': 'With native GitHub Copilot integration, you can chat with AI to generate queries, create visualizations, and automate your data workflow using natural language.',
+                'docs.intro.f1_title': 'Mixed Code Blocks',
+                'docs.intro.f1_desc': 'Interleave SQL and Python blocks in the same document. SQL results automatically become DataFrames.',
+                'docs.intro.f2_title': 'Per-Block Connections',
+                'docs.intro.f2_desc': 'Each SQL block can use a different database connection. Query multiple sources in one document.',
+                'docs.intro.f3_title': 'GitHub Copilot',
+                'docs.intro.f3_desc': 'Chat with AI to create blocks, run queries, and generate visualizations using natural language.',
+                'docs.intro.f4_title': 'Multiple Sessions',
+                'docs.intro.f4_desc': 'Each tab maintains its own Python namespace and connection. Compare data across environments.',
+                
+                // Installation
+                'docs.install.title': 'Installation',
+                'docs.install.windows_title': 'Windows (Recommended)',
+                'docs.install.windows_desc': 'Download the MSI installer from the GitHub releases page. No Python installation required.',
+                'docs.install.manual_title': 'Manual Installation',
+                'docs.install.manual_desc': 'For Linux/macOS or custom setups:',
+                
+                // First Connection
+                'docs.connection.title': 'First Connection',
+                'docs.connection.p1': 'To start querying data, you need to set up a database connection.',
+                'docs.connection.step1': 'Click the database icon in the left sidebar or press Ctrl+Shift+C',
+                'docs.connection.step2': 'Click "New Connection" and fill in your database details',
+                'docs.connection.step3': 'Click "Test Connection" to verify the settings',
+                'docs.connection.step4': 'Save and double-click the connection to connect',
+                'docs.connection.p2': 'Once connected, you can start writing SQL queries in any SQL block.',
+                
+                // Code Blocks
+                'docs.blocks.title': 'Code Blocks',
+                'docs.blocks.p1': 'DataPyn organizes code into blocks. Each block can be SQL or Python, and blocks execute independently or in sequence.',
+                'docs.blocks.add_title': 'Adding Blocks',
+                'docs.blocks.add1': 'Click + SQL or + Python button',
+                'docs.blocks.add2': 'Use Ctrl+Shift+S for SQL, Ctrl+Shift+P for Python',
+                'docs.blocks.add3': "Click the language selector to switch an existing block's type",
+                'docs.blocks.naming_title': 'Block Naming',
+                'docs.blocks.naming_desc': 'You can name SQL blocks (e.g., "customers"). The result DataFrame will use that name instead of the default "df". This allows you to reference specific query results by name in Python blocks.',
+                
+                // Databases
+                'docs.databases.title': 'Database Support',
+                'docs.databases.p1': 'DataPyn connects to the most popular database systems:',
+                'docs.databases.th_db': 'Database',
+                'docs.databases.th_features': 'Features',
+                'docs.databases.sqlserver': 'Windows Auth, SQL Auth, dynamic USE database',
+                'docs.databases.mysql': 'Multiple databases, configurable charset',
+                'docs.databases.postgresql': 'Schema support, custom types',
+                'docs.databases.mariadb': 'MySQL compatible',
+                'docs.databases.sqlite': 'Local file, serverless',
+                'docs.databases.databricks': 'SQL Warehouse, Unity Catalog',
+                
+                // Execution
+                'docs.execution.title': 'Code Execution',
+                'docs.execution.p1': 'Execute code using keyboard shortcuts or toolbar buttons:',
+                'docs.execution.th_shortcut': 'Shortcut',
+                'docs.execution.th_action': 'Action',
+                'docs.execution.f5': 'Execute selection or all blocks',
+                'docs.execution.ctrl_f5': 'Execute all blocks in sequence',
+                'docs.execution.shift_enter': 'Execute current block and advance',
+                'docs.execution.cross_title': 'Cross-Syntax Execution',
+                'docs.execution.cross_desc': 'SQL results are automatically available in Python as DataFrames:',
+                
+                // Visualization
+                'docs.viz.title': 'Visualization',
+                'docs.viz.p1': 'Create charts directly from your data using Matplotlib:',
+                'docs.viz.p2': 'Charts render inline in the results panel. You can also use seaborn, plotly, or any other visualization library.',
+                
+                // Import & Export
+                'docs.import.title': 'Import & Export',
+                'docs.import.drag_title': 'Drag and Drop Import',
+                'docs.import.drag_desc': 'Drag files directly into the editor. DataPyn generates import code automatically:',
+                'docs.import.export_title': 'Export Options',
+                'docs.import.export_desc': 'Export your DataFrames or entire workflow:',
+                'docs.import.export1': 'Excel/CSV/JSON - Right-click results table',
+                'docs.import.export2': 'Python Script - Menu > Export > Python Script (standalone)',
+                'docs.import.export3': 'Workspace - Save as .dpw file with all tabs and connections',
+                
+                // Copilot
+                'docs.copilot.title': 'GitHub Copilot Integration',
+                'docs.copilot.license_title': 'License Required',
+                'docs.copilot.license_notice': 'GitHub Copilot integration requires an active Copilot subscription. DataPyn is free and open source, but Copilot is a paid service from GitHub.',
+                'docs.copilot.p1': 'DataPyn features deep integration with GitHub Copilot. The AI assistant has full access to your session context - it can see your code, understand your database schema, and take actions like creating blocks, executing queries, and generating visualizations.',
+                'docs.copilot.auth_title': 'Authentication',
+                'docs.copilot.auth_desc': 'To use Copilot, you need a GitHub account with Copilot access. On first use, DataPyn will open a browser window for GitHub authentication. Once authorized, you can chat with Copilot directly in the sidebar panel.',
+                'docs.copilot.models_title': 'Available Models',
+                
+                // Tools
+                'docs.tools.title': 'Available Copilot Tools',
+                'docs.tools.p1': "Copilot has access to specialized tools that let it interact with DataPyn. You don't need to memorize these - just ask naturally and Copilot will use the right tools.",
+                'docs.tools.th_tool': 'Tool',
+                'docs.tools.th_desc': 'Description',
+                'docs.tools.create_block': 'Create a new SQL or Python block with code',
+                'docs.tools.edit_block': 'Modify code in an existing block',
+                'docs.tools.execute_block': 'Run a block and return results',
+                'docs.tools.read_schema': 'Read database tables and columns',
+                'docs.tools.get_context': 'See current code, connection, and state',
+                'docs.tools.connect_database': 'Connect session to a saved connection',
+                'docs.tools.get_variables': 'View Python variables in namespace',
+                'docs.tools.write_and_run': 'Create, write code, and execute in one action',
+                
+                // Prompts
+                'docs.prompts.title': 'Useful Prompts',
+                'docs.prompts.p1': 'Here are some example prompts to help you get started with Copilot:',
+                'docs.prompts.analysis_title': 'Data Analysis',
+                'docs.prompts.viz_title': 'Visualization',
+                'docs.prompts.automation_title': 'Automation',
+                
+                // Shortcuts
+                'docs.shortcuts.title': 'Keyboard Shortcuts',
+                'docs.shortcuts.exec_title': 'Execution',
+                'docs.shortcuts.exec_f5': 'Execute selection or all blocks',
+                'docs.shortcuts.exec_ctrl_f5': 'Execute all blocks',
+                'docs.shortcuts.exec_shift_enter': 'Execute and advance',
+                'docs.shortcuts.exec_ctrl_enter': 'Execute all',
+                'docs.shortcuts.edit_title': 'Editing',
+                'docs.shortcuts.edit_dup': 'Duplicate line',
+                'docs.shortcuts.edit_comment': 'Toggle comment',
+                'docs.shortcuts.edit_find': 'Find',
+                'docs.shortcuts.edit_replace': 'Find and replace',
+                'docs.shortcuts.edit_goto': 'Go to line',
+                'docs.shortcuts.tabs_title': 'Tabs & Sessions',
+                'docs.shortcuts.tabs_new': 'New tab',
+                'docs.shortcuts.tabs_close': 'Close tab',
+                'docs.shortcuts.tabs_next': 'Next tab',
+                'docs.shortcuts.tabs_num': 'Go to tab N',
+                'docs.shortcuts.blocks_title': 'Blocks',
+                'docs.shortcuts.blocks_add': 'Add new block',
+                'docs.shortcuts.blocks_move': 'Move block',
+                'docs.shortcuts.blocks_delete': 'Delete block',
+                
+                // FAQ
+                'docs.faq.title': 'Frequently Asked Questions',
+                'docs.faq.q1': 'How do I connect to SQL Server with Windows Authentication?',
+                'docs.faq.a1': 'In the connection dialog, select "Windows Auth" as the authentication type. DataPyn will use your current Windows credentials.',
+                'docs.faq.q2': 'Can I use multiple database connections in the same document?',
+                'docs.faq.a2': 'Yes! Each SQL block can have its own connection. Click the connection selector in the block header to choose a different database.',
+                'docs.faq.q3': 'Where are my credentials stored?',
+                'docs.faq.a3': 'Database passwords are encrypted using AES-256 and stored locally in your user profile. They never leave your machine.',
+                'docs.faq.q4': 'How do I access GitHub Copilot?',
+                'docs.faq.a4': "Click the Copilot icon in the sidebar or press Ctrl+Shift+I. You'll need to authenticate with your GitHub account on first use.",
+                'docs.faq.q5': 'Can I export my work as a Python script?',
+                'docs.faq.a5': 'Yes! Go to Menu > Export > Python Script. DataPyn generates a standalone .py file with all your SQL queries embedded as strings and your Python code ready to run.'
+            },
+            pt: {
+                // Navigation
+                'docs.nav.start': 'Primeiros Passos',
+                'docs.nav.intro': 'Introducao',
+                'docs.nav.install': 'Instalacao',
+                'docs.nav.connection': 'Primeira Conexao',
+                'docs.nav.features_section': 'Recursos',
+                'docs.nav.blocks': 'Blocos de Codigo',
+                'docs.nav.databases': 'Bancos de Dados',
+                'docs.nav.execution': 'Execucao de Codigo',
+                'docs.nav.visualization': 'Visualizacao',
+                'docs.nav.import_export': 'Importar e Exportar',
+                'docs.nav.copilot_section': 'GitHub Copilot',
+                'docs.nav.copilot_intro': 'Integracao Copilot',
+                'docs.nav.copilot_tools': 'Ferramentas Disponiveis',
+                'docs.nav.copilot_prompts': 'Prompts Uteis',
+                'docs.nav.reference': 'Referencia',
+                'docs.nav.shortcuts': 'Atalhos de Teclado',
+                'docs.nav.faq': 'FAQ',
+                
+                // Introduction
+                'docs.intro.title': 'Introducao',
+                'docs.intro.p1': 'DataPyn e uma IDE profissional projetada para analistas e engenheiros de dados. Ela combina SQL e Python em um unico ambiente unificado, permitindo consultar bancos de dados, manipular dados com Pandas e visualizar resultados - tudo sem trocar de ferramenta.',
+                'docs.intro.p2': 'Com integracao nativa ao GitHub Copilot, voce pode conversar com a IA para gerar queries, criar visualizacoes e automatizar seu fluxo de dados usando linguagem natural.',
+                'docs.intro.f1_title': 'Blocos de Codigo Mistos',
+                'docs.intro.f1_desc': 'Intercale blocos SQL e Python no mesmo documento. Resultados SQL viram DataFrames automaticamente.',
+                'docs.intro.f2_title': 'Conexoes por Bloco',
+                'docs.intro.f2_desc': 'Cada bloco SQL pode usar uma conexao diferente. Consulte multiplas fontes em um documento.',
+                'docs.intro.f3_title': 'GitHub Copilot',
+                'docs.intro.f3_desc': 'Converse com a IA para criar blocos, executar queries e gerar visualizacoes usando linguagem natural.',
+                'docs.intro.f4_title': 'Multiplas Sessoes',
+                'docs.intro.f4_desc': 'Cada aba mantem seu proprio namespace Python e conexao. Compare dados entre ambientes.',
+                
+                // Installation
+                'docs.install.title': 'Instalacao',
+                'docs.install.windows_title': 'Windows (Recomendado)',
+                'docs.install.windows_desc': 'Baixe o instalador MSI da pagina de releases do GitHub. Nao requer Python instalado.',
+                'docs.install.manual_title': 'Instalacao Manual',
+                'docs.install.manual_desc': 'Para Linux/macOS ou configuracoes customizadas:',
+                
+                // First Connection
+                'docs.connection.title': 'Primeira Conexao',
+                'docs.connection.p1': 'Para comecar a consultar dados, voce precisa configurar uma conexao de banco de dados.',
+                'docs.connection.step1': 'Clique no icone de banco de dados na barra lateral ou pressione Ctrl+Shift+C',
+                'docs.connection.step2': 'Clique em "Nova Conexao" e preencha os detalhes do banco',
+                'docs.connection.step3': 'Clique em "Testar Conexao" para verificar as configuracoes',
+                'docs.connection.step4': 'Salve e de duplo-clique na conexao para conectar',
+                'docs.connection.p2': 'Uma vez conectado, voce pode comecar a escrever queries SQL em qualquer bloco SQL.',
+                
+                // Code Blocks
+                'docs.blocks.title': 'Blocos de Codigo',
+                'docs.blocks.p1': 'DataPyn organiza codigo em blocos. Cada bloco pode ser SQL ou Python, e os blocos executam independentemente ou em sequencia.',
+                'docs.blocks.add_title': 'Adicionando Blocos',
+                'docs.blocks.add1': 'Clique no botao + SQL ou + Python',
+                'docs.blocks.add2': 'Use Ctrl+Shift+S para SQL, Ctrl+Shift+P para Python',
+                'docs.blocks.add3': 'Clique no seletor de linguagem para trocar o tipo de um bloco existente',
+                'docs.blocks.naming_title': 'Nomeando Blocos',
+                'docs.blocks.naming_desc': 'Voce pode nomear blocos SQL (ex: "customers"). O DataFrame resultante usara esse nome em vez do padrao "df". Isso permite referenciar resultados especificos por nome nos blocos Python.',
+                
+                // Databases
+                'docs.databases.title': 'Bancos de Dados Suportados',
+                'docs.databases.p1': 'DataPyn conecta aos sistemas de banco de dados mais populares:',
+                'docs.databases.th_db': 'Banco de Dados',
+                'docs.databases.th_features': 'Recursos',
+                'docs.databases.sqlserver': 'Windows Auth, SQL Auth, USE database dinamico',
+                'docs.databases.mysql': 'Multiplos bancos, charset configuravel',
+                'docs.databases.postgresql': 'Suporte a schemas, tipos customizados',
+                'docs.databases.mariadb': 'Compativel com MySQL',
+                'docs.databases.sqlite': 'Arquivo local, sem servidor',
+                'docs.databases.databricks': 'SQL Warehouse, Unity Catalog',
+                
+                // Execution
+                'docs.execution.title': 'Execucao de Codigo',
+                'docs.execution.p1': 'Execute codigo usando atalhos de teclado ou botoes da toolbar:',
+                'docs.execution.th_shortcut': 'Atalho',
+                'docs.execution.th_action': 'Acao',
+                'docs.execution.f5': 'Executar selecao ou todos os blocos',
+                'docs.execution.ctrl_f5': 'Executar todos os blocos em sequencia',
+                'docs.execution.shift_enter': 'Executar bloco atual e avancar',
+                'docs.execution.cross_title': 'Execucao Cross-Syntax',
+                'docs.execution.cross_desc': 'Resultados SQL ficam automaticamente disponiveis em Python como DataFrames:',
+                
+                // Visualization
+                'docs.viz.title': 'Visualizacao',
+                'docs.viz.p1': 'Crie graficos diretamente dos seus dados usando Matplotlib:',
+                'docs.viz.p2': 'Os graficos aparecem inline no painel de resultados. Voce tambem pode usar seaborn, plotly ou qualquer outra biblioteca de visualizacao.',
+                
+                // Import & Export
+                'docs.import.title': 'Importar e Exportar',
+                'docs.import.drag_title': 'Importacao Drag and Drop',
+                'docs.import.drag_desc': 'Arraste arquivos diretamente no editor. DataPyn gera codigo de importacao automaticamente:',
+                'docs.import.export_title': 'Opcoes de Exportacao',
+                'docs.import.export_desc': 'Exporte seus DataFrames ou fluxo de trabalho completo:',
+                'docs.import.export1': 'Excel/CSV/JSON - Clique direito na tabela de resultados',
+                'docs.import.export2': 'Script Python - Menu > Exportar > Script Python (standalone)',
+                'docs.import.export3': 'Workspace - Salve como arquivo .dpw com todas as abas e conexoes',
+                
+                // Copilot
+                'docs.copilot.title': 'Integracao GitHub Copilot',
+                'docs.copilot.license_title': 'Licenca Necessaria',
+                'docs.copilot.license_notice': 'A integracao com o GitHub Copilot requer uma assinatura ativa do Copilot. DataPyn e gratuito e open source, mas o Copilot e um servico pago do GitHub.',
+                'docs.copilot.p1': 'DataPyn tem integracao profunda com o GitHub Copilot. O assistente de IA tem acesso total ao contexto da sua sessao - ele pode ver seu codigo, entender o schema do banco de dados e executar acoes como criar blocos, executar queries e gerar visualizacoes.',
+                'docs.copilot.auth_title': 'Autenticacao',
+                'docs.copilot.auth_desc': 'Para usar o Copilot, voce precisa de uma conta GitHub com acesso ao Copilot. No primeiro uso, DataPyn abrira uma janela do navegador para autenticacao GitHub. Uma vez autorizado, voce pode conversar com o Copilot diretamente no painel lateral.',
+                'docs.copilot.models_title': 'Modelos Disponiveis',
+                
+                // Tools
+                'docs.tools.title': 'Ferramentas Copilot Disponiveis',
+                'docs.tools.p1': 'O Copilot tem acesso a ferramentas especializadas que permitem interagir com o DataPyn. Voce nao precisa memoriza-las - apenas pergunte naturalmente e o Copilot usara as ferramentas certas.',
+                'docs.tools.th_tool': 'Ferramenta',
+                'docs.tools.th_desc': 'Descricao',
+                'docs.tools.create_block': 'Criar um novo bloco SQL ou Python com codigo',
+                'docs.tools.edit_block': 'Modificar codigo em um bloco existente',
+                'docs.tools.execute_block': 'Executar um bloco e retornar resultados',
+                'docs.tools.read_schema': 'Ler tabelas e colunas do banco de dados',
+                'docs.tools.get_context': 'Ver codigo atual, conexao e estado',
+                'docs.tools.connect_database': 'Conectar sessao a uma conexao salva',
+                'docs.tools.get_variables': 'Ver variaveis Python no namespace',
+                'docs.tools.write_and_run': 'Criar, escrever codigo e executar em uma acao',
+                
+                // Prompts
+                'docs.prompts.title': 'Prompts Uteis',
+                'docs.prompts.p1': 'Aqui estao alguns exemplos de prompts para comecar com o Copilot:',
+                'docs.prompts.analysis_title': 'Analise de Dados',
+                'docs.prompts.viz_title': 'Visualizacao',
+                'docs.prompts.automation_title': 'Automacao',
+                
+                // Shortcuts
+                'docs.shortcuts.title': 'Atalhos de Teclado',
+                'docs.shortcuts.exec_title': 'Execucao',
+                'docs.shortcuts.exec_f5': 'Executar selecao ou todos os blocos',
+                'docs.shortcuts.exec_ctrl_f5': 'Executar todos os blocos',
+                'docs.shortcuts.exec_shift_enter': 'Executar e avancar',
+                'docs.shortcuts.exec_ctrl_enter': 'Executar todos',
+                'docs.shortcuts.edit_title': 'Edicao',
+                'docs.shortcuts.edit_dup': 'Duplicar linha',
+                'docs.shortcuts.edit_comment': 'Alternar comentario',
+                'docs.shortcuts.edit_find': 'Buscar',
+                'docs.shortcuts.edit_replace': 'Buscar e substituir',
+                'docs.shortcuts.edit_goto': 'Ir para linha',
+                'docs.shortcuts.tabs_title': 'Abas e Sessoes',
+                'docs.shortcuts.tabs_new': 'Nova aba',
+                'docs.shortcuts.tabs_close': 'Fechar aba',
+                'docs.shortcuts.tabs_next': 'Proxima aba',
+                'docs.shortcuts.tabs_num': 'Ir para aba N',
+                'docs.shortcuts.blocks_title': 'Blocos',
+                'docs.shortcuts.blocks_add': 'Adicionar novo bloco',
+                'docs.shortcuts.blocks_move': 'Mover bloco',
+                'docs.shortcuts.blocks_delete': 'Deletar bloco',
+                
+                // FAQ
+                'docs.faq.title': 'Perguntas Frequentes',
+                'docs.faq.q1': 'Como conectar ao SQL Server com Autenticacao Windows?',
+                'docs.faq.a1': 'No dialogo de conexao, selecione "Windows Auth" como tipo de autenticacao. DataPyn usara suas credenciais Windows atuais.',
+                'docs.faq.q2': 'Posso usar multiplas conexoes de banco no mesmo documento?',
+                'docs.faq.a2': 'Sim! Cada bloco SQL pode ter sua propria conexao. Clique no seletor de conexao no cabecalho do bloco para escolher um banco diferente.',
+                'docs.faq.q3': 'Onde minhas credenciais sao armazenadas?',
+                'docs.faq.a3': 'Senhas de banco sao criptografadas usando AES-256 e armazenadas localmente no seu perfil de usuario. Elas nunca saem da sua maquina.',
+                'docs.faq.q4': 'Como acesso o GitHub Copilot?',
+                'docs.faq.a4': 'Clique no icone do Copilot na barra lateral ou pressione Ctrl+Shift+I. Voce precisara autenticar com sua conta GitHub no primeiro uso.',
+                'docs.faq.q5': 'Posso exportar meu trabalho como script Python?',
+                'docs.faq.a5': 'Sim! Va em Menu > Exportar > Script Python. DataPyn gera um arquivo .py standalone com todas suas queries SQL embutidas como strings e seu codigo Python pronto para executar.'
+            }
+        };
+        
+        let currentLang = 'en';
+        
+        function detectLanguage() {
+            const saved = localStorage.getItem('datapyn-lang');
+            if (saved && translations[saved]) return saved;
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang.startsWith('pt')) return 'pt';
+            return 'en';
+        }
+        
+        function setLanguage(lang) {
+            if (!translations[lang]) return;
+            currentLang = lang;
+            localStorage.setItem('datapyn-lang', lang);
+            document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            
+            // Update page title
+            document.title = lang === 'pt' ? 'Documentacao - DataPyn' : 'Documentation - DataPyn';
+        }
+        
+        // Initialize icons
+        lucide.createIcons();
+        
+        // Initialize language
+        setLanguage(detectLanguage());
+        
+        // Sidebar toggle (mobile)
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('docs-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        if (sidebarToggle && sidebar && overlay) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('open');
+            });
+            
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            });
+            
+            // Close sidebar when clicking a link (mobile)
+            sidebar.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
+                        sidebar.classList.remove('open');
+                        overlay.classList.remove('open');
+                    }
+                });
+            });
+        }
+        
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        function updateActiveLink() {
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPos >= top && scrollPos < top + height) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', updateActiveLink);
+        
+        // Smooth scroll for nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    const navHeight = 72;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Handle deep links on page load
+        if (window.location.hash) {
+            setTimeout(() => {
+                const target = document.querySelector(window.location.hash);
+                if (target) {
+                    const navHeight = 72;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
