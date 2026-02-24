@@ -1568,9 +1568,9 @@
                 return; // No need to fetch MSI info for non-Windows
             }
             
-            // Cache key and duration (2 hours)
+            // Cache key and duration (1 minute)
             const CACHE_KEY = 'datapyn-release-cache';
-            const CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours in ms
+            const CACHE_DURATION = 1 * 60 * 1000; // 1 minute in ms
             
             // Try to get cached data first
             let releaseData = null;
