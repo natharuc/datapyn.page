@@ -26,6 +26,10 @@
       'preview.chat.sub': 'Session-aware assistant',
       'preview.user': 'Aggregate revenue by region for Q1 2025.',
       'preview.agent': 'Proposed T-SQL and a pandas follow-up:',
+      'preview.block.sql': 'SQL',
+      'preview.block.python': 'Python',
+      'preview.block.connection': 'SQL Server · sales',
+      'preview.composer': 'Ask Pynia about this session…',
       'features.title': 'Engineering-oriented workflow',
       'features.sub':
         'Designed for reproducible analysis: named block outputs, per-connection schema, and export to scripts or workspace files.',
@@ -108,6 +112,10 @@
       'preview.chat.sub': 'Assistente com contexto da sessão',
       'preview.user': 'Agregue receita por região no 1º trimestre de 2025.',
       'preview.agent': 'Sugestão de T-SQL e complemento em pandas:',
+      'preview.block.sql': 'SQL',
+      'preview.block.python': 'Python',
+      'preview.block.connection': 'SQL Server · vendas',
+      'preview.composer': 'Pergunte à Pynia sobre esta sessão…',
       'features.title': 'Fluxo orientado a engenharia de dados',
       'features.sub':
         'Análises reproduzíveis: saídas nomeadas por bloco, schema por conexão e exportação para script ou workspace.',
