@@ -46,7 +46,8 @@
       'docs.install.title': 'Installation',
       'docs.install.windows_title': 'Windows (recommended)',
       'docs.install.windows_desc':
-        'Download the MSI from GitHub Releases. Python is bundled — you do not need a separate install.',
+        'Download DataPyn-Setup.exe from GitHub Releases. Python is bundled — you do not need a separate install.',
+      'docs.install.releases_link': 'All releases',
       'docs.install.source_title': 'From source',
       'docs.install.source_desc': 'For contributors or custom setups on Windows:',
 
@@ -237,7 +238,8 @@
       'docs.install.title': 'Instalação',
       'docs.install.windows_title': 'Windows (recomendado)',
       'docs.install.windows_desc':
-        'Baixe o MSI em Releases no GitHub. Python já vem embutido — não precisa instalar separado.',
+        'Baixe o DataPyn-Setup.exe em Releases no GitHub. Python já vem embutido — não precisa instalar separado.',
+      'docs.install.releases_link': 'Todas as releases',
       'docs.install.source_title': 'Pelo código-fonte',
       'docs.install.source_desc': 'Pra contribuir ou ambiente customizado no Windows:',
 
