@@ -2,6 +2,8 @@
   'use strict';
 
   const STORAGE_KEY = 'datapyn-lang';
+  const SETUP_DOWNLOAD_URL =
+    'https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-Setup.exe';
 
   const translations = {
     en: {
@@ -69,7 +71,7 @@
       'start.title': 'Quick start',
       'start.sub': 'Typical setup for a Windows workstation.',
       'start.s1.title': 'Install DataPyn',
-      'start.s1.desc': 'Download the MSI from GitHub Releases (bundled Python runtime).',
+      'start.s1.desc': 'Download DataPyn-Setup.exe from GitHub Releases (installs the latest build).',
       'start.s2.title': 'Register a connection',
       'start.s2.desc': 'Define host, database, and auth in Connections; validate before saving.',
       'start.s3.title': 'Configure Pynia (optional)',
@@ -155,7 +157,7 @@
       'start.title': 'Início rápido',
       'start.sub': 'Configuração típica em estação Windows.',
       'start.s1.title': 'Instalar o DataPyn',
-      'start.s1.desc': 'Baixe o MSI em Releases no GitHub (runtime Python incluso).',
+      'start.s1.desc': 'Baixe o DataPyn-Setup.exe em Releases no GitHub (instala a build mais recente).',
       'start.s2.title': 'Cadastrar conexão',
       'start.s2.desc': 'Informe host, banco e autenticação em Conexões; valide antes de salvar.',
       'start.s3.title': 'Configurar a Pynia (opcional)',
@@ -249,6 +251,41 @@
     );
   }
 
+  function pickSetupAsset(assets) {
+    return (
+      assets.find((a) => a.name === 'DataPyn-Setup.exe') ||
+      assets.find((a) => /^DataPyn-Setup-[\d.]+\.exe$/i.test(a.name)) ||
+      null
+    );
+  }
+
+  function applyDownloadButtons(buttons, downloadUrl, version, lang) {
+    buttons.forEach(({ btn, text }) => {
+      btn.href = downloadUrl;
+      if (!text) return;
+      text.removeAttribute('data-i18n');
+      if (text.id === 'download-text-nav') {
+        text.textContent = version ? `v${version}` : lang === 'pt' ? 'Baixar' : 'Download';
+      } else if (text.id === 'download-text-hero') {
+        text.textContent = version
+          ? lang === 'pt'
+            ? `Baixar v${version}`
+            : `Download v${version}`
+          : lang === 'pt'
+            ? 'Baixar Setup'
+            : 'Download Setup';
+      } else {
+        text.textContent = version
+          ? lang === 'pt'
+            ? `Download para Windows v${version}`
+            : `Download for Windows v${version}`
+          : lang === 'pt'
+            ? 'Download para Windows'
+            : 'Download for Windows';
+      }
+    });
+  }
+
   async function initDownloadLinks() {
     const isWindows = /Win/i.test(navigator.platform) || /Windows/i.test(navigator.userAgent);
     const buttons = [
@@ -263,13 +300,16 @@
     const dict = translations[lang] || translations.en;
 
     if (!isWindows) {
-      buttons.forEach(({ text }) => {
+      buttons.forEach(({ btn, text }) => {
+        btn.href = 'https://github.com/natharuc/datapyn/releases/latest';
         if (!text) return;
         text.setAttribute('data-i18n', 'download.releases');
         text.textContent = dict['download.releases'];
       });
       return;
     }
+
+    applyDownloadButtons(buttons, SETUP_DOWNLOAD_URL, null, lang);
 
     const CACHE_KEY = 'datapyn-release-cache';
     const CACHE_DURATION = 60 * 1000;
@@ -308,28 +348,13 @@
 
     if (!releaseData) return;
 
-    const msiAsset = releaseData.assets?.find((a) => a.name.endsWith('.msi'));
-    if (!msiAsset) return;
-
-    const downloadUrl = msiAsset.browser_download_url;
+    const setupAsset = pickSetupAsset(releaseData.assets || []);
     const version = releaseData.tag_name.replace(/^v/, '');
+    const downloadUrl = setupAsset
+      ? setupAsset.browser_download_url
+      : SETUP_DOWNLOAD_URL;
 
-    buttons.forEach(({ btn, text }) => {
-      btn.href = downloadUrl;
-      if (!text) return;
-      text.removeAttribute('data-i18n');
-      if (text.id === 'download-text-nav') {
-        text.textContent = `v${version}`;
-      } else if (text.id === 'download-text-hero') {
-        text.textContent =
-          lang === 'pt' ? `Baixar v${version}` : `Download v${version}`;
-      } else {
-        text.textContent =
-          lang === 'pt'
-            ? `Download para Windows v${version}`
-            : `Download for Windows v${version}`;
-      }
-    });
+    applyDownloadButtons(buttons, downloadUrl, version, lang);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
