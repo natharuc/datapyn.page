@@ -24,9 +24,11 @@ O DataPyn permite criar documentos com blocos de codigo SQL e Python intercalado
 
 ### Autocompletar
 
-- Palavras-chave SQL
+- Palavras-chave SQL (funciona offline)
 - Funcoes Python/Pandas
-- Nomes de tabelas e colunas (apos conectar)
+- Tabelas e colunas do schema da conexao ativa
+- Referencias cross-database (`outro_banco..tabela`) quando o servidor expoe outros catalogs
+- Ghost text opcional da Pynia (Configuracoes → Pynia → Autocomplete inline)
 
 ### Numeracao de Linhas
 
@@ -56,6 +58,7 @@ Painel lateral com todas as conexoes salvas:
 | **MariaDB** | Compativel com MySQL |
 | **PostgreSQL** | Schemas, tipos customizados |
 | **SQLite** | Arquivo local, sem servidor |
+| **Databricks** | SQL Warehouse, Unity Catalog |
 
 ### Conexao por Sessao
 
@@ -301,4 +304,33 @@ Workspace salvo automaticamente:
 
 ---
 
+## Pynia (IA integrada)
+
+A **Pynia** e o chat e o conjunto de ferramentas de IA dentro do DataPyn — nao e um produto separado.
+
+### Conectores
+
+| Conector | Autenticacao |
+|----------|----------------|
+| **GitHub Copilot** | Login GitHub (codigo no dispositivo); runtime CLI/SDK pelo app |
+| **OpenAI** | API key (+ base URL opcional) |
+| **Claude (Anthropic)** | API key |
+| **Open Router** | API key unica; varios modelos |
+
+Configure em **Configuracoes → Pynia**. O chat e o autocomplete inline podem usar modelos diferentes.
+
+### Chat
+
+- Painel na barra lateral (botao Pynia, menu **Pynia → Abrir chat Pynia** ou **Exibir**)
+- Referencias `#block:nome` e `#tab:titulo` no prompt
+- Imagens quando o modelo suporta visao
+- Ferramentas consolidadas (`datapyn_snapshot`, `datapyn_run`, `datapyn_edit`, etc.)
+
+### Autocomplete inline
+
+Sugestoes em ghost text enquanto digita em blocos SQL/Python. Usa o token do conector ativo.
+
+---
+
 *Consulte [SHORTCUTS.md](SHORTCUTS.md) para lista completa de atalhos de teclado.*
+*Documentacao web atualizada: [datapyn.page/docs.html](https://datapyn.page/docs.html)*

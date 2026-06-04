@@ -301,15 +301,44 @@ Ou feche abas que nao esta usando.
 
 ---
 
+## Pynia
+
+### O que e a Pynia?
+
+A IA integrada do DataPyn: chat, ferramentas que editam/executam blocos, e autocomplete inline opcional. Nao precisa instalar nada alem do DataPyn.
+
+### Quais provedores funcionam?
+
+- **GitHub Copilot** (assinatura + login GitHub)
+- **OpenAI** (API key)
+- **Claude / Anthropic** (API key)
+- **Open Router** (API key, varios modelos)
+
+Tudo em **Configuracoes → Pynia**.
+
+### Como abro o chat?
+
+Botao Pynia na barra, menu **Pynia → Abrir chat Pynia**, ou mostre o dock em **Exibir**. Nao ha atalho global padrao tipo Ctrl+Shift+I.
+
+### A Pynia envia meus dados pra onde?
+
+Para o provedor que voce escolheu (API da OpenAI, Anthropic, Open Router, ou infra do Copilot). O DataPyn monta contexto local (codigo, schema, selecao) e envia na requisicao — leia as politicas do provedor.
+
+### Ferramentas `datapyn_*` — preciso decorar?
+
+Nao. Pergunte "lista as tabelas", "roda o bloco vendas", "plota um grafico" — a Pynia escolhe `datapyn_snapshot`, `datapyn_run`, `datapyn_chart`, etc.
+
+---
+
 ## Mais Ajuda
 
 ### Onde reporto bugs?
 
-[GitHub Issues](https://github.com/seu-usuario/datapyn/issues)
+[GitHub Issues](https://github.com/natharuc/datapyn/issues)
 
 ### Como contribuo?
 
-Veja [CONTRIBUTING.md](https://github.com/seu-usuario/datapyn/blob/main/CONTRIBUTING.md)
+Veja [CONTRIBUTING.md](https://github.com/natharuc/datapyn/blob/main/CONTRIBUTING.md)
 
 ### Tem comunidade?
 

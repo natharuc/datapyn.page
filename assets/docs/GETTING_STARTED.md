@@ -10,7 +10,7 @@ Comece a usar o DataPyn em menos de 5 minutos!
 
 ```powershell
 # Clone o repositorio
-git clone https://github.com/seu-usuario/datapyn.git
+git clone https://github.com/natharuc/datapyn.git
 cd datapyn
 
 # Execute o instalador automatico
@@ -180,7 +180,20 @@ Cada aba pode ter sua propria conexao. Use isso para comparar dados entre ambien
 
 ---
 
-## 7. Proximos Passos
+## 7. Pynia (opcional)
+
+A **Pynia** e a IA dentro do DataPyn — mesmo painel para Copilot ou API keys.
+
+1. Abra **Configuracoes → Pynia** e escolha um conector (OpenAI, Claude, Open Router ou GitHub Copilot).
+2. Cole a API key ou faca login no Copilot e clique em **Verificar**.
+3. Abra o chat pelo botao **Pynia** na barra ou **Pynia → Abrir chat Pynia**.
+4. Pergunte em linguagem natural; use `#block:nome` para citar um bloco.
+
+Ghost text no editor: ative **Autocomplete inline** na mesma tela de configuracao.
+
+---
+
+## 8. Proximos Passos
 
 - [FEATURES.md](FEATURES.md) - Lista completa de funcionalidades
 - [EXAMPLES.md](EXAMPLES.md) - Exemplos praticos detalhados
@@ -215,4 +228,4 @@ pip install PyQt6 PyQt6-QScintilla
 
 ---
 
-*Precisa de ajuda? Abra uma issue no [GitHub](https://github.com/seu-usuario/datapyn/issues).*
+*Precisa de ajuda? Abra uma issue no [GitHub](https://github.com/natharuc/datapyn/issues) ou veja [datapyn.page/docs.html](https://datapyn.page/docs.html).*
