@@ -82,36 +82,81 @@
             <span data-i18n="preview.title">session.sql — DataPyn</span>
           </div>
           <div class="preview-body">
-            <div class="preview-editor">
-              <div><span class="cm">-- SQL block</span></div>
-              <div><span class="kw">SELECT</span> regiao, <span class="fn">SUM</span>(receita) <span class="kw">AS</span> total</div>
-              <div><span class="kw">FROM</span> vendas..fato</div>
-              <div><span class="kw">WHERE</span> data &gt;= <span class="str">'2025-01-01'</span></div>
-              <div><span class="kw">GROUP BY</span> regiao;</div>
-              <div style="margin-top:10px"><span class="cm"># Python block</span></div>
-              <div><span class="kw">import</span> pandas <span class="kw">as</span> pd</div>
-              <div>df = result_sql</div>
-              <div>df.plot(kind=<span class="str">'bar'</span>)</div>
+            <div class="preview-session" aria-hidden="true">
+              <div class="preview-blocks">
+                <article class="dp-block dp-block--sql">
+                  <header class="dp-block-bar">
+                    <span class="dp-block-grip" aria-hidden="true"></span>
+                    <span class="dp-lang dp-lang--sql">
+                      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M2 3h12v2H7v8H5V5H2V3z"/></svg>
+                      <span data-i18n="preview.block.sql">SQL</span>
+                    </span>
+                    <span class="dp-conn" data-i18n="preview.block.connection">SQL Server · vendas</span>
+                    <span class="dp-block-name">result_sql</span>
+                    <span class="dp-block-actions">
+                      <span class="dp-icon-btn dp-icon-btn--run" title="Run"></span>
+                      <span class="dp-icon-btn" title="More"></span>
+                    </span>
+                  </header>
+                  <div class="dp-block-code">
+                    <pre><code><span class="kw">SELECT</span> regiao,
+       <span class="fn">SUM</span>(receita) <span class="kw">AS</span> total
+<span class="kw">FROM</span> vendas..fato
+<span class="kw">WHERE</span> data &gt;= <span class="str">'2025-01-01'</span>
+<span class="kw">GROUP BY</span> regiao;</code></pre>
+                  </div>
+                </article>
+
+                <article class="dp-block dp-block--py">
+                  <header class="dp-block-bar">
+                    <span class="dp-block-grip" aria-hidden="true"></span>
+                    <span class="dp-lang dp-lang--py">
+                      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M8 2c2 0 3.5 1.2 3.5 3S10 8 8 8 4.5 6.8 4.5 5 6 2 8 2zm-4 9h8v3H4v-3z"/></svg>
+                      <span data-i18n="preview.block.python">Python</span>
+                    </span>
+                    <span class="dp-block-name">chart</span>
+                    <span class="dp-block-actions">
+                      <span class="dp-icon-btn dp-icon-btn--run" title="Run"></span>
+                      <span class="dp-icon-btn" title="More"></span>
+                    </span>
+                  </header>
+                  <div class="dp-block-code">
+                    <pre><code><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = result_sql
+df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita por região'</span>)</code></pre>
+                  </div>
+                </article>
+              </div>
             </div>
-            <div class="preview-chat">
-              <div class="chat-head">
-                <img src="assets/pynia_logo.svg" alt="" width="28" height="28">
+
+            <aside class="preview-pynia">
+              <header class="pynia-dock-head">
+                <img src="assets/pynia_logo.svg" alt="" width="24" height="24">
                 <div>
                   <strong data-i18n="preview.chat.title">Pynia</strong>
                   <small data-i18n="preview.chat.sub">Session-aware assistant</small>
                 </div>
-              </div>
-              <div class="chat-msgs">
-                <div class="chat-bubble user" data-i18n="preview.user">Summarize revenue by region for last quarter.</div>
+              </header>
+              <div class="pynia-dock-msgs">
+                <div class="chat-bubble user" data-i18n="preview.user">Aggregate revenue by region for Q1 2025.</div>
                 <div class="chat-bubble agent">
                   <span class="agent-tag">
                     <img src="assets/pynia_logo.svg" alt=""> Pynia
                   </span>
-                  <span data-i18n="preview.agent">Here is a query and a small pandas follow-up:</span>
-                  <div class="chat-code">SELECT regiao, SUM(receita) ...</div>
+                  <span data-i18n="preview.agent">Proposed T-SQL and a pandas follow-up:</span>
+                  <div class="chat-code-block">
+                    <div class="chat-code-head"><span>sql</span></div>
+                    <pre><code><span class="kw">SELECT</span> regiao, <span class="fn">SUM</span>(receita) <span class="kw">AS</span> total
+<span class="kw">FROM</span> vendas..fato …</code></pre>
+                  </div>
                 </div>
               </div>
-            </div>
+              <footer class="pynia-dock-composer">
+                <span class="pynia-composer-input" data-i18n="preview.composer">Ask Pynia about this session…</span>
+                <span class="pynia-composer-meta">gpt-4o · medium</span>
+              </footer>
+            </aside>
           </div>
         </div>
       </div>

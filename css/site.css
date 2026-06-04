@@ -18,6 +18,13 @@
   --accent-glow: rgba(51, 105, 255, 0.35);
   --sql: #569cd6;
   --python: #dcdcaa;
+  --dp-bg-editor: #181a1f;
+  --dp-bg-block: #1f2228;
+  --dp-bg-code: #1e1e1e;
+  --dp-border: rgba(255, 255, 255, 0.06);
+  --dp-border-muted: rgba(255, 255, 255, 0.03);
+  --dp-accent-sql: #e38c00;
+  --dp-accent-py: #3572a5;
   --success: #4ade80;
   --radius: 12px;
   --radius-lg: 18px;
@@ -404,49 +411,251 @@ code, kbd, pre { font-family: var(--mono); }
 
 .preview-body {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  min-height: 320px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.88fr);
+  min-height: 360px;
+  background: var(--dp-bg-editor);
 }
 
-.preview-editor {
+/* Session editor — stacked blocks like DataPyn */
+.preview-session {
   border-right: 1px solid var(--border);
-  padding: 12px;
-  font-size: 0.68rem;
-  line-height: 1.55;
-}
-
-.preview-chat {
-  display: flex;
-  flex-direction: column;
+  padding: 10px 10px 12px;
+  overflow: hidden;
   min-height: 0;
 }
 
-.chat-head {
+.preview-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.dp-block {
+  border-radius: 12px;
+  border: 1px solid var(--dp-border);
+  background: var(--dp-bg-block);
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.dp-block--sql {
+  border-left: 3px solid var(--dp-accent-sql);
+}
+
+.dp-block--py {
+  border-left: 3px solid var(--dp-accent-py);
+}
+
+.dp-block-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-height: 34px;
+  padding: 4px 8px 4px 6px;
+  background: var(--dp-bg-block);
+  border-bottom: 1px solid var(--dp-border-muted);
+  font-size: 0.62rem;
+}
+
+.dp-block-grip {
+  width: 6px;
+  height: 14px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--text-dim) 0,
+    var(--text-dim) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+.dp-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.6rem;
+  border: 1px solid var(--dp-border);
+  background: #282c34;
+  color: var(--text);
+}
+
+.dp-lang--sql { color: #f0b878; }
+.dp-lang--py { color: #7eb8e8; }
+
+.dp-conn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--dp-border);
+  background: #282c34;
+  color: var(--text-muted);
+  max-width: 42%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dp-conn::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: #cc2927;
+  flex-shrink: 0;
+}
+
+.dp-block-name {
+  margin-left: auto;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+}
+
+.dp-block-actions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 4px;
+}
+
+.dp-icon-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--dp-border);
+  background: #282c34;
+  flex-shrink: 0;
+}
+
+.dp-icon-btn--run {
+  position: relative;
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.dp-icon-btn--run::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 5px;
+  border: 5px solid transparent;
+  border-left: 7px solid #4ade80;
+}
+
+.dp-block-code {
+  background: var(--dp-bg-code);
+  padding: 8px 10px 10px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  line-height: 1.5;
+}
+
+.dp-block-code pre {
+  margin: 0;
+  white-space: pre;
+}
+
+.dp-block--sql .dp-block-code { min-height: 72px; }
+.dp-block--py .dp-block-code { min-height: 56px; }
+
+/* Pynia dock (right panel) */
+.preview-pynia {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-base);
+  border-left: 1px solid var(--border);
+}
+
+.pynia-dock-head {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
-  background: linear-gradient(135deg, rgba(51, 105, 255, 0.25), rgba(51, 194, 255, 0.12));
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(51, 105, 255, 0.22), rgba(51, 194, 255, 0.08));
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-.chat-head strong {
-  font-size: 0.8rem;
+.pynia-dock-head strong {
+  font-size: 0.78rem;
   display: block;
 }
 
-.chat-head small {
-  font-size: 0.65rem;
+.pynia-dock-head small {
+  font-size: 0.62rem;
   color: var(--text-muted);
 }
 
-.chat-msgs {
+.pynia-dock-msgs {
   flex: 1;
-  padding: 12px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.pynia-dock-composer {
+  flex-shrink: 0;
+  margin: 0 10px 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pynia-composer-input {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+.pynia-composer-meta {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  align-self: flex-end;
+}
+
+.chat-code-block {
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid var(--dp-border);
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.chat-code-head {
+  padding: 4px 8px;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--dp-border-muted);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.chat-code-block pre {
+  margin: 0;
+  padding: 6px 8px;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
 }
 
 .chat-bubble {
@@ -797,6 +1006,12 @@ code, kbd, pre { font-family: var(--mono); }
 }
 
 @media (max-width: 767px) {
-  .preview-body { grid-template-columns: 1fr; }
-  .preview-editor { border-right: none; border-bottom: 1px solid var(--border); max-height: 180px; overflow: hidden; }
+  .preview-body { grid-template-columns: 1fr; min-height: 0; }
+  .preview-session {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 220px;
+  }
+  .preview-pynia { min-height: 200px; }
+  .dp-block-name { display: none; }
 }
