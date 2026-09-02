@@ -269,6 +269,7 @@ code, kbd, pre { font-family: var(--mono); }
   margin: 0 auto 48px;
 }
 
+.section-head h1,
 .section-head h2 {
   margin: 0 0 12px;
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -974,11 +975,88 @@ code, kbd, pre { font-family: var(--mono); }
 
 .footer-links a:hover { color: var(--text); }
 
+.docs-link { color: var(--accent-cyan); }
+.docs-link:hover { text-decoration: underline; }
+
 .divider {
   height: 1px;
   background: var(--border);
   max-width: var(--max);
   margin: 0 auto;
+}
+
+/* Downloads page */
+.dl-hero {
+  padding-top: calc(var(--nav-h) + 48px);
+  padding-bottom: 24px;
+}
+
+.dl-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.dl-card {
+  padding: 28px 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dl-card.detected {
+  border-color: rgba(51, 105, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(51, 105, 255, 0.2);
+}
+
+.dl-card h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.dl-card .dl-arch {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.dl-card .dl-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.dl-card .dl-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.dl-card .dl-actions .btn { width: 100%; }
+
+.dl-source {
+  margin-top: 32px;
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+
+.dl-source pre {
+  margin: 12px 0 0;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  color: var(--text-muted);
 }
 
 /* Syntax colors in preview */
@@ -998,6 +1076,7 @@ code, kbd, pre { font-family: var(--mono); }
   .bento-card.span-2 { grid-column: span 2; }
   .db-grid { grid-template-columns: repeat(3, 1fr); }
   .doc-grid { grid-template-columns: repeat(4, 1fr); }
+  .dl-grid { grid-template-columns: repeat(3, 1fr); }
   .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
 }
 

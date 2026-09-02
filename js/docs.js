@@ -7,6 +7,7 @@
     en: {
       'docs.page_title': 'Documentation — DataPyn',
       'docs.nav.home': 'Home',
+      'docs.nav.downloads': 'Downloads',
       'docs.nav.start': 'Getting started',
       'docs.nav.intro': 'Introduction',
       'docs.nav.install': 'Installation',
@@ -44,12 +45,19 @@
       'docs.intro.f4_desc': 'Autocomplete and validation from your schema, including cross-database names like other_db..table.',
 
       'docs.install.title': 'Installation',
-      'docs.install.windows_title': 'Windows (recommended)',
+      'docs.install.windows_title': 'Windows',
       'docs.install.windows_desc':
-        'Download DataPyn-Setup.exe from GitHub Releases. Python is bundled — you do not need a separate install.',
+        'Download DataPyn-Setup.exe from the downloads page. Python is bundled — you do not need a separate install.',
+      'docs.install.linux_title': 'Linux',
+      'docs.install.linux_desc':
+        'Ubuntu/Debian: install datapyn_amd64.deb. Fedora, Arch, and others: extract DataPyn-linux-x86_64.tar.gz. SQL Server via pyodbc needs unixodbc plus a system ODBC driver; pymssql works without extra drivers.',
+      'docs.install.macos_title': 'macOS',
+      'docs.install.macos_desc':
+        'Apple Silicon: open the unsigned DMG, copy DataPyn.app to Applications, then right-click Open (or run xattr -cr /Applications/DataPyn.app).',
+      'docs.install.downloads_page': 'All downloads',
       'docs.install.releases_link': 'All releases',
       'docs.install.source_title': 'From source',
-      'docs.install.source_desc': 'For contributors or custom setups on Windows:',
+      'docs.install.source_desc': 'For contributors or custom setups (Python 3.12+, uv):',
 
       'docs.connection.title': 'First connection',
       'docs.connection.p1': 'You need at least one saved connection before SQL blocks can run.',
@@ -199,6 +207,7 @@
     pt: {
       'docs.page_title': 'Documentação — DataPyn',
       'docs.nav.home': 'Início',
+      'docs.nav.downloads': 'Downloads',
       'docs.nav.start': 'Começando',
       'docs.nav.intro': 'Introdução',
       'docs.nav.install': 'Instalação',
@@ -236,12 +245,19 @@
       'docs.intro.f4_desc': 'Autocomplete e validação pelo schema, inclusive referências cross-database tipo outro_banco..tabela.',
 
       'docs.install.title': 'Instalação',
-      'docs.install.windows_title': 'Windows (recomendado)',
+      'docs.install.windows_title': 'Windows',
       'docs.install.windows_desc':
-        'Baixe o DataPyn-Setup.exe em Releases no GitHub. Python já vem embutido — não precisa instalar separado.',
+        'Baixe o DataPyn-Setup.exe na página de downloads. O Python já vem embutido — não precisa instalar separado.',
+      'docs.install.linux_title': 'Linux',
+      'docs.install.linux_desc':
+        'Ubuntu/Debian: instale o datapyn_amd64.deb. Fedora, Arch e outras distros: extraia o DataPyn-linux-x86_64.tar.gz. SQL Server via pyodbc precisa de unixodbc e um driver ODBC no sistema; pymssql funciona sem driver extra.',
+      'docs.install.macos_title': 'macOS',
+      'docs.install.macos_desc':
+        'Apple Silicon: abra o DMG (não assinado), copie DataPyn.app para Applications e use Abrir no menu de contexto (ou rode xattr -cr /Applications/DataPyn.app).',
+      'docs.install.downloads_page': 'Todos os downloads',
       'docs.install.releases_link': 'Todas as releases',
       'docs.install.source_title': 'Pelo código-fonte',
-      'docs.install.source_desc': 'Pra contribuir ou ambiente customizado no Windows:',
+      'docs.install.source_desc': 'Pra contribuir ou ambiente customizado (Python 3.12+, uv):',
 
       'docs.connection.title': 'Primeira conexão',
       'docs.connection.p1': 'Você precisa de pelo menos uma conexão salva antes de rodar SQL.',
