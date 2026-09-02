@@ -22,6 +22,7 @@
       </a>
       <nav class="nav-links" aria-label="Docs">
         <a href="index.html" data-i18n="docs.nav.home">Home</a>
+        <a href="downloads.html" data-i18n="docs.nav.downloads">Downloads</a>
         <a href="index.html#pynia">Pynia</a>
         <a href="https://github.com/natharuc/datapyn" target="_blank" rel="noopener">GitHub</a>
       </nav>
@@ -102,19 +103,23 @@
 
           <section id="installation">
             <h2 data-i18n="docs.install.title">Installation</h2>
-            <h3 data-i18n="docs.install.windows_title">Windows (recommended)</h3>
-            <p data-i18n="docs.install.windows_desc">Download DataPyn-Setup.exe from GitHub Releases.</p>
             <p>
-              <a href="https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-Setup.exe" class="docs-link" target="_blank" rel="noopener">DataPyn-Setup.exe</a>
+              <a href="downloads.html" class="docs-link" data-i18n="docs.install.downloads_page">All downloads</a>
               ·
               <a href="https://github.com/natharuc/datapyn/releases/latest" class="docs-link" target="_blank" rel="noopener" data-i18n="docs.install.releases_link">All releases</a>
             </p>
+            <h3 data-i18n="docs.install.windows_title">Windows</h3>
+            <p data-i18n="docs.install.windows_desc">Download DataPyn-Setup.exe from the downloads page. Python is bundled.</p>
+            <h3 data-i18n="docs.install.linux_title">Linux</h3>
+            <p data-i18n="docs.install.linux_desc">Ubuntu/Debian: install the .deb. Other distros: extract the tar.gz. SQL Server via pyodbc needs unixodbc; pymssql does not.</p>
+            <h3 data-i18n="docs.install.macos_title">macOS</h3>
+            <p data-i18n="docs.install.macos_desc">Apple Silicon DMG (unsigned). After copying to Applications, right-click Open or run xattr -cr /Applications/DataPyn.app.</p>
             <h3 data-i18n="docs.install.source_title">From source</h3>
-            <p data-i18n="docs.install.source_desc">For contributors or custom setups on Windows:</p>
+            <p data-i18n="docs.install.source_desc">For contributors (Python 3.12+, uv):</p>
             <pre><code>git clone https://github.com/natharuc/datapyn.git
 cd datapyn
-.\scripts\install.bat
-.\scripts\run.bat</code></pre>
+uv sync
+uv run python source/main.py</code></pre>
           </section>
 
           <section id="first-connection">

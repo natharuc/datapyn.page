@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloads — DataPyn</title>
+  <meta name="description" content="Download DataPyn for Windows, Linux, and macOS.">
+  <link rel="icon" type="image/x-icon" href="assets/datapyn-logo.ico">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+</head>
+<body>
+  <div class="bg-mesh" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/datapyn_logo.svg" alt="" width="28" height="28">
+        DataPyn
+      </a>
+
+      <nav class="nav-links" aria-label="Main">
+        <a href="index.html#features" data-i18n="nav.features">Features</a>
+        <a href="index.html#pynia" data-i18n="nav.pynia">Pynia</a>
+        <a href="index.html#databases" data-i18n="nav.databases">Databases</a>
+        <a href="docs.html" data-i18n="nav.docs">Docs</a>
+        <a href="downloads.html" data-i18n="nav.downloads">Downloads</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="en" class="active">EN</button>
+          <button type="button" data-lang="pt">PT</button>
+        </div>
+        <a href="https://github.com/natharuc/datapyn" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+          <i data-lucide="github" style="width:20px;height:20px"></i>
+        </a>
+        <a id="download-btn-nav" href="downloads.html" class="btn btn-primary" style="padding:8px 14px;font-size:0.8rem">
+          <span id="download-text-nav" data-i18n="nav.download">Download</span>
+        </a>
+        <button type="button" id="menu-toggle" class="menu-toggle" aria-expanded="false" aria-controls="mobile-drawer">
+          <i data-lucide="menu" style="width:22px;height:22px"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-drawer" class="mobile-drawer">
+    <a href="index.html#features" data-i18n="nav.features">Features</a>
+    <a href="index.html#pynia" data-i18n="nav.pynia">Pynia</a>
+    <a href="index.html#databases" data-i18n="nav.databases">Databases</a>
+    <a href="docs.html" data-i18n="nav.docs">Docs</a>
+    <a href="downloads.html" data-i18n="nav.downloads">Downloads</a>
+  </div>
+
+  <main>
+    <section class="section dl-hero">
+      <div class="container">
+        <div class="section-head">
+          <h1 data-i18n="dl.title">Downloads</h1>
+          <p data-i18n="dl.sub">Official installers from GitHub Releases. Python is bundled — you do not need a separate install.</p>
+        </div>
+
+        <div class="dl-grid">
+          <article class="dl-card" data-os="windows">
+            <span class="badge dl-detected-badge" hidden data-i18n="dl.your_os">Your system</span>
+            <h2 data-i18n="dl.windows.title">Windows</h2>
+            <p class="dl-arch" data-i18n="dl.windows.arch">x64 · Windows 10/11</p>
+            <p class="dl-note" data-i18n="dl.windows.note">The setup wizard installs under %LOCALAPPDATA%\DataPyn and creates Start Menu / Desktop shortcuts.</p>
+            <div class="dl-actions">
+              <a id="dl-btn-windows" href="https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-Setup.exe" class="btn btn-primary" target="_blank" rel="noopener">
+                <i data-lucide="download" style="width:16px;height:16px"></i>
+                <span data-i18n="dl.windows.primary">Download Setup.exe</span>
+              </a>
+              <a id="dl-btn-windows-zip" href="https://github.com/natharuc/datapyn/releases/latest" class="btn btn-ghost" target="_blank" rel="noopener">
+                <span data-i18n="dl.windows.zip">Portable ZIP</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="dl-card" data-os="linux">
+            <span class="badge dl-detected-badge" hidden data-i18n="dl.your_os">Your system</span>
+            <h2 data-i18n="dl.linux.title">Linux</h2>
+            <p class="dl-arch" data-i18n="dl.linux.arch">amd64 · Ubuntu/Debian 22.04+</p>
+            <p class="dl-note" data-i18n="dl.linux.note">The .deb targets Ubuntu/Debian. Fedora, Arch, and other distros should use the tarball. SQL Server via pyodbc needs unixodbc plus a system ODBC driver; pymssql works without extra drivers.</p>
+            <div class="dl-actions">
+              <a id="dl-btn-linux" href="https://github.com/natharuc/datapyn/releases/latest/download/datapyn_amd64.deb" class="btn btn-primary" target="_blank" rel="noopener">
+                <i data-lucide="download" style="width:16px;height:16px"></i>
+                <span data-i18n="dl.linux.primary">Download .deb</span>
+              </a>
+              <a id="dl-btn-linux-tar" href="https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-linux-x86_64.tar.gz" class="btn btn-ghost" target="_blank" rel="noopener">
+                <span data-i18n="dl.linux.tarball">Portable tar.gz</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="dl-card" data-os="macos">
+            <span class="badge dl-detected-badge" hidden data-i18n="dl.your_os">Your system</span>
+            <h2 data-i18n="dl.macos.title">macOS</h2>
+            <p class="dl-arch" data-i18n="dl.macos.arch">Apple Silicon (arm64)</p>
+            <p class="dl-note" data-i18n="dl.macos.note">The disk image is unsigned. After copying DataPyn.app to Applications, right-click Open, or run: xattr -cr /Applications/DataPyn.app</p>
+            <div class="dl-actions">
+              <a id="dl-btn-macos" href="https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-macos-arm64.dmg" class="btn btn-primary" target="_blank" rel="noopener">
+                <i data-lucide="download" style="width:16px;height:16px"></i>
+                <span data-i18n="dl.macos.primary">Download .dmg</span>
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <div class="dl-source">
+          <h2 data-i18n="dl.source.title">From source</h2>
+          <p class="dl-note" data-i18n="dl.source.desc">Contributors can clone the repo and run with uv (Python 3.12+).</p>
+          <pre><code>git clone https://github.com/natharuc/datapyn.git
+cd datapyn
+uv sync
+uv run python source/main.py</code></pre>
+          <p style="margin:16px 0 0">
+            <a href="https://github.com/natharuc/datapyn/releases/latest" class="docs-link" target="_blank" rel="noopener" data-i18n="dl.releases">All GitHub Releases</a>
+            ·
+            <a href="docs.html#installation" data-i18n="docs.all">Documentation</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand" style="font-size:0.9rem">
+        <img src="assets/datapyn_logo.svg" alt="" width="24" height="24">
+        <span data-i18n="footer.tagline">DataPyn — SQL + Python IDE with Pynia</span>
+      </div>
+      <div class="footer-links">
+        <a href="docs.html" data-i18n="footer.docs">Documentation</a>
+        <a href="downloads.html" data-i18n="footer.downloads">Downloads</a>
+        <a href="https://github.com/natharuc/datapyn" target="_blank" rel="noopener" data-i18n="footer.github">GitHub</a>
+        <a href="https://github.com/natharuc/datapyn/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="footer.license">Open source</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
