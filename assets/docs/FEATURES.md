@@ -1,6 +1,6 @@
 # Funcionalidades do DataPyn
 
-Lista completa de todas as funcionalidades disponiveis no DataPyn.
+Recursos do aplicativo DataPyn Tauri: interface React/TypeScript, host Rust, Monaco e kernels Python isolados por sessão.
 
 ---
 
@@ -10,11 +10,10 @@ Lista completa de todas as funcionalidades disponiveis no DataPyn.
 
 O DataPyn permite criar documentos com blocos de codigo SQL e Python intercalados:
 
-- **Adicionar bloco SQL**: Clique no botao `+ SQL` ou use `Ctrl+Shift+S`
-- **Adicionar bloco Python**: Clique no botao `+ Python` ou use `Ctrl+Shift+P`
+- **Adicionar bloco SQL/Python**: use a barra de ferramentas ou `Ctrl+Shift+B`, e escolha a linguagem no bloco
 - **Alternar linguagem**: Clique no seletor de linguagem do bloco
 - **Mover blocos**: Arraste para reordenar
-- **Deletar bloco**: Botao X ou `Ctrl+Shift+D`
+- **Deletar bloco**: use a ação de remover no bloco
 
 ### Syntax Highlighting
 
@@ -28,7 +27,7 @@ O DataPyn permite criar documentos com blocos de codigo SQL e Python intercalado
 - Funcoes Python/Pandas
 - Tabelas e colunas do schema da conexao ativa
 - Referencias cross-database (`outro_banco..tabela`) quando o servidor expoe outros catalogs
-- Ghost text opcional da Pynia (Configuracoes → Pynia → Autocomplete inline)
+- Ghost text opcional da Pynia via agente ACP (Configurações → Editor → Sugestões inline da Pynia)
 
 ### Numeracao de Linhas
 
@@ -53,7 +52,7 @@ Painel lateral com todas as conexoes salvas:
 
 | Banco | Recursos |
 |-------|----------|
-| **SQL Server** | Windows Auth, SQL Auth, USE database dinamico |
+| **SQL Server** | Windows Auth, SQL Auth, Microsoft Entra, contexto de database por bloco |
 | **MySQL** | Multiplos bancos, charset configuravel |
 | **MariaDB** | Compativel com MySQL |
 | **PostgreSQL** | Schemas, tipos customizados |
@@ -76,10 +75,10 @@ Cada aba pode conectar a um banco diferente:
 
 | Atalho | Acao |
 |--------|------|
-| `F5` | Executar bloco atual (se houver selecao, executa selecao; senao executa todos) |
+| `F5` | Executar seleção ou, sem seleção, o bloco atual |
 | `Ctrl+F5` | Executar todos os blocos em sequencia |
 | `Shift+Enter` | Executar bloco atual e avancar para o proximo |
-| `Ctrl+Enter` | Executar todos os blocos |
+| `Ctrl+Enter` | Executar seleção ou bloco atual |
 
 ### Execucao SQL
 
@@ -122,7 +121,8 @@ Tabela interativa com os dados retornados:
 - **Ordenacao**: Clique no cabecalho
 - **Selecao**: Clique para selecionar celulas
 - **Copiar**: `Ctrl+C` copia selecao
-- **Exportar**: Excel, CSV, JSON
+- **Exportar**: Excel, CSV, JSON, SQL e Parquet
+- **Download direto de consulta**: CSV/Parquet, com progresso e cancelamento
 
 ### Output (Saida)
 
@@ -216,11 +216,7 @@ vendas_2024  # Mostra preview automatico
 
 ### Auto-Save
 
-Workspace salvo automaticamente:
-
-- A cada 5 minutos
-- Ao fechar aplicacao
-- Restaurado ao iniciar
+O perfil Tauri salva rascunhos após alterações e restaura as sessões ao iniciar, sem executar código automaticamente. Arquivos `.dpw` são salvos por `Ctrl+S`. Snapshots Parquet para restaurar DataFrames são opcionais e separados do documento.
 
 ---
 
@@ -261,6 +257,7 @@ Workspace salvo automaticamente:
 | CSV | `.csv` | Valores separados por virgula |
 | JSON | `.json` | Estrutura de dados |
 | SQL | `.sql` | INSERT statements |
+| Parquet | `.parquet` | Dados colunares |
 
 ### Como Exportar
 
@@ -275,13 +272,13 @@ Workspace salvo automaticamente:
 
 ### Credenciais
 
-- Senhas armazenadas com criptografia AES-256
+- Credenciais salvas no cofre do sistema sob `DataPyn.Tauri.Connections`
 - Opcao de nao salvar senha (pede a cada conexao)
 - Windows Authentication quando disponivel
 
 ### Dados Locais
 
-- Nenhum dado enviado para servidores externos
+- Consultas usam os servidores de banco configurados; agentes Pynia recebem o contexto fornecido na conversa
 - Historico salvo localmente
 - Workspaces em formato JSON legivel
 
@@ -293,42 +290,41 @@ Workspace salvo automaticamente:
 
 - Conexoes via pool (reutilizadas)
 - Carregamento lazy de resultados grandes
-- Threads separadas para execucao (UI responsiva)
+- Kernels Python separados por sessão, mantendo a UI responsiva
 - Cache de metadados de tabelas
 
-### Limites Recomendados
+### Resultados grandes
 
-- Ate 1 milhao de linhas por resultado
-- Ate 50 abas simultaneas
-- Ate 10 conexoes ativas
+A grade virtual busca páginas do resultado e aplica filtros e ordenação no runtime. O uso de memória depende dos DataFrames, dos kernels abertos e do volume retornado; limite a consulta ou use o download direto CSV/Parquet para grandes exportações.
 
 ---
 
 ## Pynia (IA integrada)
 
-A **Pynia** e o chat e o conjunto de ferramentas de IA dentro do DataPyn — nao e um produto separado.
+A **Pynia** é o chat e o conjunto de ferramentas de IA dentro do DataPyn. Conecta agentes externos via ACP, com conversa e histórico isolados por aba.
 
-### Conectores
+### Agentes
 
-| Conector | Autenticacao |
+| Agente | Configuração |
 |----------|----------------|
-| **GitHub Copilot** | Login GitHub (codigo no dispositivo); runtime CLI/SDK pelo app |
-| **OpenAI** | API key (+ base URL opcional) |
-| **Claude (Anthropic)** | API key |
-| **Open Router** | API key unica; varios modelos |
+| **Claude** | Instalação e autenticação do agente Claude |
+| **Cursor** | Instalação e autenticação do agente Cursor |
+| **GitHub Copilot** | Instalação do agente e login GitHub |
+| **Codex** | Instalação e autenticação do agente Codex |
 
-Configure em **Configuracoes → Pynia**. O chat e o autocomplete inline podem usar modelos diferentes.
+Abra **Agentes e configuração** pela engrenagem do painel Pynia. O gerenciador oferece instalação/atualização, instruções de login e verificação das instalações. Modelos e opções de raciocínio dependem do agente; conta e plano são próprios. Após o primeiro envio, o agente permanece associado à conversa da aba; **Novo chat** permite escolher outro.
 
 ### Chat
 
-- Painel na barra lateral (botao Pynia, menu **Pynia → Abrir chat Pynia** ou **Exibir**)
-- Referencias `#block:nome` e `#tab:titulo` no prompt
+- Painel Pynia pela barra de ferramentas ou menu **Exibir**
+- Referências `@` a blocos, variáveis, seleção e schema
 - Imagens quando o modelo suporta visao
 - Ferramentas consolidadas (`datapyn_snapshot`, `datapyn_run`, `datapyn_edit`, etc.)
+- Solicitações de permissão e perguntas respondidas no chat
 
 ### Autocomplete inline
 
-Sugestoes em ghost text enquanto digita em blocos SQL/Python. Usa o token do conector ativo.
+Sugestões em ghost text enquanto digita em blocos SQL/Python. Ative em **Configurações → Editor → Sugestões inline da Pynia**; exige um agente ACP instalado e autenticado. `Ctrl+.` solicita sugestão e `Tab` aceita. A sessão de autocomplete é separada da conversa.
 
 ---
 

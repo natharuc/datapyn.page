@@ -1,177 +1,127 @@
-# Instalacao
+# Instalação
 
-Guia de instalacao do DataPyn para Windows, Linux e macOS.
+O aplicativo padrão do DataPyn usa **Tauri 2**, com interface React/TypeScript, host Rust e kernels Python isolados por sessão.
 
----
+## Downloads oficiais
 
-## Requisitos
+Use a [página de downloads](https://datapyn.page/downloads.html) para encontrar a release Tauri estável e os arquivos da sua plataforma. Os instaladores usam tags **`tauri-vX.Y.Z`** e nomes **`DataPyn-Tauri-<versão>-<plataforma>`**.
 
-### Sistema operacional
+O endereço GitHub `releases/latest` permanece reservado ao PyQt6 histórico. Instaladores e atualizações desse canal são independentes e não instalam o aplicativo Tauri.
 
-| Plataforma | Artefato | Arquitetura |
-|------------|----------|-------------|
-| Windows 10 (1903+) / Windows 11 | `DataPyn-Setup.exe` | x64 |
-| Ubuntu/Debian 22.04+ | `datapyn_amd64.deb` | amd64 |
-| Outras distros Linux | `DataPyn-linux-x86_64.tar.gz` | x86_64 |
-| macOS 13+ | `DataPyn-macos-arm64.dmg` | Apple Silicon (arm64) |
+| Plataforma | Formatos Tauri | Arquitetura |
+|------------|----------------|-------------|
+| Windows 10/11 | NSIS Setup.exe, ZIP portátil | x64 |
+| Linux, base Ubuntu 22.04+ | DEB, AppImage, tar.gz | x64 / amd64 |
+| macOS 14+ | DMG | Apple Silicon / arm64 |
 
-Os instaladores ja incluem Python. Nao e necessario instalar Python no sistema para uso normal.
-
-Downloads: [datapyn.page/downloads.html](https://datapyn.page/downloads.html) ou [GitHub Releases](https://github.com/natharuc/datapyn/releases/latest).
-
-### Drivers de banco (opcionais)
-
-| Banco | Windows | Linux / macOS |
-|-------|---------|----------------|
-| SQL Server | ODBC Driver 17/18, ou pymssql | **pymssql** (FreeTDS no wheel). `pyodbc` exige `unixodbc` + driver Microsoft/FreeTDS no sistema |
-| PostgreSQL | psycopg2 (bundled) | psycopg2 (bundled) |
-| MySQL / MariaDB | PyMySQL (bundled) | PyMySQL (bundled) |
-| Databricks | connector bundled | connector bundled |
-
----
+O runtime Python, as bibliotecas de análise/exportação e os drivers Python acompanham os pacotes. Para usar o app instalado, você não precisa instalar Python ou Node.js.
 
 ## Windows
 
-1. Baixe `DataPyn-Setup.exe` em [Downloads](https://datapyn.page/downloads.html).
-2. Execute o assistente. Destino padrao: `%LOCALAPPDATA%\DataPyn`.
-3. Atalhos sao criados no Menu Iniciar e na Area de trabalho.
+1. Baixe o arquivo `DataPyn-Tauri-<versão>-windows-x86_64-setup.exe` em [Downloads](https://datapyn.page/downloads.html).
+2. Execute o assistente de instalação.
+3. Abra **DataPyn Tauri** pelo atalho criado.
 
-ZIP portatil: extraia `DataPyn-{version}-windows.zip` e execute `DataPyn.exe`.
+O Setup inclui WebView2 offline e o instalador Microsoft ODBC Driver 18 x64. Um ODBC 17/18 x64 já instalado é preservado. Se o driver estiver ausente, o Setup pede consentimento; apenas a instalação desse driver compartilhado solicita permissão de administrador.
 
-Atualizacao automatica (somente Windows) baixa o ZIP da release e aplica ao sair.
+Para o ZIP portátil, extraia o pacote e mantenha os dois executáveis juntos. WebView2 e ODBC são pré-requisitos do portátil; o Setup os prepara. Atualizar uma instalação portátil usa o NSIS na mesma pasta e preserva o caminho.
 
----
+## Linux
 
-## Linux (Ubuntu/Debian)
+A distribuição Tauri publica DEB, AppImage e tar.gz para x64, com base Ubuntu 22.04+. RPM e pacote Arch pertencem ao canal histórico.
 
-```bash
-sudo apt install ./datapyn_amd64.deb
-datapyn
-```
+### DEB
 
-O pacote instala em `/opt/datapyn`, registra o tipo MIME `.dpw` e cria o comando `datapyn`. Dependencias de Qt/WebEngine entram via `Depends` do `.deb`. Recomendado: `libsecret-1-0` (keyring) e `unixodbc` (SQL Server via pyodbc).
-
-### Tarball (Fedora, Arch e outros)
+Baixe o arquivo `.deb` Tauri e instale-o pelo gerenciador de pacotes:
 
 ```bash
-tar -xzf DataPyn-linux-x86_64.tar.gz
-cd DataPyn
-QTWEBENGINE_DISABLE_SANDBOX=1 ./DataPyn
+sudo apt install ./DataPyn-Tauri-<versão>-linux-x86_64.deb
 ```
 
-O WebEngine do bundle precisa das flags de sandbox desabilitadas na maioria dos desktops.
+Substitua `<versão>` pelo número do arquivo baixado. Abra **DataPyn Tauri** pelo menu de aplicativos.
 
----
+### AppImage
+
+Torne o arquivo baixado executável e abra-o:
+
+```bash
+chmod +x DataPyn-Tauri-<versão>-linux-x86_64.AppImage
+./DataPyn-Tauri-<versão>-linux-x86_64.AppImage
+```
+
+Se FUSE não estiver disponível, use o modo extract-and-run:
+
+```bash
+APPIMAGE_EXTRACT_AND_RUN=1 ./DataPyn-Tauri-<versão>-linux-x86_64.AppImage
+```
+
+### tar.gz
+
+Extraia o pacote Tauri e siga as instruções incluídas no arquivo. DEB e tar.gz iniciam um AppImage gerenciado em `$XDG_DATA_HOME/datapyn-tauri/installation`, com padrão `~/.local/share/datapyn-tauri/installation`. Essa cópia gravável recebe as atualizações assinadas; atualizar o DEB não substitui uma versão já atualizada pelo app.
+
+Para SQL Server, instale unixODBC e o driver Microsoft nativo (`msodbcsql18`). unixODBC sozinho não é o driver de SQL Server. Para salvar senhas, a sessão desktop precisa de um cofre Secret Service e D-Bus do usuário.
 
 ## macOS (Apple Silicon)
 
-O DMG **nao e assinado**. O Gatekeeper bloqueia a primeira abertura.
+1. Baixe o DMG Tauri para macOS 14+ e Apple Silicon em [Downloads](https://datapyn.page/downloads.html).
+2. Abra a imagem e copie **DataPyn Tauri** para Applications.
+3. Abra o aplicativo. A distribuição atual pode exigir liberação em **Ajustes do Sistema → Privacidade e Segurança**.
 
-1. Abra `DataPyn-macos-arm64.dmg` e arraste `DataPyn.app` para Applications.
-2. No Finder: clique com o botao direito em DataPyn → **Abrir**.
-3. Ou no Terminal:
+A assinatura do updater é independente da notarização Apple. Para SQL Server, instale o driver Microsoft ODBC arm64 e unixODBC pelo Homebrew nativo; evite misturar drivers Intel/Rosetta com o app arm64.
 
-```bash
-xattr -cr /Applications/DataPyn.app
-open /Applications/DataPyn.app
-```
+## Atualização automática
 
-Intel Mac nao e suportado nesta versao.
+Windows, Linux e macOS usam o canal Tauri assinado. O app consulta o feed ao iniciar e a cada seis horas, e baixa a atualização em segundo plano. Quando aparecer **Atualização pronta**, instale pelo próprio aplicativo.
 
----
+A instalação exige ação do usuário e salva o workspace. Operações em andamento ou falha ao salvar impedem a instalação. Sair antes de instalar descarta o download e exige baixá-lo novamente.
 
-## A partir do codigo-fonte
+O feed é `https://github.com/natharuc/datapyn/releases/download/tauri-stable/latest.json`. O app valida o canal e a versão, e verifica a assinatura do pacote. O tag `tauri-stable` serve o feed; os instaladores ficam nas releases imutáveis `tauri-vX.Y.Z`.
 
-Requisito: Python **3.12+** e [uv](https://docs.astral.sh/uv/).
+## A partir do código-fonte
 
-### Windows
-
-```powershell
-git clone https://github.com/natharuc/datapyn.git
-cd datapyn
-scripts\install.bat
-scripts\run.bat
-```
-
-### Linux / macOS
+Pré-requisitos: **Node.js 22**, **Rust 1.90+**, **Python 3.12+**, [uv](https://docs.astral.sh/uv/) e dependências nativas da plataforma descritas no [AGENTS.md do repositório](https://github.com/natharuc/datapyn/blob/main/AGENTS.md).
 
 ```bash
 git clone https://github.com/natharuc/datapyn.git
 cd datapyn
-chmod +x scripts/linux/install.sh scripts/linux/run.sh
-./scripts/linux/install.sh
-./scripts/linux/run.sh
+uv sync --dev --frozen
+npm --prefix desktop ci
+npm --prefix desktop run desktop:dev
 ```
 
-O `install.sh` instala dependencias de sistema (Qt, ODBC, libpq) quando o `apt-get` esta disponivel.
+`main` contém o app Tauri. Os scripts antigos de `scripts/linux/`, `scripts/install.bat`, `scripts/run.bat` e `source/main.py` são exclusivos da manutenção histórica PyQt6.
 
----
+## Configurações e dados
 
-## Configuracao inicial
+O perfil Tauri tem identidade própria, **`app.datapyn.tauri`**:
 
-Pasta de dados do usuario:
+- Windows: `%LOCALAPPDATA%/app.datapyn.tauri`.
+- macOS: `~/Library/Application Support/app.datapyn.tauri`.
+- Linux: `$XDG_DATA_HOME/app.datapyn.tauri` ou `~/.local/share/app.datapyn.tauri`.
 
-- Windows: `%APPDATA%\DataPyn\`
-- macOS: `~/Library/Application Support/datapyn/`
-- Linux: `~/.local/share/datapyn/` (ou `$XDG_DATA_HOME/datapyn/`)
+Credenciais de conexões usam o cofre do sistema sob `DataPyn.Tauri.Connections`. Configurações históricas podem ser importadas explicitamente; o app não herda automaticamente o perfil PyQt6. Workspaces usam arquivos `.dpw`.
 
-Arquivos tipicos: `connections.json`, `settings.json`, `shortcuts.json`.
+## Desinstalação
 
----
+Use o desinstalador registrado no Windows, o gerenciador do pacote DEB no Linux ou remova o aplicativo de Applications no macOS. Para arquivos portáteis, remova os arquivos extraídos.
 
-## Desinstalacao
+A desinstalação não apaga workspaces nem remove drivers compartilhados.
 
-**Windows:** `DataPyn-Setup.exe --uninstall`, ou o atalho de desinstalacao.
+## Build e publicação
 
-**Linux (.deb):**
+Para validar o executável nativo:
 
 ```bash
-sudo apt remove datapyn
+npm --prefix desktop run desktop:build -- --no-bundle
 ```
 
-**macOS:** apague `/Applications/DataPyn.app`.
+Saída: `desktop/src-tauri/target/release/`. Instaladores distribuídos exigem o fluxo de assinatura descrito na [distribuição Tauri](https://github.com/natharuc/datapyn/blob/main/docs/TAURI_DISTRIBUTION.md).
 
-Dados do usuario nao sao removidos automaticamente.
-
----
-
-## Solucao de problemas
-
-### Linux: Monaco / Pynia em branco
-
-Confirme `QTWEBENGINE_DISABLE_SANDBOX=1`. O `.deb` ja lanca o wrapper com essa variavel.
-
-### Linux: SQL Server
-
-Prefira o driver pymssql na conexao. pyodbc so funciona com ODBC instalado no sistema.
-
-### macOS: "app is damaged" / nao abre
-
-O binario nao e notarizado. Use **Abrir** no menu de contexto ou `xattr -cr`.
-
-### Windows: VCRUNTIME140.dll
-
-Instale o [Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe).
-
----
-
-## Build dos instaladores
-
-```bash
-uv sync --dev
-uv run pyinstaller scripts/datapyn.spec --clean
-```
-
-- Linux: `bash scripts/linux/package.sh <version>` (requer `fpm`)
-- macOS: `uv run python scripts/macos/generate_icns.py` antes do PyInstaller; depois `bash scripts/macos/package_dmg.sh <version>`
-- Windows setup: `uv run pyinstaller installer/datapyn_setup.spec --clean`
-
-A esteira **Continuous Delivery - PSR** publica os tres sistemas no mesmo GitHub Release. Dry-run do `.deb`: Actions → **Build Linux Installers (dry run)**.
-
----
+Um push em `main` publica a versão dos manifests quando seu tag `tauri-vX.Y.Z` ainda não existe, depois da validação nas três plataformas. Um tag existente evita nova publicação. Consulte [TAURI_RELEASE.md](https://github.com/natharuc/datapyn/blob/main/docs/TAURI_RELEASE.md) para preparar uma versão.
 
 ## Suporte
 
-- **Issues**: [GitHub Issues](https://github.com/natharuc/datapyn/issues)
+- [Drivers e pré-requisitos nativos](https://github.com/natharuc/datapyn/blob/main/docs/TAURI_RUNTIME_DISTRIBUTION.md).
+- [GitHub Issues](https://github.com/natharuc/datapyn/issues).
 
-*Problemas com a instalacao? Abra uma issue com o sistema operacional e o log de erro.*
+Ao reportar um problema, inclua plataforma, arquitetura, versão Tauri e log de erro.

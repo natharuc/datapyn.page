@@ -12,7 +12,7 @@
   --border-strong: rgba(148, 163, 184, 0.22);
   --text: #eef2f7;
   --text-muted: #8b9cb3;
-  --text-dim: #5c6d85;
+  --text-dim: #7c8da5;
   --accent: #3369ff;
   --accent-cyan: #33c2ff;
   --accent-glow: rgba(51, 105, 255, 0.35);
@@ -35,6 +35,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html {
   scroll-behavior: smooth;
@@ -373,6 +374,55 @@ code, kbd, pre { font-family: var(--mono); }
 }
 
 /* Product preview */
+.product-preview {
+  margin: 0;
+  min-width: 0;
+}
+
+.product-screenshot {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg-base);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.2s;
+}
+
+.product-screenshot:hover { border-color: var(--accent-cyan); }
+.product-screenshot:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: 4px; }
+.product-screenshot img { width: 100%; height: auto; }
+
+.screenshot-expand {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(7, 11, 18, 0.92);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-size: 0.68rem;
+}
+
+.product-preview figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.product-preview figcaption strong { color: var(--text); font-weight: 500; }
+.product-preview--pynia { margin-top: 24px; }
+.screenshot-grid { display: grid; gap: 28px; }
+
 .preview-window {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-strong);
@@ -986,6 +1036,14 @@ code, kbd, pre { font-family: var(--mono); }
 }
 
 /* Downloads page */
+.release-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
 .dl-hero {
   padding-top: calc(var(--nav-h) + 48px);
   padding-bottom: 24px;
@@ -1010,6 +1068,10 @@ code, kbd, pre { font-family: var(--mono); }
 .dl-card.detected {
   border-color: rgba(51, 105, 255, 0.55);
   box-shadow: 0 0 0 1px rgba(51, 105, 255, 0.2);
+}
+
+.dl-card.unavailable {
+  opacity: 0.82;
 }
 
 .dl-card h2 {
@@ -1040,7 +1102,21 @@ code, kbd, pre { font-family: var(--mono); }
 
 .dl-card .dl-actions .btn { width: 100%; }
 
+.dl-formats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.dl-formats .btn { width: 100%; }
+
+.dl-formats .btn.recommended {
+  box-shadow: 0 0 0 1px rgba(51, 105, 255, 0.35);
+}
+
 .dl-source {
+  scroll-margin-top: calc(var(--nav-h) + 16px);
   margin-top: 32px;
   padding: 24px;
   border-radius: var(--radius);
@@ -1068,23 +1144,27 @@ code, kbd, pre { font-family: var(--mono); }
 
 /* Responsive */
 @media (min-width: 768px) {
-  .nav-links { display: flex; }
-  .menu-toggle { display: none; }
-  .hero-grid { grid-template-columns: 1fr 1.05fr; }
+  .screenshot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .spotlight-grid { grid-template-columns: 1fr 1fr; }
   .bento { grid-template-columns: repeat(3, 1fr); }
   .bento-card.span-2 { grid-column: span 2; }
   .db-grid { grid-template-columns: repeat(3, 1fr); }
   .doc-grid { grid-template-columns: repeat(4, 1fr); }
-  .dl-grid { grid-template-columns: repeat(3, 1fr); }
+  .dl-grid { grid-template-columns: 1fr 1fr; }
+  .dl-card--wide { grid-column: 1 / -1; }
+  .dl-formats { grid-template-columns: 1fr 1fr; }
   .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
 }
 
 @media (min-width: 1024px) {
+  .nav-links { display: flex; }
+  .menu-toggle { display: none; }
+  .hero-grid { grid-template-columns: 1fr 1.05fr; }
   .db-grid { grid-template-columns: repeat(6, 1fr); }
 }
 
 @media (max-width: 767px) {
+  #download-btn-nav { display: none; }
   .preview-body { grid-template-columns: 1fr; min-height: 0; }
   .preview-session {
     border-right: none;
@@ -1093,4 +1173,8 @@ code, kbd, pre { font-family: var(--mono); }
   }
   .preview-pynia { min-height: 200px; }
   .dp-block-name { display: none; }
+}
+
+@media (max-width: 380px) {
+  .nav-actions > .icon-btn { display: none; }
 }

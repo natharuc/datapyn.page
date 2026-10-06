@@ -1,42 +1,27 @@
 # Guia de Inicio Rapido
 
-Comece a usar o DataPyn em menos de 5 minutos!
+Comece a usar o DataPyn Tauri com SQL e Python no mesmo fluxo de análise.
 
 ---
 
 ## 1. Instalacao
 
-### Windows (Recomendado)
+Instaladores oficiais: [Downloads](https://datapyn.page/downloads.html) — Windows x64 `Setup.exe` ou ZIP; Linux x64 DEB, AppImage ou tar.gz (base Ubuntu 22.04+); macOS 14+ Apple Silicon DMG. Escolha arquivos `DataPyn-Tauri-*` de tags `tauri-vX.Y.Z`.
+
+Python e bibliotecas de análise já vêm embutidos. O Setup Windows inclui WebView2 e prepara ODBC para SQL Server. No Linux/macOS, SQL Server exige o driver Microsoft ODBC nativo. Veja [INSTALL.md](INSTALL.md) para pré-requisitos por plataforma.
+
+### Desenvolvimento pelo código-fonte
+
+Requisitos: Node.js 22, Rust 1.90+, Python 3.12+, uv e dependências nativas da plataforma. O app padrão está em `main`.
 
 ```powershell
 # Clone o repositorio
 git clone https://github.com/natharuc/datapyn.git
 cd datapyn
 
-# Execute o instalador automatico
-.\scripts\install.bat
-
-# Inicie o DataPyn
-.\scripts\run.bat
-```
-
-### Instalacao Manual
-
-```bash
-# Crie ambiente virtual
-python -m venv .venv
-
-# Ative o ambiente
-# Windows:
-.venv\Scripts\activate
-# Linux/Mac:
-source .venv/bin/activate
-
-# Instale dependencias
-pip install -r requirements.txt
-
-# Execute
-python source/main.py
+uv sync --dev --frozen
+npm --prefix desktop ci
+npm --prefix desktop run desktop:dev
 ```
 
 ---
@@ -45,7 +30,7 @@ python source/main.py
 
 ### Passo 1: Abrir Gerenciador de Conexoes
 
-Clique no icone de banco de dados no painel lateral esquerdo, ou pressione `Ctrl+Shift+C`.
+Clique no ícone de banco de dados no painel lateral esquerdo, ou pressione `Ctrl+Shift+M` para gerenciar conexões.
 
 ### Passo 2: Criar Nova Conexao
 
@@ -83,7 +68,7 @@ SELECT TOP 10 * FROM Clientes
 
 ### Passo 2: Executar
 
-Pressione **F5** ou clique no botao **Executar**.
+Pressione **F5**, **Ctrl+Enter** ou clique no botão **Executar**. Uma seleção executa só o trecho selecionado; sem seleção, executa o bloco atual.
 
 ### Passo 3: Ver Resultados
 
@@ -115,7 +100,7 @@ df['Estado'].value_counts().plot(kind='bar')
 
 ### Passo 3: Executar Python
 
-Pressione **F5** ou clique em **Executar**. O sistema detecta automaticamente a linguagem do bloco.
+Pressione **F5**, **Ctrl+Enter** ou clique em **Executar**. O sistema usa a linguagem do bloco atual. **Ctrl+F5** executa os blocos ativos em sequência.
 
 ---
 
@@ -151,10 +136,11 @@ Pressione **F5** ou clique em **Executar**. O sistema detecta automaticamente a 
 
 | Acao | Atalho |
 |------|--------|
-| Executar bloco atual | `F5` |
+| Executar bloco atual ou seleção | `F5` / `Ctrl+Enter` |
 | Executar todos os blocos | `Ctrl+F5` |
 | Executar e avancar | `Shift+Enter` |
 | Nova aba | `Ctrl+T` |
+| Novo bloco | `Ctrl+Shift+B` |
 | Salvar | `Ctrl+S` |
 | Configuracoes | `Ctrl+,` |
 
@@ -182,14 +168,14 @@ Cada aba pode ter sua propria conexao. Use isso para comparar dados entre ambien
 
 ## 7. Pynia (opcional)
 
-A **Pynia** e a IA dentro do DataPyn — mesmo painel para Copilot ou API keys.
+A **Pynia** conecta o DataPyn a agentes ACP: **Claude, Cursor, GitHub Copilot e Codex**. Cada aba tem conversa e histórico próprios.
 
-1. Abra **Configuracoes → Pynia** e escolha um conector (OpenAI, Claude, Open Router ou GitHub Copilot).
-2. Cole a API key ou faca login no Copilot e clique em **Verificar**.
-3. Abra o chat pelo botao **Pynia** na barra ou **Pynia → Abrir chat Pynia**.
-4. Pergunte em linguagem natural; use `#block:nome` para citar um bloco.
+1. Abra o painel **Pynia** e clique na engrenagem **Agentes e configuração**.
+2. Instale o agente escolhido ou verifique a instalação existente. Siga as instruções de login do agente.
+3. Escolha o agente para a aba e envie sua mensagem. Após o primeiro envio, ele permanece associado à conversa; use **Novo chat** para trocar.
+4. Pergunte em linguagem natural; use referências `@` a blocos, variáveis, seleção e schema. Responda no chat quando o agente pedir permissão ou fizer perguntas.
 
-Ghost text no editor: ative **Autocomplete inline** na mesma tela de configuracao.
+Ghost text no editor: ative **Sugestões inline da Pynia** em **Configurações → Editor**. Exige um agente instalado e autenticado. **Ctrl+.** solicita sugestão; **Tab** aceita. Conta, plano e modelos dependem do agente escolhido.
 
 ---
 
@@ -206,25 +192,17 @@ Ghost text no editor: ative **Autocomplete inline** na mesma tela de configuraca
 
 ### "Nao consigo conectar ao SQL Server"
 
-1. Verifique se o ODBC Driver 17 esta instalado
+1. Verifique se ODBC 17/18 x64 está instalado no Windows, ou o driver Microsoft nativo e unixODBC no Linux/macOS
 2. Confirme que o servico SQL Server esta rodando
 3. Teste a conectividade: `telnet servidor 1433`
 
 ### "Erro: modulo nao encontrado"
 
-Execute novamente a instalacao de dependencias:
-
-```bash
-pip install -r requirements.txt
-```
+Use o gerenciador de pacotes integrado ao DataPyn para instalar bibliotecas adicionais no perfil Tauri. O Python do sistema é independente do runtime embutido.
 
 ### "Interface nao abre"
 
-Verifique se o PyQt6 esta instalado corretamente:
-
-```bash
-pip install PyQt6 PyQt6-QScintilla
-```
+Confira se baixou um pacote Tauri para a arquitetura correta. No ZIP Windows, mantenha os executáveis juntos e confira WebView2. Para AppImage sem FUSE, use `APPIMAGE_EXTRACT_AND_RUN=1`. Veja [INSTALL.md](INSTALL.md) para dependências nativas e suporte.
 
 ---
 

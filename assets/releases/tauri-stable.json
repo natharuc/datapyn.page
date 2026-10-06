@@ -1,0 +1,69 @@
+{
+  "tag_name": "tauri-v1.0.2",
+  "html_url": "https://github.com/natharuc/datapyn/releases/tag/tauri-v1.0.2",
+  "published_at": "2026-10-06T11:32:28Z",
+  "draft": false,
+  "prerelease": false,
+  "assets": [
+    {
+      "name": "DataPyn-Tauri-1.0.2-darwin-aarch64.app.tar.gz",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-darwin-aarch64.app.tar.gz",
+      "size": 211310050
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-darwin-aarch64.app.tar.gz.sig",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-darwin-aarch64.app.tar.gz.sig",
+      "size": 432
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-darwin-aarch64.dmg",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-darwin-aarch64.dmg",
+      "size": 211933492
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-linux-x86_64.AppImage",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-linux-x86_64.AppImage",
+      "size": 357759480
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-linux-x86_64.AppImage.sig",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-linux-x86_64.AppImage.sig",
+      "size": 444
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-linux-x86_64.deb",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-linux-x86_64.deb",
+      "size": 353423392
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-linux-x86_64.tar.gz",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-linux-x86_64.tar.gz",
+      "size": 356585076
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-windows-x86_64-setup.exe",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-windows-x86_64-setup.exe",
+      "size": 436691330
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-windows-x86_64-setup.exe.sig",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-windows-x86_64-setup.exe.sig",
+      "size": 444
+    },
+    {
+      "name": "DataPyn-Tauri-1.0.2-windows-x86_64.zip",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-windows-x86_64.zip",
+      "size": 214451425
+    },
+    {
+      "name": "latest.json",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/latest.json",
+      "size": 2010
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "browser_download_url": "https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/SHA256SUMS.txt",
+      "size": 1171
+    }
+  ]
+}

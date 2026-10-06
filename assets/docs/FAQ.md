@@ -8,11 +8,17 @@ Duvidas comuns sobre o DataPyn.
 
 ### O que e o DataPyn?
 
-DataPyn e uma IDE para analise de dados que combina SQL e Python em um unico ambiente. Voce pode escrever queries SQL, manipular os resultados com pandas, e gerar visualizacoes - tudo em uma interface unificada.
+DataPyn é uma IDE desktop Tauri para análise de dados que combina SQL e Python em um único ambiente. Cada sessão usa um kernel Python isolado. Você pode escrever consultas SQL, manipular resultados com pandas ou Polars e gerar visualizações na mesma interface.
 
 ### Quais sistemas operacionais sao suportados?
 
-Atualmente, o DataPyn suporta **Windows 10/11**. Versoes para macOS e Linux estao em desenvolvimento.
+Pacotes oficiais do canal Tauri, disponíveis em [Downloads](https://datapyn.page/downloads.html):
+
+- **Windows 10/11** (x64): Setup.exe Tauri e ZIP portátil.
+- **Linux** (x64, base Ubuntu 22.04+): DEB, AppImage e tar.gz.
+- **macOS 14+** (Apple Silicon): DMG Tauri.
+
+Os tags atuais usam `tauri-vX.Y.Z`; `releases/latest` no GitHub continua reservado ao canal histórico PyQt6.
 
 ### O DataPyn e gratuito?
 
@@ -20,7 +26,7 @@ Sim, o DataPyn e **open-source e gratuito** para uso pessoal e comercial.
 
 ### Preciso instalar Python separadamente?
 
-O executavel standalone ja inclui Python embarcado. Se voce executar a partir do codigo-fonte, precisa de Python 3.11+.
+Os pacotes Tauri incluem Python e as bibliotecas de análise. Para desenvolver pelo código-fonte, instale Node.js 22, Rust 1.90+, Python 3.12+, uv e os pré-requisitos nativos descritos em [INSTALL.md](INSTALL.md).
 
 ---
 
@@ -33,6 +39,7 @@ O executavel standalone ja inclui Python embarcado. Se voce executar a partir do
 - PostgreSQL (10+)
 - MariaDB (10+)
 - SQLite
+- Databricks SQL Warehouse
 
 ### Como me conecto ao SQL Server com autenticacao Windows?
 
@@ -44,7 +51,7 @@ O executavel standalone ja inclui Python embarcado. Se voce executar a partir do
 
 ### Minhas senhas sao seguras?
 
-Sim. Senhas salvas sao criptografadas com **AES-256**. A chave de criptografia e derivada do hardware da sua maquina, entao o arquivo de conexoes nao pode ser usado em outro computador.
+Credenciais de conexões salvas usam o cofre do sistema sob **`DataPyn.Tauri.Connections`**. O perfil Tauri é separado do perfil histórico. No Linux, salvar senhas requer um serviço Secret Service ativo; sem cofre, informe a senha ao conectar.
 
 ### Posso usar conexoes via SSH tunnel?
 
@@ -75,21 +82,17 @@ Possiveis causas:
 2. **Rede lenta** - Verifique conexao com o servidor
 3. **Lock no banco** - Outra transacao pode estar bloqueando
 
-Voce pode cancelar a execucao clicando no **X** que aparece.
+Use a ação **Cancelar** ou **Escape**. O cancelamento encerra o kernel afetado; as outras sessões continuam disponíveis. Variáveis desse kernel podem precisar ser recriadas.
 
 ### Como uso variaveis Python no SQL?
 
-Use a sintaxe de f-string:
-
-```python
-ano = 2024
-```
+Use o painel de parâmetros SQL. Parâmetros locais usam `@nome`; parâmetros compartilhados usam `{{nome}}` quando esse delimitador está configurado:
 
 ```sql
-SELECT * FROM vendas WHERE YEAR(data) = {ano}
+SELECT * FROM vendas WHERE YEAR(data) = @ano
 ```
 
-A variavel `ano` do Python sera substituida no SQL.
+Defina `ano` como inteiro no painel. Os parâmetros são enviados ao driver como valores tipados, preservando strings, datas e valores nulos.
 
 ### Posso executar DDL (CREATE, ALTER, DROP)?
 
@@ -108,11 +111,11 @@ Sim, mas com cautela. Nao ha confirmacao automatica para comandos DDL. Recomenda
 2. Clique direito na tabela de resultados
 3. Selecione **Exportar > Excel**
 
-Ou use `Ctrl+Shift+X`.
+Use o menu de exportação da grade. Ele oferece Excel, CSV, JSON, SQL e Parquet; o download direto de consultas oferece CSV e Parquet.
 
-### Por que a tabela mostra apenas 1000 linhas?
+### Por que a tabela mostra apenas parte das linhas?
 
-Por padrao, o DataPyn limita a exibicao a **1000 linhas** para performance. O DataFrame `df` contem todos os dados.
+O limite padrão de visualização é **100 linhas** e pode ser alterado nas configurações. O DataFrame contém o resultado completo. A exportação da grade usa a seleção ou a visualização completa, incluindo os filtros e a ordenação aplicados.
 
 Para ver mais:
 
@@ -137,25 +140,19 @@ O DataPyn ja inclui:
 
 - `pandas` - Manipulacao de dados
 - `numpy` - Operacoes numericas
+- `polars` - DataFrames
 - `matplotlib` - Graficos
-- `seaborn` - Visualizacoes estatisticas
 - `datetime` - Datas e horas
 
 ### Como instalo bibliotecas adicionais?
 
-Abra um terminal e instale via pip:
-
-```bash
-pip install nome_da_biblioteca
-```
-
-A biblioteca ficara disponivel em novas sessoes.
+Use o gerenciador de pacotes integrado ao DataPyn. Os pacotes adicionais ficam no perfil Tauri, sem modificar o Python do sistema ou o app histórico. Reinicie a sessão quando o gerenciador solicitar.
 
 ### Por que minha variavel sumiu?
 
 Cada **aba/sessao** tem seu proprio namespace Python. Variaveis nao sao compartilhadas entre abas.
 
-Se voce fechar uma aba, as variaveis sao perdidas (a menos que salve o workspace).
+Salvar um `.dpw` preserva o documento, mas não implica salvar todos os objetos do namespace. A restauração de DataFrames por snapshots Parquet é opcional e precisa estar habilitada.
 
 ### Como limpo o namespace?
 
@@ -188,11 +185,7 @@ Sim. Arraste as bordas dos paineis de resultados, output e variaveis para redime
 
 ### Os paineis sumiram. Como recupero?
 
-Use os atalhos:
-
-- `Ctrl+R` - Painel de resultados
-- `Ctrl+Shift+O` - Painel de output
-- `Ctrl+Shift+V` - Painel de variaveis
+Mostre os painéis pelo menu **Exibir**. Use `Ctrl+Shift+R` para restaurar a visualização ou `Ctrl+Shift+Alt+R` para restaurar a disposição.
 
 ---
 
@@ -209,13 +202,7 @@ Workspace e o estado completo da sua sessao de trabalho:
 
 ### Onde os workspaces sao salvos?
 
-Por padrao em:
-
-```
-%USERPROFILE%/Documents/DataPyn/
-```
-
-Arquivos `.dpw` (DataPyn Workspace).
+Você escolhe o destino ao salvar arquivos `.dpw`. Configurações e sessões restauradas automaticamente ficam no perfil Tauri: `%LOCALAPPDATA%/app.datapyn.tauri` no Windows, `~/Library/Application Support/app.datapyn.tauri` no macOS e `$XDG_DATA_HOME/app.datapyn.tauri` (ou `~/.local/share/app.datapyn.tauri`) no Linux.
 
 ### Como abro um workspace antigo?
 
@@ -225,7 +212,7 @@ Navegue ate o arquivo `.dpw`.
 
 ### Posso abrir multiplos workspaces?
 
-Atualmente, apenas um workspace pode estar aberto por vez. Abrir outro substitui o atual.
+O app gerencia perfis de workspace separados, com conexões, atalhos, configurações e sessões próprios. Troque pelo gerenciador de workspaces quando não houver operações em andamento.
 
 ---
 
@@ -233,11 +220,7 @@ Atualmente, apenas um workspace pode estar aberto por vez. Abrir outro substitui
 
 ### Erro: "Driver ODBC nao encontrado"
 
-Instale o driver ODBC apropriado:
-
-- **SQL Server**: [Microsoft ODBC Driver 17/18](https://docs.microsoft.com/sql/connect/odbc/download-odbc-driver-for-sql-server)
-- **MySQL**: [MySQL Connector/ODBC](https://dev.mysql.com/downloads/connector/odbc/)
-- **PostgreSQL**: [PostgreSQL ODBC](https://www.postgresql.org/ftp/odbc/versions/)
+SQL Server usa `pyodbc` com o driver Microsoft nativo. O Setup Windows prepara ODBC 18 x64 se necessário; Linux/macOS exigem instalação do driver e unixODBC. MySQL, MariaDB, PostgreSQL e Databricks usam os drivers Python embutidos. Veja [INSTALL.md](INSTALL.md).
 
 ### Erro: "Conexao recusada"
 
@@ -250,13 +233,7 @@ Verifique:
 
 ### A aplicacao travou. Perdi meu trabalho?
 
-O DataPyn faz **auto-save** a cada 2 minutos. Ao reabrir, ele pergunta se deseja restaurar a sessao anterior.
-
-O backup fica em:
-
-```
-%APPDATA%/DataPyn/autosave.dpw
-```
+O Tauri salva rascunhos de documentos no perfil do workspace após alterações e restaura as sessões ao iniciar. Código não é executado automaticamente na restauração. Salve também o `.dpw` com `Ctrl+S`; a restauração de variáveis Python é um recurso separado e opcional.
 
 ### Caracteres especiais aparecem errados
 
@@ -305,24 +282,24 @@ Ou feche abas que nao esta usando.
 
 ### O que e a Pynia?
 
-A IA integrada do DataPyn: chat, ferramentas que editam/executam blocos, e autocomplete inline opcional. Nao precisa instalar nada alem do DataPyn.
+A IA integrada do DataPyn: chat, ferramentas que editam/executam blocos e autocomplete inline opcional. Ela se conecta a agentes externos via ACP; instalação, conta e login do agente são próprios.
 
-### Quais provedores funcionam?
+### Quais agentes funcionam?
 
-- **GitHub Copilot** (assinatura + login GitHub)
-- **OpenAI** (API key)
-- **Claude / Anthropic** (API key)
-- **Open Router** (API key, varios modelos)
+- **Claude**
+- **Cursor**
+- **GitHub Copilot**
+- **Codex**
 
-Tudo em **Configuracoes → Pynia**.
+Abra a engrenagem **Agentes e configuração** no painel Pynia para instalar/atualizar, seguir as instruções de login e verificar as instalações. Modelos e raciocínio dependem das opções anunciadas pelo agente. Após a primeira mensagem, o agente fica associado à conversa da aba; inicie **Novo chat** para trocar.
 
 ### Como abro o chat?
 
-Botao Pynia na barra, menu **Pynia → Abrir chat Pynia**, ou mostre o dock em **Exibir**. Nao ha atalho global padrao tipo Ctrl+Shift+I.
+Use o botão Pynia na barra de ferramentas ou mostre o painel pelo menu **Exibir**. Cada aba mantém seu próprio histórico.
 
 ### A Pynia envia meus dados pra onde?
 
-Para o provedor que voce escolheu (API da OpenAI, Anthropic, Open Router, ou infra do Copilot). O DataPyn monta contexto local (codigo, schema, selecao) e envia na requisicao — leia as politicas do provedor.
+Para o agente escolhido, que usa sua conta e serviço. O DataPyn fornece contexto da sessão, como código, schema, seleção e anexos. Responda no chat às permissões solicitadas pelo agente e consulte as políticas desse serviço.
 
 ### Ferramentas `datapyn_*` — preciso decorar?
 
