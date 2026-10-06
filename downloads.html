@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Downloads — DataPyn</title>
-  <meta name="description" content="Download DataPyn for Windows, Linux, and macOS.">
+  <title>Downloads — DataPyn Tauri</title>
+  <meta name="description" content="Download the latest DataPyn Tauri release for Windows x64, Linux x86_64, and macOS Apple Silicon. Python is included.">
   <link rel="icon" type="image/x-icon" href="assets/datapyn-logo.ico">
   <link rel="stylesheet" href="css/site.css">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
@@ -34,7 +34,7 @@
           <button type="button" data-lang="pt">PT</button>
         </div>
         <a href="https://github.com/natharuc/datapyn" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
-          <i data-lucide="github" style="width:20px;height:20px"></i>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .75a11.25 11.25 0 0 0-3.558 21.924c.563.104.768-.244.768-.543 0-.267-.01-.974-.015-1.912-3.13.68-3.79-1.508-3.79-1.508-.512-1.301-1.25-1.647-1.25-1.647-1.023-.7.077-.686.077-.686 1.13.08 1.726 1.16 1.726 1.16 1.005 1.724 2.637 1.226 3.28.938.103-.73.393-1.226.715-1.508-2.499-.284-5.126-1.25-5.126-5.563 0-1.229.44-2.233 1.16-3.02-.116-.285-.503-1.43.11-2.98 0 0 .945-.303 3.094 1.153a10.784 10.784 0 0 1 5.632 0c2.15-1.456 3.094-1.153 3.094-1.153.613 1.55.226 2.695.111 2.98.722.787 1.159 1.791 1.159 3.02 0 4.324-2.631 5.276-5.137 5.554.404.348.764 1.035.764 2.085 0 1.507-.014 2.723-.014 3.092 0 .302.203.653.774.542A11.25 11.25 0 0 0 12 .75Z"/></svg>
         </a>
         <a id="download-btn-nav" href="downloads.html" class="btn btn-primary" style="padding:8px 14px;font-size:0.8rem">
           <span id="download-text-nav" data-i18n="nav.download">Download</span>
@@ -59,7 +59,13 @@
       <div class="container">
         <div class="section-head">
           <h1 data-i18n="dl.title">Downloads</h1>
-          <p data-i18n="dl.sub">Official installers from GitHub Releases. Python is bundled — you do not need a separate install.</p>
+          <p data-i18n="dl.sub">The current DataPyn desktop app, built with Tauri. Python and its database libraries are included.</p>
+        </div>
+
+        <div class="release-summary">
+          <span class="badge">Tauri</span>
+          <span id="release-status" role="status" aria-live="polite">Latest Tauri release · v1.0.2</span>
+          <a id="dl-release-link" href="https://github.com/natharuc/datapyn/releases/tag/tauri-v1.0.2" class="docs-link" target="_blank" rel="noopener" data-i18n="dl.release.notes">Release notes</a>
         </div>
 
         <div class="dl-grid">
@@ -67,59 +73,65 @@
             <span class="badge dl-detected-badge" hidden data-i18n="dl.your_os">Your system</span>
             <h2 data-i18n="dl.windows.title">Windows</h2>
             <p class="dl-arch" data-i18n="dl.windows.arch">x64 · Windows 10/11</p>
-            <p class="dl-note" data-i18n="dl.windows.note">The setup wizard installs under %LOCALAPPDATA%\DataPyn and creates Start Menu / Desktop shortcuts.</p>
+            <p class="dl-note" data-i18n="dl.windows.note">The setup prepares WebView2 and Microsoft ODBC when needed. For the ZIP, keep datapyn-desktop.exe and datapyn-runtime.exe together; WebView2 and ODBC are prerequisites.</p>
             <div class="dl-actions">
-              <a id="dl-btn-windows" href="https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-Setup.exe" class="btn btn-primary" target="_blank" rel="noopener">
+              <a id="dl-btn-windows" href="https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-windows-x86_64-setup.exe" class="btn btn-primary" target="_blank" rel="noopener">
                 <i data-lucide="download" style="width:16px;height:16px"></i>
                 <span data-i18n="dl.windows.primary">Download Setup.exe</span>
               </a>
-              <a id="dl-btn-windows-zip" href="https://github.com/natharuc/datapyn/releases/latest" class="btn btn-ghost" target="_blank" rel="noopener">
-                <span data-i18n="dl.windows.zip">Portable ZIP</span>
-              </a>
-            </div>
-          </article>
-
-          <article class="dl-card" data-os="linux">
-            <span class="badge dl-detected-badge" hidden data-i18n="dl.your_os">Your system</span>
-            <h2 data-i18n="dl.linux.title">Linux</h2>
-            <p class="dl-arch" data-i18n="dl.linux.arch">amd64 · Ubuntu/Debian 22.04+</p>
-            <p class="dl-note" data-i18n="dl.linux.note">The .deb targets Ubuntu/Debian. Fedora, Arch, and other distros should use the tarball. SQL Server via pyodbc needs unixodbc plus a system ODBC driver; pymssql works without extra drivers.</p>
-            <div class="dl-actions">
-              <a id="dl-btn-linux" href="https://github.com/natharuc/datapyn/releases/latest/download/datapyn_amd64.deb" class="btn btn-primary" target="_blank" rel="noopener">
-                <i data-lucide="download" style="width:16px;height:16px"></i>
-                <span data-i18n="dl.linux.primary">Download .deb</span>
-              </a>
-              <a id="dl-btn-linux-tar" href="https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-linux-x86_64.tar.gz" class="btn btn-ghost" target="_blank" rel="noopener">
-                <span data-i18n="dl.linux.tarball">Portable tar.gz</span>
-              </a>
+              <a id="dl-btn-windows-zip" href="https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-windows-x86_64.zip" class="btn btn-ghost" target="_blank" rel="noopener" data-i18n="dl.windows.zip">Portable ZIP</a>
             </div>
           </article>
 
           <article class="dl-card" data-os="macos">
             <span class="badge dl-detected-badge" hidden data-i18n="dl.your_os">Your system</span>
             <h2 data-i18n="dl.macos.title">macOS</h2>
-            <p class="dl-arch" data-i18n="dl.macos.arch">Apple Silicon (arm64)</p>
-            <p class="dl-note" data-i18n="dl.macos.note">The disk image is unsigned. After copying DataPyn.app to Applications, right-click Open, or run: xattr -cr /Applications/DataPyn.app</p>
+            <p class="dl-arch" data-i18n="dl.macos.arch">Apple Silicon (arm64) · macOS 14+</p>
+            <p class="dl-note" data-i18n="dl.macos.note">Open the DMG and copy DataPyn Tauri to Applications. This build is not notarized; if macOS blocks it, allow it in System Settings → Privacy &amp; Security.</p>
             <div class="dl-actions">
-              <a id="dl-btn-macos" href="https://github.com/natharuc/datapyn/releases/latest/download/DataPyn-macos-arm64.dmg" class="btn btn-primary" target="_blank" rel="noopener">
+              <a id="dl-btn-macos" href="https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-darwin-aarch64.dmg" class="btn btn-primary" target="_blank" rel="noopener">
                 <i data-lucide="download" style="width:16px;height:16px"></i>
                 <span data-i18n="dl.macos.primary">Download .dmg</span>
               </a>
             </div>
           </article>
-        </div>
 
-        <div class="dl-source">
+          <article class="dl-card dl-card--wide" data-os="linux">
+            <span class="badge dl-detected-badge" hidden data-i18n="dl.your_os">Your system</span>
+            <h2 data-i18n="dl.linux.title">Linux</h2>
+            <p class="dl-arch" data-i18n="dl.linux.arch">x86_64 · Ubuntu 22.04+ base</p>
+            <p class="dl-note" data-i18n="dl.linux.note">Choose DEB for Ubuntu/Debian, or AppImage/tar.gz for other compatible x86_64 desktops. The DEB and tar.gz launchers prepare a user-managed installation without FUSE. SQL Server via ODBC needs the native Microsoft driver.</p>
+            <div class="dl-formats">
+              <a id="dl-btn-linux-deb" data-linux-format="linuxDeb" href="https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-linux-x86_64.deb" class="btn btn-ghost" target="_blank" rel="noopener">
+                <i data-lucide="download" style="width:16px;height:16px"></i>
+                <span data-i18n="dl.linux.deb">Ubuntu / Debian (.deb)</span>
+              </a>
+              <a id="dl-btn-linux-appimage" data-linux-format="linuxAppImage" href="https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-linux-x86_64.AppImage" class="btn btn-ghost" target="_blank" rel="noopener">
+                <i data-lucide="download" style="width:16px;height:16px"></i>
+                <span data-i18n="dl.linux.appimage">AppImage</span>
+              </a>
+              <a id="dl-btn-linux-tar" href="https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/DataPyn-Tauri-1.0.2-linux-x86_64.tar.gz" class="btn btn-ghost" target="_blank" rel="noopener" data-i18n="dl.linux.tarball">Portable tar.gz</a>
+            </div>
+          </article>
+        </div>
+        <p style="margin:20px 0 0">
+          <a id="dl-btn-checksums" href="https://github.com/natharuc/datapyn/releases/download/tauri-v1.0.2/SHA256SUMS.txt" class="docs-link" target="_blank" rel="noopener" data-i18n="dl.checksums">Verify downloads (SHA256)</a>
+        </p>
+
+        <div id="dl-source" class="dl-source">
           <h2 data-i18n="dl.source.title">From source</h2>
-          <p class="dl-note" data-i18n="dl.source.desc">Contributors can clone the repo and run with uv (Python 3.12+).</p>
+          <p class="dl-note" data-i18n="dl.source.desc">Development requires Node.js 22, Rust 1.90+, Python 3.12+, uv, and your platform’s native dependencies.</p>
           <pre><code>git clone https://github.com/natharuc/datapyn.git
 cd datapyn
-uv sync
-uv run python source/main.py</code></pre>
+uv sync --dev --frozen
+npm --prefix desktop ci
+npm --prefix desktop run desktop:dev</code></pre>
           <p style="margin:16px 0 0">
-            <a href="https://github.com/natharuc/datapyn/releases/latest" class="docs-link" target="_blank" rel="noopener" data-i18n="dl.releases">All GitHub Releases</a>
+            <a href="https://github.com/natharuc/datapyn/blob/main/AGENTS.md#project" class="docs-link" target="_blank" rel="noopener" data-i18n="dl.source.requirements">Development prerequisites</a>
             ·
-            <a href="docs.html#installation" data-i18n="docs.all">Documentation</a>
+            <a href="https://github.com/natharuc/datapyn/releases" class="docs-link" target="_blank" rel="noopener" data-i18n="dl.releases">All GitHub Releases</a>
+            ·
+            <a href="docs.html#installation" class="docs-link" data-i18n="docs.all">Documentation</a>
           </p>
         </div>
       </div>
@@ -141,6 +153,7 @@ uv run python source/main.py</code></pre>
     </div>
   </footer>
 
+  <script src="js/releases.js"></script>
   <script src="js/site.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {

@@ -2,50 +2,15 @@
   'use strict';
 
   const STORAGE_KEY = 'datapyn-lang';
-  const RELEASE_DOWNLOAD_BASE =
-    'https://github.com/natharuc/datapyn/releases/latest/download';
-  const RELEASES_PAGE_URL = 'https://github.com/natharuc/datapyn/releases/latest';
+  let activeLang = null;
+  const RELEASES_PAGE_URL = 'https://github.com/natharuc/datapyn/releases';
   const DOWNLOADS_PAGE = 'downloads.html';
-
-  const PLATFORM_ASSETS = {
-    windows: {
-      stable: 'DataPyn-Setup.exe',
-      matchers: [
-        (n) => n === 'DataPyn-Setup.exe',
-        (n) => /^DataPyn-Setup-[\d.]+\.exe$/i.test(n),
-      ],
-    },
-    linux: {
-      stable: 'datapyn_amd64.deb',
-      matchers: [
-        (n) => n === 'datapyn_amd64.deb',
-        (n) => /^datapyn_[\d.]+_amd64\.deb$/i.test(n),
-      ],
-    },
-    macos: {
-      stable: 'DataPyn-macos-arm64.dmg',
-      matchers: [
-        (n) => n === 'DataPyn-macos-arm64.dmg',
-        (n) => /^DataPyn-[\d.]+-macos-arm64\.dmg$/i.test(n),
-      ],
-    },
+  const ASSET_BUTTONS = {
+    windows: 'dl-btn-windows', windowsZip: 'dl-btn-windows-zip',
+    linuxDeb: 'dl-btn-linux-deb', linuxAppImage: 'dl-btn-linux-appimage',
+    linuxTarball: 'dl-btn-linux-tar', macos: 'dl-btn-macos', checksums: 'dl-btn-checksums',
   };
-
-  const EXTRA_ASSETS = {
-    windowsZip: {
-      stable: null,
-      matchers: [(n) => /^DataPyn-[\d.]+-windows\.zip$/i.test(n)],
-    },
-    linuxTarball: {
-      stable: 'DataPyn-linux-x86_64.tar.gz',
-      matchers: [
-        (n) => n === 'DataPyn-linux-x86_64.tar.gz',
-        (n) => /^DataPyn-[\d.]+-linux-x86_64\.tar\.gz$/i.test(n),
-      ],
-    },
-  };
-
-  let downloadState = { os: 'other', version: null, urls: {} };
+  let downloadState = { os: 'other', linuxFamily: 'universal', version: null, urls: {}, source: null, releaseUrl: RELEASES_PAGE_URL };
 
   const translations = {
     en: {
@@ -54,22 +19,21 @@
       'nav.databases': 'Databases',
       'nav.docs': 'Docs',
       'nav.github': 'GitHub',
-      'nav.download': 'Download',
+      'nav.download': "Download",
       'nav.downloads': 'Downloads',
       'download.releases': 'View Releases',
       'download.all': 'All downloads',
-      'hero.badge': 'Desktop IDE · SQL + Python',
+      'hero.badge': "Tauri desktop · SQL + Python",
       'hero.title': 'One workspace for queries, pipelines, and analysis.',
-      'hero.lead':
-        'DataPyn is built for analysts and data engineers who work directly against databases: block-based SQL and Python, Monaco editing with schema intelligence, and Pynia for LLM-assisted development — connect GitHub Copilot, OpenAI, Anthropic, or Open Router under Settings → Pynia.',
+      'hero.lead': "A desktop workspace built with Tauri for analysts and data engineers. Combine SQL and Python blocks, explore your database with Monaco, and work with Pynia using Claude, Cursor, GitHub Copilot, or Codex. Python is included.",
       'hero.cta.primary': 'Download',
       'hero.cta.secondary': 'Documentation',
       'hero.cta.downloads': 'All downloads',
       'hero.meta.windows': 'Windows',
-      'hero.meta.platforms': 'Windows · Linux · macOS',
+      'hero.meta.platforms': "Windows · Linux · macOS",
       'hero.meta.offline': 'Offline SQL completion',
       'hero.meta.open': 'Open source',
-      'preview.title': 'session.sql — DataPyn',
+      'preview.title': "DataPyn · Tauri",
       'preview.chat.title': 'Pynia',
       'preview.chat.sub': 'Session-aware assistant',
       'preview.user': 'Aggregate revenue by region for Q1 2025.',
@@ -91,47 +55,43 @@
       'features.connect.desc':
         'SQL Server, PostgreSQL, MySQL, MariaDB, SQLite, Databricks — with per-block connection binding.',
       'features.session.title': 'Tabs & workspaces',
-      'features.session.desc':
-        'Multiple sessions with isolated Python namespaces. Save and restore .dpw workspaces with connections and layout.',
+      'features.session.desc': "Keep independent Python sessions in tabs, arrange dockable panels, and save your work in .dpw workspaces.",
       'features.monaco.title': 'Monaco editor',
-      'features.monaco.desc':
-        'Syntax highlighting, minimap, find/replace, and optional Pynia inline ghost completions for SQL and Python blocks.',
+      'features.monaco.desc': "Syntax highlighting, find/replace, schema-aware SQL completion, and optional Pynia inline suggestions.",
       'features.export.title': 'Export & integration',
-      'features.export.desc':
-        'Export result grids to Excel/CSV/JSON, generate standalone Python scripts, or hand off logic to your orchestration stack.',
+      'features.export.desc': "Import CSV, JSON, and Excel files. Export result grids, charts, Python scripts, and .dpw workspaces.",
       'pynia.eyebrow': 'Pynia',
-      'pynia.title': 'LLM assistance with full session context',
-      'pynia.lead':
-        'Pynia is integrated into the IDE: it reads the active connection, schema, blocks, and selection, then can author SQL/Python, run blocks via tool calls, inspect results, and build charts — using whichever connector your organization already standardizes on.',
-      'pynia.l1.title': 'Connector choice',
-      'pynia.l1.desc': 'GitHub Copilot (device login), OpenAI, Anthropic, and Open Router — each with its own credentials and model list.',
-      'pynia.l2.title': 'Grounded in metadata',
-      'pynia.l2.desc': 'Tooling exposes workspace state, table/column lists, block code, and execution output — not a disconnected chat window.',
+      'pynia.title': "Your coding agent, inside the workspace",
+      'pynia.lead': "Pynia connects Claude, Cursor, GitHub Copilot, and Codex to the active session. Ask it to explore the schema, write SQL and Python, inspect results, and build charts. Review permissions in the conversation before an agent proceeds.",
+      'pynia.l1.title': "Choose your agent",
+      'pynia.l1.desc': "Claude, Cursor, GitHub Copilot, and Codex, with installation and sign-in controls in Pynia settings.",
+      'pynia.l2.title': "Session context",
+      'pynia.l2.desc': "Each tab keeps its conversation and execution context, including blocks, schema, and results.",
       'pynia.l3.title': 'SQL → Python continuity',
-      'pynia.l3.desc': 'Generate or refactor queries, then chain pandas/matplotlib steps on the same result set inside the session.',
-      'pynia.notice':
-        'LLM usage is billed by the provider (Copilot subscription or API credits). Configure connectors in Settings → Pynia.',
-      'providers.label': 'LLM connectors',
+      'pynia.l3.desc': "Write or refactor queries, then continue with Python on the same result set.",
+      'pynia.notice': "Agents use their own authentication and subscriptions. Configure your preferred agent in Settings → Pynia.",
+      'providers.label': "Available agents",
+      'pynia.screenshot.caption': 'Choose your Pynia agent in the Tauri app.',
       'databases.title': 'Database connectivity',
-      'databases.sub': 'Native drivers, encrypted credential storage, and connection testing from the manager panel.',
+      'databases.sub': "SQL Server, PostgreSQL, MySQL, MariaDB, SQLite, and Databricks, with connections per block.",
       'start.title': 'Quick start',
-      'start.sub': 'Install on Windows, Linux, or macOS, then connect and run your first block.',
+      'start.sub': "Install on Windows, Linux, or macOS, then connect and run your first block.",
       'start.s1.title': 'Install DataPyn',
-      'start.s1.desc': 'Download the installer for your OS from the downloads page (Setup.exe, .deb, or .dmg).',
+      'start.s1.desc': "Download the latest Tauri installer for your platform. The Python runtime is included.",
       'start.s2.title': 'Register a connection',
       'start.s2.desc': 'Define host, database, and auth in Connections; validate before saving.',
       'start.s3.title': 'Configure Pynia (optional)',
-      'start.s3.desc': 'Add API tokens or sign in to GitHub Copilot under Settings → Pynia.',
+      'start.s3.desc': "Choose Claude, Cursor, GitHub Copilot, or Codex in Settings → Pynia and sign in to your agent.",
       'start.s4.title': 'Execute blocks',
-      'start.s4.desc': 'Run with F5 or Shift+Enter; open the Pynia panel from the toolbar when you need generation or explanation.',
+      'start.s4.desc': 'Run the current block or selection with F5. Open Pynia from the toolbar when you need help writing or explaining code.',
       'docs.title': 'Documentation',
-      'docs.sub': 'Connections, block model, SQL editor behavior, Pynia connectors, and shortcuts.',
+      'docs.sub': "Installation, connections, blocks, Pynia agents, and shortcuts.",
       'docs.all': 'Full documentation',
       'docs.connections': 'Connections',
       'docs.pynia': 'Pynia',
       'docs.sql': 'SQL editor',
       'cta.title': 'Run your next analysis in a single IDE',
-      'cta.sub': 'Install DataPyn, connect to your databases, and optionally wire Pynia to your LLM provider.',
+      'cta.sub': "Install the Tauri desktop app, connect your databases, and bring your coding agent into the session.",
       'footer.tagline': 'DataPyn — SQL + Python IDE with Pynia',
       'cta.btn': 'Download',
       'footer.docs': 'Documentation',
@@ -139,25 +99,42 @@
       'footer.github': 'GitHub',
       'footer.license': 'Open source',
       'dl.title': 'Downloads',
-      'dl.sub': 'Official installers from GitHub Releases. Python is bundled — you do not need a separate install.',
+      'dl.sub': "The current DataPyn desktop app, built with Tauri. Python and its database libraries are included.",
       'dl.your_os': 'Your system',
       'dl.windows.title': 'Windows',
       'dl.windows.arch': 'x64 · Windows 10/11',
       'dl.windows.primary': 'Download Setup.exe',
       'dl.windows.zip': 'Portable ZIP',
-      'dl.windows.note': 'The setup wizard installs under %LOCALAPPDATA%\\DataPyn and creates Start Menu / Desktop shortcuts.',
+      'dl.windows.note': "The setup prepares WebView2 and Microsoft ODBC when needed. For the ZIP, keep datapyn-desktop.exe and datapyn-runtime.exe together; WebView2 and ODBC are prerequisites.",
       'dl.linux.title': 'Linux',
-      'dl.linux.arch': 'amd64 · Ubuntu/Debian 22.04+',
+      'dl.linux.arch': "x86_64 · Ubuntu 22.04+ base",
       'dl.linux.primary': 'Download .deb',
-      'dl.linux.tarball': 'Portable tar.gz',
-      'dl.linux.note': 'The .deb targets Ubuntu/Debian. Fedora, Arch, and other distros should use the tarball. SQL Server via pyodbc needs unixodbc plus a system ODBC driver; pymssql works without extra drivers.',
+      'dl.linux.deb': 'Ubuntu / Debian (.deb)',
+      'dl.linux.appimage': "AppImage",
+      'dl.linux.tarball': "Portable tar.gz",
+      'dl.linux.note': "Choose DEB for Ubuntu/Debian, or AppImage/tar.gz for other compatible x86_64 desktops. The DEB and tar.gz launchers prepare a user-managed installation without FUSE. SQL Server via ODBC needs the native Microsoft driver.",
       'dl.macos.title': 'macOS',
-      'dl.macos.arch': 'Apple Silicon (arm64)',
+      'dl.macos.arch': "Apple Silicon (arm64) · macOS 14+",
       'dl.macos.primary': 'Download .dmg',
-      'dl.macos.note': 'The disk image is unsigned. After copying DataPyn.app to Applications, right-click Open, or run: xattr -cr /Applications/DataPyn.app',
+      'dl.macos.note': "Open the DMG and copy DataPyn Tauri to Applications. This build is not notarized; if macOS blocks it, allow it in System Settings → Privacy & Security.",
       'dl.source.title': 'From source',
-      'dl.source.desc': 'Contributors can clone the repo and run with uv (Python 3.12+).',
-      'dl.releases': 'All GitHub Releases',
+      'dl.source.desc': "Development requires Node.js 22, Rust 1.90+, Python 3.12+, uv, and your platform’s native dependencies.",
+      'dl.releases': "All GitHub Releases",
+      'preview.caption': "Current Tauri interface · demonstration data",
+      'screenshots.title': "A closer look at the Tauri workspace",
+      'screenshots.sub': "SQL and Python blocks, result grids, and dockable panels in the current desktop interface.",
+      'screenshots.dark': "Dark workspace",
+      'screenshots.light': "Light workspace",
+      'screenshots.open': "Open full screenshot",
+      'features.runtime.title': "Tauri desktop, Python included",
+      'features.runtime.desc': "Native installers with the Python runtime and isolated kernels for each session.",
+      'dl.release.loading': "Checking the Tauri release",
+      'dl.release.current': "Latest Tauri release",
+      'dl.release.fallback': "Last verified Tauri release",
+      'dl.release.unavailable': 'Tauri installers available below',
+      'dl.release.notes': "Release notes",
+      'dl.checksums': "Verify downloads (SHA256)",
+      'dl.source.requirements': "Development prerequisites",
     },
     pt: {
       'nav.features': 'Recursos',
@@ -165,22 +142,21 @@
       'nav.databases': 'Bancos',
       'nav.docs': 'Docs',
       'nav.github': 'GitHub',
-      'nav.download': 'Download',
+      'nav.download': "Baixar",
       'nav.downloads': 'Downloads',
       'download.releases': 'Ver Releases',
       'download.all': 'Todos os downloads',
-      'hero.badge': 'IDE desktop · SQL + Python',
+      'hero.badge': "Desktop Tauri · SQL + Python",
       'hero.title': 'Um ambiente para consultas, pipelines e análise.',
-      'hero.lead':
-        'O DataPyn é voltado a analistas e engenheiros de dados que trabalham direto no banco: blocos SQL e Python no mesmo documento, editor Monaco com inteligência de schema e a Pynia para apoio com LLM — configure GitHub Copilot, OpenAI, Anthropic ou Open Router em Configurações → Pynia.',
+      'hero.lead': "Um ambiente desktop feito com Tauri para analistas e engenheiros de dados. Combine blocos SQL e Python, explore seu banco com o Monaco e trabalhe com a Pynia usando Claude, Cursor, GitHub Copilot ou Codex. O Python já vem incluído.",
       'hero.cta.primary': 'Download',
       'hero.cta.secondary': 'Documentação',
       'hero.cta.downloads': 'Todos os downloads',
       'hero.meta.windows': 'Windows',
-      'hero.meta.platforms': 'Windows · Linux · macOS',
+      'hero.meta.platforms': "Windows · Linux · macOS",
       'hero.meta.offline': 'Autocomplete SQL offline',
       'hero.meta.open': 'Código aberto',
-      'preview.title': 'sessao.sql — DataPyn',
+      'preview.title': "DataPyn · Tauri",
       'preview.chat.title': 'Pynia',
       'preview.chat.sub': 'Assistente com contexto da sessão',
       'preview.user': 'Agregue receita por região no 1º trimestre de 2025.',
@@ -202,47 +178,43 @@
       'features.connect.desc':
         'SQL Server, PostgreSQL, MySQL, MariaDB, SQLite, Databricks — com vínculo de conexão por bloco.',
       'features.session.title': 'Abas e workspaces',
-      'features.session.desc':
-        'Várias sessões com namespace Python isolado. Salve e restaure workspaces .dpw com conexões e layout.',
+      'features.session.desc': "Mantenha sessões Python independentes em abas, reorganize os painéis e salve seu trabalho em workspaces .dpw.",
       'features.monaco.title': 'Editor Monaco',
-      'features.monaco.desc':
-        'Destaque de sintaxe, minimapa, busca/substituição e ghost text opcional da Pynia em blocos SQL e Python.',
+      'features.monaco.desc': "Destaque de sintaxe, busca/substituição, autocomplete SQL baseado no schema e sugestões inline opcionais da Pynia.",
       'features.export.title': 'Exportação e integração',
-      'features.export.desc':
-        'Exporte grids para Excel/CSV/JSON, gere scripts Python standalone ou encaminhe a lógica ao seu orquestrador.',
+      'features.export.desc': "Importe CSV, JSON e Excel. Exporte grades de resultados, gráficos, scripts Python e workspaces .dpw.",
       'pynia.eyebrow': 'Pynia',
-      'pynia.title': 'Assistência por LLM com contexto da sessão',
-      'pynia.lead':
-        'A Pynia está integrada ao IDE: enxerga conexão ativa, schema, blocos e seleção; pode produzir SQL/Python, executar blocos via ferramentas, inspecionar resultados e montar gráficos — usando o conector que sua equipe já padronizou.',
-      'pynia.l1.title': 'Escolha do conector',
-      'pynia.l1.desc': 'GitHub Copilot (login por dispositivo), OpenAI, Anthropic e Open Router — credenciais e lista de modelos por provedor.',
-      'pynia.l2.title': 'Ancorada no metadata',
-      'pynia.l2.desc': 'Ferramentas expõem estado do workspace, tabelas/colunas, código dos blocos e saída de execução — não é um chat desconectado do editor.',
+      'pynia.title': "Seu agente de código, dentro do workspace",
+      'pynia.lead': "A Pynia conecta Claude, Cursor, GitHub Copilot e Codex à sessão ativa. Peça para explorar o schema, escrever SQL e Python, inspecionar resultados e criar gráficos. Revise as permissões na conversa antes de o agente prosseguir.",
+      'pynia.l1.title': "Escolha seu agente",
+      'pynia.l1.desc': "Claude, Cursor, GitHub Copilot e Codex, com controles de instalação e login nas configurações da Pynia.",
+      'pynia.l2.title': "Contexto da sessão",
+      'pynia.l2.desc': "Cada aba mantém sua conversa e seu contexto de execução, incluindo blocos, schema e resultados.",
       'pynia.l3.title': 'Continuidade SQL → Python',
-      'pynia.l3.desc': 'Gere ou refatore consultas e encadeie pandas/matplotlib no mesmo resultado, dentro da sessão.',
-      'pynia.notice':
-        'O uso de LLM é cobrado pelo provedor (assinatura Copilot ou créditos de API). Configure os conectores em Configurações → Pynia.',
-      'providers.label': 'Conectores de LLM',
+      'pynia.l3.desc': "Escreva ou refatore consultas e continue em Python no mesmo resultado.",
+      'pynia.notice': "Os agentes usam autenticação e assinatura próprias. Configure seu agente em Configurações → Pynia.",
+      'providers.label': "Agentes disponíveis",
+      'pynia.screenshot.caption': 'Escolha seu agente Pynia no aplicativo Tauri.',
       'databases.title': 'Conectividade com bancos',
-      'databases.sub': 'Drivers nativos, credenciais criptografadas localmente e teste de conexão no gerenciador.',
+      'databases.sub': "SQL Server, PostgreSQL, MySQL, MariaDB, SQLite e Databricks, com conexão por bloco.",
       'start.title': 'Início rápido',
-      'start.sub': 'Instale no Windows, Linux ou macOS, conecte o banco e rode o primeiro bloco.',
+      'start.sub': "Instale no Windows, Linux ou macOS, conecte o banco e execute seu primeiro bloco.",
       'start.s1.title': 'Instalar o DataPyn',
-      'start.s1.desc': 'Baixe o instalador do seu sistema na página de downloads (Setup.exe, .deb ou .dmg).',
+      'start.s1.desc': "Baixe o instalador Tauri mais recente para sua plataforma. O runtime Python vem incluído.",
       'start.s2.title': 'Cadastrar conexão',
       'start.s2.desc': 'Informe host, banco e autenticação em Conexões; valide antes de salvar.',
       'start.s3.title': 'Configurar a Pynia (opcional)',
-      'start.s3.desc': 'Informe tokens de API ou autentique no GitHub Copilot em Configurações → Pynia.',
+      'start.s3.desc': "Escolha Claude, Cursor, GitHub Copilot ou Codex em Configurações → Pynia e faça login no agente.",
       'start.s4.title': 'Executar blocos',
-      'start.s4.desc': 'Use F5 ou Shift+Enter; abra o painel Pynia na barra de ferramentas quando precisar gerar ou explicar código.',
+      'start.s4.desc': 'Execute o bloco atual ou a seleção com F5. Abra a Pynia pela barra de ferramentas quando precisar escrever ou explicar código.',
       'docs.title': 'Documentação',
-      'docs.sub': 'Conexões, modelo de blocos, editor SQL, conectores Pynia e atalhos.',
+      'docs.sub': "Instalação, conexões, blocos, agentes Pynia e atalhos.",
       'docs.all': 'Documentação completa',
       'docs.connections': 'Conexões',
       'docs.pynia': 'Pynia',
       'docs.sql': 'Editor SQL',
       'cta.title': 'Concentre a próxima análise em um único IDE',
-      'cta.sub': 'Instale o DataPyn, conecte aos seus bancos e, se quiser, vincule a Pynia ao provedor de LLM da sua equipe.',
+      'cta.sub': "Instale o desktop Tauri, conecte seus bancos e traga seu agente de código para a sessão.",
       'footer.tagline': 'DataPyn — IDE SQL + Python com Pynia',
       'cta.btn': 'Download',
       'footer.docs': 'Documentação',
@@ -250,37 +222,58 @@
       'footer.github': 'GitHub',
       'footer.license': 'Código aberto',
       'dl.title': 'Downloads',
-      'dl.sub': 'Instaladores oficiais nas GitHub Releases. O Python vem no pacote — não precisa instalar separado.',
+      'dl.sub': "O DataPyn desktop atual, feito com Tauri. Python e suas bibliotecas de banco de dados vêm incluídos.",
       'dl.your_os': 'Seu sistema',
       'dl.windows.title': 'Windows',
       'dl.windows.arch': 'x64 · Windows 10/11',
       'dl.windows.primary': 'Baixar Setup.exe',
       'dl.windows.zip': 'ZIP portátil',
-      'dl.windows.note': 'O assistente instala em %LOCALAPPDATA%\\DataPyn e cria atalhos no Menu Iniciar e na Área de trabalho.',
+      'dl.windows.note': "O instalador prepara WebView2 e Microsoft ODBC quando necessário. No ZIP, mantenha datapyn-desktop.exe e datapyn-runtime.exe juntos; WebView2 e ODBC são pré-requisitos.",
       'dl.linux.title': 'Linux',
-      'dl.linux.arch': 'amd64 · Ubuntu/Debian 22.04+',
+      'dl.linux.arch': "x86_64 · base Ubuntu 22.04+",
       'dl.linux.primary': 'Baixar .deb',
-      'dl.linux.tarball': 'tar.gz portátil',
-      'dl.linux.note': 'O .deb é para Ubuntu/Debian. Fedora, Arch e outras distros devem usar o tarball. SQL Server via pyodbc precisa de unixodbc e um driver ODBC no sistema; pymssql funciona sem driver extra.',
+      'dl.linux.deb': 'Ubuntu / Debian (.deb)',
+      'dl.linux.appimage': "AppImage",
+      'dl.linux.tarball': "tar.gz portátil",
+      'dl.linux.note': "Use DEB no Ubuntu/Debian ou AppImage/tar.gz em outros desktops x86_64 compatíveis. Os launchers DEB e tar.gz preparam uma instalação por usuário sem FUSE. SQL Server via ODBC precisa do driver Microsoft nativo.",
       'dl.macos.title': 'macOS',
-      'dl.macos.arch': 'Apple Silicon (arm64)',
+      'dl.macos.arch': "Apple Silicon (arm64) · macOS 14+",
       'dl.macos.primary': 'Baixar .dmg',
-      'dl.macos.note': 'A imagem não é assinada. Depois de copiar DataPyn.app para Applications, use Abrir no menu de contexto ou: xattr -cr /Applications/DataPyn.app',
+      'dl.macos.note': "Abra o DMG e copie DataPyn Tauri para Applications. Este build não é notarizado; se o macOS bloquear, libere em Ajustes do Sistema → Privacidade e Segurança.",
       'dl.source.title': 'Pelo código-fonte',
-      'dl.source.desc': 'Contribuidores podem clonar o repositório e rodar com uv (Python 3.12+).',
-      'dl.releases': 'Todas as GitHub Releases',
+      'dl.source.desc': "O desenvolvimento requer Node.js 22, Rust 1.90+, Python 3.12+, uv e as dependências nativas da sua plataforma.",
+      'dl.releases': "Todas as releases no GitHub",
+      'preview.caption': "Interface Tauri atual · dados de demonstração",
+      'screenshots.title': "Conheça o workspace Tauri",
+      'screenshots.sub': "Blocos SQL e Python, grades de resultados e painéis reorganizáveis na interface desktop atual.",
+      'screenshots.dark': "Workspace escuro",
+      'screenshots.light': "Workspace claro",
+      'screenshots.open': "Abrir print completo",
+      'features.runtime.title': "Desktop Tauri, Python incluído",
+      'features.runtime.desc': "Instaladores nativos com runtime Python e kernels isolados por sessão.",
+      'dl.release.loading': "Consultando a release Tauri",
+      'dl.release.current': "Última release Tauri",
+      'dl.release.fallback': "Última release Tauri confirmada",
+      'dl.release.unavailable': 'Instaladores Tauri disponíveis abaixo',
+      'dl.release.notes': "Notas da versão",
+      'dl.checksums': "Verificar downloads (SHA256)",
+      'dl.source.requirements': "Pré-requisitos de desenvolvimento",
     },
+
   };
 
   function getLang() {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    if (activeLang) return activeLang;
+    let stored = null;
+    try { stored = localStorage.getItem(STORAGE_KEY); } catch (_) { /* Optional preference. */ }
     if (stored === 'pt' || stored === 'en') return stored;
     const nav = (navigator.language || '').toLowerCase();
     return nav.startsWith('pt') ? 'pt' : 'en';
   }
 
   function setLang(lang) {
-    localStorage.setItem(STORAGE_KEY, lang);
+    activeLang = lang;
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) { /* Optional preference. */ }
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
     applyTranslations(lang);
     document.querySelectorAll('.lang-switch button').forEach((btn) => {
@@ -360,6 +353,20 @@
     return 'other';
   }
 
+  function detectLinuxFamily() {
+    const ua = String(navigator.userAgent || '').toLowerCase();
+    if (/ubuntu|debian|linux mint|pop!_os|elementary|kali|raspbian|zorin/.test(ua)) {
+      return 'debian';
+    }
+    if (/fedora|rhel|centos|rocky|alma|red hat|suse|opensuse/.test(ua)) {
+      return 'rpm';
+    }
+    if (/arch|manjaro|endeavouros|cachyos|garuda|artix/.test(ua)) {
+      return 'arch';
+    }
+    return 'universal';
+  }
+
   function platformLabel(os) {
     if (os === 'windows') return 'Windows';
     if (os === 'macos') return 'macOS';
@@ -367,154 +374,97 @@
     return null;
   }
 
-  function stableUrl(filename) {
-    return filename ? `${RELEASE_DOWNLOAD_BASE}/${filename}` : RELEASES_PAGE_URL;
+  function linuxCtaKey() {
+    return downloadState.linuxFamily === 'debian' ? 'linuxDeb' : 'linuxAppImage';
   }
 
-  function pickAsset(assets, spec) {
-    if (!spec) return null;
-    for (const match of spec.matchers) {
-      const found = assets.find((a) => match(a.name));
-      if (found) return found;
+  function ctaUrlForOs(os) {
+    // Mobile and known unsupported desktop architectures go to the platform list.
+    const ua = String(navigator.userAgent || '').toLowerCase();
+    if (os !== 'macos' && /aarch64|arm64|armv7|i686/.test(ua)) return DOWNLOADS_PAGE;
+    const key = os === 'linux' ? linuxCtaKey() : os;
+    return downloadState.urls[key] || DOWNLOADS_PAGE;
+  }
+
+  function setBtnHref(id, href) {
+    const el = document.getElementById(id);
+    if (!el || !href) return;
+    el.href = href;
+    if (href.startsWith('https:')) {
+      el.target = '_blank';
+      el.rel = 'noopener';
+    } else {
+      el.removeAttribute('target');
+      el.removeAttribute('rel');
     }
-    return null;
-  }
-
-  function resolveUrl(assets, spec) {
-    const found = pickAsset(assets, spec);
-    if (found && found.browser_download_url) return found.browser_download_url;
-    return spec && spec.stable ? stableUrl(spec.stable) : null;
   }
 
   function applyCtaFromState() {
-    const os = downloadState.os;
-    const version = downloadState.version;
     const lang = getLang();
-    const label = platformLabel(os);
-    const url =
-      (label && downloadState.urls[os]) ||
-      (label && stableUrl(PLATFORM_ASSETS[os].stable)) ||
-      DOWNLOADS_PAGE;
-
+    const dict = translations[lang] || translations.en;
+    const label = platformLabel(downloadState.os);
+    const url = ctaUrlForOs(downloadState.os);
     const buttons = [
-      { btn: document.getElementById('download-btn-nav'), text: document.getElementById('download-text-nav') },
-      { btn: document.getElementById('download-btn-hero'), text: document.getElementById('download-text-hero') },
-      { btn: document.getElementById('download-btn-cta'), text: document.getElementById('download-text-cta') },
-      { btn: document.getElementById('download-btn-mobile'), text: null },
-    ].filter((x) => x.btn);
-
-    buttons.forEach(({ btn, text }) => {
-      btn.href = url;
-      if (url.startsWith('http')) {
-        btn.target = '_blank';
-        btn.rel = 'noopener';
-      } else {
-        btn.removeAttribute('target');
-        btn.removeAttribute('rel');
-      }
-      if (!text) return;
-      text.removeAttribute('data-i18n');
-      if (!label) {
-        text.textContent = lang === 'pt' ? 'Downloads' : 'Downloads';
-        return;
-      }
-      if (text.id === 'download-text-nav') {
-        text.textContent = version ? `v${version}` : lang === 'pt' ? 'Baixar' : 'Download';
-      } else if (text.id === 'download-text-hero') {
-        text.textContent = version
-          ? lang === 'pt'
-            ? `Baixar para ${label} v${version}`
-            : `Download for ${label} v${version}`
-          : lang === 'pt'
-            ? `Baixar para ${label}`
-            : `Download for ${label}`;
-      } else {
-        text.textContent = version
-          ? lang === 'pt'
-            ? `Download para ${label} v${version}`
-            : `Download for ${label} v${version}`
-          : lang === 'pt'
-            ? `Download para ${label}`
-            : `Download for ${label}`;
-      }
-    });
-
+      ['download-btn-nav', 'download-text-nav'],
+      ['download-btn-hero', 'download-text-hero'],
+      ['download-btn-cta', 'download-text-cta'],
+      ['download-btn-mobile', null],
+    ];
+    for (const [id, textId] of buttons) {
+      setBtnHref(id, url);
+      const text = document.getElementById(textId || id);
+      if (!text) continue;
+      const direct = url !== DOWNLOADS_PAGE;
+      text.textContent = direct
+        ? (id === 'download-btn-nav' ? `${dict['nav.download']} v${downloadState.version}` : `${dict['nav.download']} ${label} · v${downloadState.version}`)
+        : dict['download.all'];
+    }
     applyDownloadsPageLinks();
   }
 
   function applyDownloadsPageLinks() {
-    const map = [
-      ['dl-btn-windows', downloadState.urls.windows || stableUrl(PLATFORM_ASSETS.windows.stable)],
-      ['dl-btn-windows-zip', downloadState.urls.windowsZip || RELEASES_PAGE_URL],
-      ['dl-btn-linux', downloadState.urls.linux || stableUrl(PLATFORM_ASSETS.linux.stable)],
-      ['dl-btn-linux-tar', downloadState.urls.linuxTarball || stableUrl(EXTRA_ASSETS.linuxTarball.stable)],
-      ['dl-btn-macos', downloadState.urls.macos || stableUrl(PLATFORM_ASSETS.macos.stable)],
-    ];
-    map.forEach(([id, href]) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.href = href;
-    });
-
-    const os = downloadState.os;
-    document.querySelectorAll('.dl-card[data-os]').forEach((card) => {
-      const match = card.getAttribute('data-os') === os;
-      card.classList.toggle('detected', match);
-      const badge = card.querySelector('.dl-detected-badge');
-      if (badge) badge.hidden = !match;
-    });
-  }
-
-  async function fetchLatestRelease() {
-    const CACHE_KEY = 'datapyn-release-cache';
-    const CACHE_DURATION = 60 * 1000;
-    try {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_DURATION) return data;
+    if (downloadState.version) {
+      for (const [key, id] of Object.entries(ASSET_BUTTONS)) {
+        const button = document.getElementById(id);
+        if (!button) continue;
+        button.hidden = !downloadState.urls[key];
+        if (downloadState.urls[key]) setBtnHref(id, downloadState.urls[key]);
       }
-    } catch (_) {
-      /* ignore */
+      setBtnHref('dl-release-link', downloadState.releaseUrl);
     }
-    try {
-      const response = await fetch(
-        'https://api.github.com/repos/natharuc/datapyn/releases/latest'
-      );
-      if (!response.ok) return null;
-      const data = await response.json();
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
-      } catch (_) {
-        /* ignore */
-      }
-      return data;
-    } catch (_) {
-      return null;
+    const linuxKey = linuxCtaKey();
+    document.querySelectorAll('[data-linux-format]').forEach((button) => {
+      const recommended = downloadState.os === 'linux' && button.dataset.linuxFormat === linuxKey;
+      button.classList.toggle('recommended', recommended);
+      button.classList.toggle('btn-primary', recommended);
+      button.classList.toggle('btn-ghost', !recommended);
+    });
+    document.querySelectorAll('.dl-card[data-os]').forEach((card) => {
+      const detected = card.dataset.os === downloadState.os;
+      card.classList.toggle('detected', detected);
+      const badge = card.querySelector('.dl-detected-badge');
+      if (badge) badge.hidden = !detected;
+    });
+    const status = document.getElementById('release-status');
+    if (status) {
+      const dict = translations[getLang()] || translations.en;
+      const key = !downloadState.version ? (downloadState.source === 'unavailable' ? 'dl.release.unavailable' : 'dl.release.loading') : downloadState.source === 'fallback' ? 'dl.release.fallback' : 'dl.release.current';
+      status.textContent = dict[key] + (downloadState.version ? ` · v${downloadState.version}` : '');
     }
   }
 
   async function initDownloadLinks() {
-    downloadState.os = detectOS();
-    applyCtaFromState();
-
-    const releaseData = await fetchLatestRelease();
-    if (!releaseData) return;
-
-    const assets = releaseData.assets || [];
-    downloadState.version = String(releaseData.tag_name || '').replace(/^v/, '') || null;
-    downloadState.urls = {
-      windows: resolveUrl(assets, PLATFORM_ASSETS.windows),
-      linux: resolveUrl(assets, PLATFORM_ASSETS.linux),
-      macos: resolveUrl(assets, PLATFORM_ASSETS.macos),
-      windowsZip: resolveUrl(assets, EXTRA_ASSETS.windowsZip),
-      linuxTarball: resolveUrl(assets, EXTRA_ASSETS.linuxTarball),
-    };
+    if (!window.DataPynReleases) return;
+    let storage = null;
+    try { storage = window.localStorage; } catch (_) { /* Private browsing can disable storage. */ }
+    const latest = await window.DataPynReleases.loadLatest({ storage });
+    downloadState = latest ? { ...downloadState, ...latest } : { ...downloadState, source: 'unavailable' };
     applyCtaFromState();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     downloadState.os = detectOS();
+    downloadState.linuxFamily = detectLinuxFamily();
     initLang();
     initMobileNav();
     initNavShadow();

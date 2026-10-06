@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation — DataPyn</title>
-  <meta name="description" content="DataPyn docs — SQL + Python blocks, Monaco editor, cross-database SQL, and Pynia (OpenAI, Claude, Open Router, GitHub Copilot).">
+  <meta name="description" content="DataPyn Tauri docs — installation, SQL + Python blocks, Monaco editor, and Pynia agents (Claude, Cursor, GitHub Copilot, Codex).">
   <link rel="icon" type="image/x-icon" href="assets/datapyn-logo.ico">
   <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/docs.css">
@@ -59,7 +59,7 @@
 
           <p class="nav-section-title" data-i18n="docs.nav.pynia_section">Pynia</p>
           <a href="#pynia" class="nav-link" data-i18n="docs.nav.pynia">What is Pynia</a>
-          <a href="#pynia-setup" class="nav-link" data-i18n="docs.nav.pynia_setup">Connectors & settings</a>
+          <a href="#pynia-setup" class="nav-link" data-i18n="docs.nav.pynia_setup">Agents & settings</a>
           <a href="#pynia-chat" class="nav-link" data-i18n="docs.nav.pynia_chat">Chat</a>
           <a href="#pynia-autocomplete" class="nav-link" data-i18n="docs.nav.pynia_ac">Inline autocomplete</a>
           <a href="#pynia-tools" class="nav-link" data-i18n="docs.nav.pynia_tools">Tools</a>
@@ -76,7 +76,7 @@
 
           <section id="introduction">
             <h2 data-i18n="docs.intro.title">Introduction</h2>
-            <p data-i18n="docs.intro.p1">DataPyn is an IDE for people who work with data every day.</p>
+            <p data-i18n="docs.intro.p1">DataPyn is a desktop IDE built with Tauri for SQL and Python analysis in the same session.</p>
             <p data-i18n="docs.intro.p2">Pynia is the AI built into DataPyn.</p>
             <div class="intro-grid">
               <div class="doc-card">
@@ -106,20 +106,24 @@
             <p>
               <a href="downloads.html" class="docs-link" data-i18n="docs.install.downloads_page">All downloads</a>
               ·
-              <a href="https://github.com/natharuc/datapyn/releases/latest" class="docs-link" target="_blank" rel="noopener" data-i18n="docs.install.releases_link">All releases</a>
+              <a href="https://github.com/natharuc/datapyn/releases?q=tauri-v&amp;expanded=true" class="docs-link" target="_blank" rel="noopener" data-i18n="docs.install.releases_link">Tauri releases</a>
             </p>
+            <p data-i18n="docs.install.channel">Choose the Tauri channel with tags tauri-vX.Y.Z. Python and the analysis libraries are bundled.</p>
             <h3 data-i18n="docs.install.windows_title">Windows</h3>
-            <p data-i18n="docs.install.windows_desc">Download DataPyn-Setup.exe from the downloads page. Python is bundled.</p>
+            <p data-i18n="docs.install.windows_desc">Windows x64: choose the Tauri Setup.exe or portable ZIP. Setup includes WebView2 and prepares the SQL Server ODBC driver.</p>
             <h3 data-i18n="docs.install.linux_title">Linux</h3>
-            <p data-i18n="docs.install.linux_desc">Ubuntu/Debian: install the .deb. Other distros: extract the tar.gz. SQL Server via pyodbc needs unixodbc; pymssql does not.</p>
+            <p data-i18n="docs.install.linux_desc">Linux x64, Ubuntu 22.04+: choose DEB, AppImage, or tar.gz. SQL Server requires unixODBC and the Microsoft ODBC driver. AppImage supports extract-and-run when FUSE is unavailable.</p>
             <h3 data-i18n="docs.install.macos_title">macOS</h3>
-            <p data-i18n="docs.install.macos_desc">Apple Silicon DMG (unsigned). After copying to Applications, right-click Open or run xattr -cr /Applications/DataPyn.app.</p>
+            <p data-i18n="docs.install.macos_desc">macOS 14+, Apple Silicon: download the Tauri DMG and copy DataPyn Tauri to Applications. The current distribution may require permission in Privacy &amp; Security.</p>
+            <h3 data-i18n="docs.install.update_title">Updates</h3>
+            <p data-i18n="docs.install.update_desc">Windows, Linux, and macOS use the signed Tauri update channel. When an update is ready, save your work and install it from the app.</p>
             <h3 data-i18n="docs.install.source_title">From source</h3>
-            <p data-i18n="docs.install.source_desc">For contributors (Python 3.12+, uv):</p>
+            <p data-i18n="docs.install.source_desc">For contributors: Node.js 22, Rust 1.90+, Python 3.12+, uv, and the native dependencies documented in the repository.</p>
             <pre><code>git clone https://github.com/natharuc/datapyn.git
 cd datapyn
-uv sync
-uv run python source/main.py</code></pre>
+uv sync --dev --frozen
+npm --prefix desktop ci
+npm --prefix desktop run desktop:dev</code></pre>
           </section>
 
           <section id="first-connection">
@@ -213,7 +217,7 @@ df.plot(kind="bar", x="category", y="total", legend=False)</code></pre>
 
           <section id="visualization">
             <h2 data-i18n="docs.viz.title">Visualization</h2>
-            <p data-i18n="docs.viz.p1">matplotlib, seaborn, plotly…</p>
+            <p data-i18n="docs.viz.p1">Python charts and interactive result visualizations.</p>
             <p data-i18n="docs.viz.p2">Pynia datapyn_chart tool.</p>
           </section>
 
@@ -241,36 +245,36 @@ df.plot(kind="bar", x="category", y="total", legend=False)</code></pre>
               <p style="margin:8px 0 0" data-i18n="docs.pynia.warn">DataPyn is free; providers may charge.</p>
             </div>
             <div class="provider-grid">
-              <div class="provider-chip"><img src="assets/pynia_logo.svg" alt="" width="18" height="18"> OpenAI</div>
-              <div class="provider-chip">Claude (Anthropic)</div>
-              <div class="provider-chip">Open Router</div>
+              <div class="provider-chip"><img src="assets/pynia_logo.svg" alt="" width="18" height="18"> Claude</div>
+              <div class="provider-chip">Cursor</div>
               <div class="provider-chip">GitHub Copilot</div>
+              <div class="provider-chip">Codex</div>
             </div>
           </section>
 
           <section id="pynia-setup">
-            <h2 data-i18n="docs.pynia_setup.title">Connectors & settings</h2>
-            <p data-i18n="docs.pynia_setup.p1">Settings → Pynia</p>
+            <h2 data-i18n="docs.pynia_setup.title">Agents & settings</h2>
+            <p data-i18n="docs.pynia_setup.p1">Open Agents &amp; configuration in the Pynia panel.</p>
             <ul>
               <li data-i18n="docs.pynia_setup.copilot">GitHub Copilot</li>
-              <li data-i18n="docs.pynia_setup.openai">OpenAI</li>
-              <li data-i18n="docs.pynia_setup.anthropic">Claude</li>
-              <li data-i18n="docs.pynia_setup.or">Open Router</li>
+              <li data-i18n="docs.pynia_setup.claude">Claude</li>
+              <li data-i18n="docs.pynia_setup.cursor">Cursor</li>
+              <li data-i18n="docs.pynia_setup.codex">Codex</li>
             </ul>
-            <div class="callout tip" data-i18n="docs.pynia_setup.tip">Separate chat and autocomplete models.</div>
+            <div class="callout tip" data-i18n="docs.pynia_setup.tip">Install and sign in to your agent, then select it for this tab.</div>
           </section>
 
           <section id="pynia-chat">
             <h2 data-i18n="docs.pynia_chat.title">Chat</h2>
             <p data-i18n="docs.pynia_chat.p1">Open Pynia panel.</p>
-            <p data-i18n="docs.pynia_chat.p2">#block and #tab references.</p>
-            <p data-i18n="docs.pynia_chat.p3">Switch connector and model.</p>
+            <p data-i18n="docs.pynia_chat.p2">Reference blocks, variables, selection, and schema with @ references.</p>
+            <p data-i18n="docs.pynia_chat.p3">Choose a model and reasoning level when the agent exposes them.</p>
           </section>
 
           <section id="pynia-autocomplete">
             <h2 data-i18n="docs.pynia_ac.title">Inline autocomplete</h2>
             <p data-i18n="docs.pynia_ac.p1">Ghost text in blocks.</p>
-            <p data-i18n="docs.pynia_ac.p2">Same connector token as chat.</p>
+            <p data-i18n="docs.pynia_ac.p2">Inline suggestions use an authenticated ACP agent.</p>
           </section>
 
           <section id="pynia-tools">
@@ -292,7 +296,6 @@ df.plot(kind="bar", x="category", y="total", legend=False)</code></pre>
                 <tr><td><code>datapyn_blocks</code></td><td data-i18n="docs.pynia_tools.t6">Create/focus tabs</td></tr>
                 <tr><td><code>datapyn_database</code></td><td data-i18n="docs.pynia_tools.t7">Connections & schema</td></tr>
                 <tr><td><code>datapyn_chart</code></td><td data-i18n="docs.pynia_tools.t8">Charts</td></tr>
-                <tr><td><code>datapyn_subagent</code></td><td data-i18n="docs.pynia_tools.t9">Parallel explore</td></tr>
                 <tr><td><code>datapyn_notify</code></td><td data-i18n="docs.pynia_tools.t10">Toasts</td></tr>
               </tbody>
             </table>
@@ -334,7 +337,7 @@ df.plot(kind="bar", x="category", y="total", legend=False)</code></pre>
                 <tr><td><span class="kbd">F5</span></td><td data-i18n="docs.exec.f5">Run</td></tr>
                 <tr><td><span class="kbd">Ctrl+F5</span></td><td data-i18n="docs.exec.ctrl_f5">Run all</td></tr>
                 <tr><td><span class="kbd">Shift+Enter</span></td><td data-i18n="docs.exec.shift_enter">Run + next</td></tr>
-                <tr><td><span class="kbd">Ctrl+Enter</span></td><td>Run all blocks</td></tr>
+                <tr><td><span class="kbd">Ctrl+Enter</span></td><td data-i18n="docs.exec.f5">Run current block or selection</td></tr>
               </tbody>
             </table>
             <h3 data-i18n="docs.shortcuts.edit_title">Editing</h3>
@@ -352,22 +355,18 @@ df.plot(kind="bar", x="category", y="total", legend=False)</code></pre>
               <tbody>
                 <tr><td><span class="kbd">Ctrl+T</span></td><td>New tab</td></tr>
                 <tr><td><span class="kbd">Ctrl+W</span></td><td>Close tab</td></tr>
-                <tr><td><span class="kbd">Ctrl+Tab</span></td><td>Next tab</td></tr>
               </tbody>
             </table>
             <h3 data-i18n="docs.shortcuts.blocks_title">Blocks</h3>
             <table>
               <tbody>
-                <tr><td><span class="kbd">Ctrl+Shift+S</span></td><td>New SQL block</td></tr>
-                <tr><td><span class="kbd">Ctrl+Shift+P</span></td><td>New Python block</td></tr>
-                <tr><td><span class="kbd">Ctrl+Shift+B</span></td><td>Add block</td></tr>
-                <tr><td><span class="kbd">Alt+↑/↓</span></td><td>Move block</td></tr>
+                <tr><td><span class="kbd">Ctrl+Shift+B</span></td><td data-i18n="docs.shortcuts.add_block">Add block</td></tr>
               </tbody>
             </table>
             <h3 data-i18n="docs.shortcuts.pynia_title">Pynia & connections</h3>
             <table>
               <tbody>
-                <tr><td><span class="kbd">Ctrl+Shift+C</span></td><td>Connections panel</td></tr>
+                <tr><td><span class="kbd">Ctrl+Shift+M</span></td><td data-i18n="docs.shortcuts.connections">Manage connections</td></tr>
                 <tr><td>Toolbar / menu</td><td data-i18n="docs.faq.a4">Open Pynia</td></tr>
               </tbody>
             </table>
@@ -380,11 +379,11 @@ df.plot(kind="bar", x="category", y="total", legend=False)</code></pre>
             <h3 data-i18n="docs.faq.q2">Multiple DBs?</h3>
             <p data-i18n="docs.faq.a2">Per-block connection selector.</p>
             <h3 data-i18n="docs.faq.q3">Password storage?</h3>
-            <p data-i18n="docs.faq.a3">AES-256 local encryption.</p>
+            <p data-i18n="docs.faq.a3">Connection credentials use the operating system credential store.</p>
             <h3 data-i18n="docs.faq.q4">Open Pynia?</h3>
             <p data-i18n="docs.faq.a4">Toolbar, menu, or View dock.</p>
             <h3 data-i18n="docs.faq.q5">Which provider?</h3>
-            <p data-i18n="docs.faq.a5">Copilot if you have it; else API keys.</p>
+            <p data-i18n="docs.faq.a5">Claude, Cursor, GitHub Copilot, and Codex agents.</p>
             <h3 data-i18n="docs.faq.q6">Export .py?</h3>
             <p data-i18n="docs.faq.a6">Menu → Export → Python script.</p>
           </section>

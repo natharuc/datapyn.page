@@ -1,6 +1,6 @@
 # Changelog
 
-Historico de versoes e mudancas do DataPyn.
+Histórico da distribuição PyQt6 anterior à migração. A versão e o canal Tauri são independentes; consulte as [releases Tauri](https://github.com/natharuc/datapyn/releases?q=tauri-v&expanded=true) para as mudanças do aplicativo atual e [Downloads](https://datapyn.page/downloads.html) para instalar.
 
 ---
 

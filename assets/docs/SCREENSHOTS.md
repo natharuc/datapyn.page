@@ -1,13 +1,23 @@
 # Screenshots
 
-Guia de screenshots para documentacao e site do DataPyn.
+Guia de screenshots para documentação e site do DataPyn Tauri.
+
+## Capturas atuais do site
+
+O hero e a galeria usam capturas reais da interface Tauri, feitas em **06/10/2026** com o **frontend 1.0.2** e dados demonstrativos genéricos:
+
+- `assets/screenshots/tauri-workspace-dark.png`: workspace, blocos SQL/Python e resultados em tema escuro.
+- `assets/screenshots/tauri-workspace-light.png`: workspace em tema claro.
+- `assets/screenshots/tauri-pynia-agents.png`: Pynia e seleção de agentes.
+
+As imagens em `assets/docs/screenshots/` retratam a interface PyQt6 e ficam como material histórico. Use as capturas Tauri acima para apresentar o aplicativo atual. Novas capturas devem vir da interface real, com dados demonstrativos e registro da versão usada.
 
 ---
 
 ## Estrutura de Arquivos
 
 ```
-docs/
+assets/docs/
 +-- screenshots/
     +-- main-window.png          # Janela principal completa
     +-- editor-sql.png           # Editor com codigo SQL

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DataPyn — SQL + Python IDE with Pynia</title>
-  <meta name="description" content="DataPyn is a desktop IDE for data engineers: block-based SQL and Python, Monaco schema intelligence, and Pynia (Copilot, OpenAI, Anthropic, Open Router).">
+  <title>DataPyn — Tauri desktop IDE for SQL + Python</title>
+  <meta name="description" content="DataPyn is a Tauri desktop IDE for Windows, Linux, and macOS: SQL and Python blocks, Monaco editing, result grids, and Pynia with Claude, Cursor, GitHub Copilot, and Codex.">
   <link rel="icon" type="image/x-icon" href="assets/datapyn-logo.ico">
   <link rel="stylesheet" href="css/site.css">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
@@ -34,7 +34,7 @@
           <button type="button" data-lang="pt">PT</button>
         </div>
         <a href="https://github.com/natharuc/datapyn" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
-          <i data-lucide="github" style="width:20px;height:20px"></i>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .75a11.25 11.25 0 0 0-3.558 21.924c.563.104.768-.244.768-.543 0-.267-.01-.974-.015-1.912-3.13.68-3.79-1.508-3.79-1.508-.512-1.301-1.25-1.647-1.25-1.647-1.023-.7.077-.686.077-.686 1.13.08 1.726 1.16 1.726 1.16 1.005 1.724 2.637 1.226 3.28.938.103-.73.393-1.226.715-1.508-2.499-.284-5.126-1.25-5.126-5.563 0-1.229.44-2.233 1.16-3.02-.116-.285-.503-1.43.11-2.98 0 0 .945-.303 3.094 1.153a10.784 10.784 0 0 1 5.632 0c2.15-1.456 3.094-1.153 3.094-1.153.613 1.55.226 2.695.111 2.98.722.787 1.159 1.791 1.159 3.02 0 4.324-2.631 5.276-5.137 5.554.404.348.764 1.035.764 2.085 0 1.507-.014 2.723-.014 3.092 0 .302.203.653.774.542A11.25 11.25 0 0 0 12 .75Z"/></svg>
         </a>
         <a id="download-btn-nav" href="downloads.html" class="btn btn-primary" style="padding:8px 14px;font-size:0.8rem">
           <span id="download-text-nav" data-i18n="nav.download">Download</span>
@@ -59,10 +59,10 @@
     <section class="hero section">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <span class="badge" data-i18n="hero.badge">Desktop IDE · SQL + Python</span>
+          <span class="badge" data-i18n="hero.badge">Tauri desktop · SQL + Python</span>
           <h1><span class="gradient" data-i18n="hero.title">One workspace for queries, pipelines, and analysis.</span></h1>
           <p class="lead" data-i18n="hero.lead">
-            DataPyn is built for analysts and data engineers who work directly against databases: block-based SQL and Python, Monaco editing with schema intelligence, and Pynia for LLM-assisted development.
+            The current DataPyn desktop app is built with Tauri: SQL and Python blocks, Monaco editing, result grids, and Pynia in one workspace. Native installers include the Python runtime.
           </p>
           <div class="hero-cta">
             <a id="download-btn-hero" href="downloads.html" class="btn btn-primary">
@@ -79,89 +79,13 @@
           </div>
         </div>
 
-        <div class="preview-window" aria-hidden="true">
-          <div class="preview-chrome">
-            <div class="preview-dots"><i></i><i></i><i></i></div>
-            <span data-i18n="preview.title">session.sql — DataPyn</span>
-          </div>
-          <div class="preview-body">
-            <div class="preview-session" aria-hidden="true">
-              <div class="preview-blocks">
-                <article class="dp-block dp-block--sql">
-                  <header class="dp-block-bar">
-                    <span class="dp-block-grip" aria-hidden="true"></span>
-                    <span class="dp-lang dp-lang--sql">
-                      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M2 3h12v2H7v8H5V5H2V3z"/></svg>
-                      <span data-i18n="preview.block.sql">SQL</span>
-                    </span>
-                    <span class="dp-conn" data-i18n="preview.block.connection">SQL Server · vendas</span>
-                    <span class="dp-block-name">result_sql</span>
-                    <span class="dp-block-actions">
-                      <span class="dp-icon-btn dp-icon-btn--run" title="Run"></span>
-                      <span class="dp-icon-btn" title="More"></span>
-                    </span>
-                  </header>
-                  <div class="dp-block-code">
-                    <pre><code><span class="kw">SELECT</span> regiao,
-       <span class="fn">SUM</span>(receita) <span class="kw">AS</span> total
-<span class="kw">FROM</span> vendas..fato
-<span class="kw">WHERE</span> data &gt;= <span class="str">'2025-01-01'</span>
-<span class="kw">GROUP BY</span> regiao;</code></pre>
-                  </div>
-                </article>
-
-                <article class="dp-block dp-block--py">
-                  <header class="dp-block-bar">
-                    <span class="dp-block-grip" aria-hidden="true"></span>
-                    <span class="dp-lang dp-lang--py">
-                      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M8 2c2 0 3.5 1.2 3.5 3S10 8 8 8 4.5 6.8 4.5 5 6 2 8 2zm-4 9h8v3H4v-3z"/></svg>
-                      <span data-i18n="preview.block.python">Python</span>
-                    </span>
-                    <span class="dp-block-name">chart</span>
-                    <span class="dp-block-actions">
-                      <span class="dp-icon-btn dp-icon-btn--run" title="Run"></span>
-                      <span class="dp-icon-btn" title="More"></span>
-                    </span>
-                  </header>
-                  <div class="dp-block-code">
-                    <pre><code><span class="kw">import</span> pandas <span class="kw">as</span> pd
-
-df = result_sql
-df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita por região'</span>)</code></pre>
-                  </div>
-                </article>
-              </div>
-            </div>
-
-            <aside class="preview-pynia">
-              <header class="pynia-dock-head">
-                <img src="assets/pynia_logo.svg" alt="" width="24" height="24">
-                <div>
-                  <strong data-i18n="preview.chat.title">Pynia</strong>
-                  <small data-i18n="preview.chat.sub">Session-aware assistant</small>
-                </div>
-              </header>
-              <div class="pynia-dock-msgs">
-                <div class="chat-bubble user" data-i18n="preview.user">Aggregate revenue by region for Q1 2025.</div>
-                <div class="chat-bubble agent">
-                  <span class="agent-tag">
-                    <img src="assets/pynia_logo.svg" alt=""> Pynia
-                  </span>
-                  <span data-i18n="preview.agent">Proposed T-SQL and a pandas follow-up:</span>
-                  <div class="chat-code-block">
-                    <div class="chat-code-head"><span>sql</span></div>
-                    <pre><code><span class="kw">SELECT</span> regiao, <span class="fn">SUM</span>(receita) <span class="kw">AS</span> total
-<span class="kw">FROM</span> vendas..fato …</code></pre>
-                  </div>
-                </div>
-              </div>
-              <footer class="pynia-dock-composer">
-                <span class="pynia-composer-input" data-i18n="preview.composer">Ask Pynia about this session…</span>
-                <span class="pynia-composer-meta">gpt-4o · medium</span>
-              </footer>
-            </aside>
-          </div>
-        </div>
+        <figure class="product-preview">
+          <a class="product-screenshot" href="assets/screenshots/tauri-workspace-dark.png" target="_blank" rel="noopener">
+            <img src="assets/screenshots/tauri-workspace-dark.png" alt="Current DataPyn Tauri workspace showing SQL and Python blocks, a result grid, connections, and variables with fictitious demonstration data." width="1600" height="1000" fetchpriority="high">
+            <span class="screenshot-expand"><i data-lucide="maximize-2" style="width:14px;height:14px"></i><span data-i18n="screenshots.open">Open full screenshot</span></span>
+          </a>
+          <figcaption><strong data-i18n="preview.title">DataPyn · Tauri</strong><span data-i18n="preview.caption">Current Tauri interface · demonstration data</span></figcaption>
+        </figure>
       </div>
     </section>
 
@@ -185,12 +109,12 @@ df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita po
           <article class="bento-card">
             <div class="bento-icon"><i data-lucide="plug"></i></div>
             <h3 data-i18n="features.connect.title">Many databases</h3>
-            <p data-i18n="features.connect.desc">SQL Server, PostgreSQL, MySQL, Oracle, SQLite, Snowflake, BigQuery, and more.</p>
+            <p data-i18n="features.connect.desc">SQL Server, PostgreSQL, MySQL, MariaDB, SQLite, and Databricks.</p>
           </article>
           <article class="bento-card">
             <div class="bento-icon"><i data-lucide="folder-open"></i></div>
             <h3 data-i18n="features.session.title">Sessions & projects</h3>
-            <p data-i18n="features.session.desc">Organize work by connection and file. Pick up where you left off.</p>
+            <p data-i18n="features.session.desc">Save sessions and workspaces as .dpw files, organize connections, and arrange dockable panels.</p>
           </article>
           <article class="bento-card">
             <div class="bento-icon"><i data-lucide="code"></i></div>
@@ -200,8 +124,38 @@ df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita po
           <article class="bento-card">
             <div class="bento-icon"><i data-lucide="share-2"></i></div>
             <h3 data-i18n="features.export.title">Export & share</h3>
-            <p data-i18n="features.export.desc">Notebook-style flows and outputs you can reuse in reports and pipelines.</p>
+            <p data-i18n="features.export.desc">Import CSV, JSON, and XLSX data, export results, and save your analysis as a standalone Python script.</p>
           </article>
+          <article class="bento-card span-2">
+            <div class="bento-icon"><i data-lucide="cpu"></i></div>
+            <h3 data-i18n="features.runtime.title">Tauri desktop, Python included</h3>
+            <p data-i18n="features.runtime.desc">Native installers with the Python runtime and isolated kernels for each session.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenshots" class="section section-tight">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="screenshots.title">A closer look at the Tauri workspace</h2>
+          <p data-i18n="screenshots.sub">SQL and Python blocks, result grids, and dockable panels in the current desktop interface.</p>
+        </div>
+        <div class="screenshot-grid">
+          <figure class="product-preview">
+            <a class="product-screenshot" href="assets/screenshots/tauri-workspace-dark.png" target="_blank" rel="noopener">
+              <img src="assets/screenshots/tauri-workspace-dark.png" alt="DataPyn Tauri in dark theme with SQL and Python analysis and a result grid using demonstration data." width="1600" height="1000" loading="lazy" decoding="async">
+              <span class="screenshot-expand"><i data-lucide="maximize-2" style="width:14px;height:14px"></i><span data-i18n="screenshots.open">Open full screenshot</span></span>
+            </a>
+            <figcaption><strong data-i18n="screenshots.dark">Dark workspace</strong><span data-i18n="preview.caption">Current Tauri interface · demonstration data</span></figcaption>
+          </figure>
+          <figure class="product-preview">
+            <a class="product-screenshot" href="assets/screenshots/tauri-workspace-light.png" target="_blank" rel="noopener">
+              <img src="assets/screenshots/tauri-workspace-light.png" alt="DataPyn Tauri in light theme with SQL and Python analysis and a result grid using demonstration data." width="1600" height="1000" loading="lazy" decoding="async">
+              <span class="screenshot-expand"><i data-lucide="maximize-2" style="width:14px;height:14px"></i><span data-i18n="screenshots.open">Open full screenshot</span></span>
+            </a>
+            <figcaption><strong data-i18n="screenshots.light">Light workspace</strong><span data-i18n="preview.caption">Current Tauri interface · demonstration data</span></figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -214,16 +168,16 @@ df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita po
               <img src="assets/pynia_logo.svg" alt="" width="18" height="18" style="display:inline;vertical-align:middle">
               <span data-i18n="pynia.eyebrow">Pynia</span>
             </p>
-            <h2 style="margin:0 0 12px;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-0.03em" data-i18n="pynia.title">LLM assistance with full session context</h2>
+            <h2 style="margin:0 0 12px;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-0.03em" data-i18n="pynia.title">Your coding agent, with session context</h2>
             <p style="margin:0;color:var(--text-muted);max-width:480px" data-i18n="pynia.lead">
-              Pynia is integrated into the IDE: it reads the active connection, schema, blocks, and selection, then can author SQL/Python and run blocks via tool calls.
+              Pynia connects your coding agent to the active session: connection, schema, blocks, results, and selection. Use its tools to write SQL and Python, inspect data, and run blocks.
             </p>
             <ul class="spotlight-list">
               <li>
                 <span class="li-icon"><i data-lucide="cpu"></i></span>
                 <span>
-                  <strong data-i18n="pynia.l1.title">Multi-provider</strong>
-                  <span data-i18n="pynia.l1.desc">GitHub Copilot, OpenAI, Anthropic, OpenRouter, and compatible endpoints.</span>
+                  <strong data-i18n="pynia.l1.title">Your choice of agent</strong>
+                  <span data-i18n="pynia.l1.desc">Claude, Cursor, GitHub Copilot, and Codex through the Agent Client Protocol (ACP).</span>
                 </span>
               </li>
               <li>
@@ -241,38 +195,27 @@ df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita po
                 </span>
               </li>
             </ul>
-            <p class="notice" data-i18n="pynia.notice">Some providers require their own subscription or API keys. Configure them in DataPyn settings.</p>
+            <p class="notice" data-i18n="pynia.notice">Agents use their own installation and login. Some require a subscription. Choose and configure your agent in the Pynia panel.</p>
           </div>
           <div>
             <span class="badge badge-pynia">
               <img src="assets/pynia_logo.svg" alt="">
               Pynia
             </span>
-            <p style="margin:16px 0 8px;font-size:0.8rem;color:var(--text-dim)" data-i18n="providers.label">Supported connectors</p>
+            <p style="margin:16px 0 8px;font-size:0.8rem;color:var(--text-dim)" data-i18n="providers.label">Supported agents</p>
             <div class="providers">
+              <span class="provider-pill">Claude</span>
+              <span class="provider-pill">Cursor</span>
               <span class="provider-pill">GitHub Copilot</span>
-              <span class="provider-pill">OpenAI</span>
-              <span class="provider-pill">Anthropic</span>
-              <span class="provider-pill">OpenRouter</span>
-              <span class="provider-pill">Compatible APIs</span>
+              <span class="provider-pill">Codex</span>
             </div>
-            <div class="preview-window" style="margin-top:24px">
-              <div class="preview-chrome">
-                <div class="preview-dots"><i></i><i></i><i></i></div>
-                <span>Pynia · Settings → AI</span>
-              </div>
-              <div style="padding:16px;font-size:0.8rem;color:var(--text-muted);line-height:1.7">
-                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-                  <span>Provider</span><span style="color:var(--text)">OpenAI</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-                  <span>Model</span><span style="color:var(--text)">gpt-4o</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;padding:8px 0">
-                  <span>Context</span><span style="color:var(--accent-cyan)">Schema + selection</span>
-                </div>
-              </div>
-            </div>
+            <figure class="product-preview product-preview--pynia">
+              <a class="product-screenshot" href="assets/screenshots/tauri-pynia-agents.png" target="_blank" rel="noopener">
+                <img src="assets/screenshots/tauri-pynia-agents.png" alt="The current Pynia agent selector in DataPyn Tauri, listing Claude, Cursor, GitHub Copilot, and Codex." width="1600" height="1000" loading="lazy" decoding="async">
+                <span class="screenshot-expand"><i data-lucide="maximize-2" style="width:14px;height:14px"></i><span data-i18n="screenshots.open">Open full screenshot</span></span>
+              </a>
+              <figcaption><span data-i18n="pynia.screenshot.caption">Choose your Pynia agent in the Tauri app.</span></figcaption>
+            </figure>
           </div>
         </div>
       </div>
@@ -324,7 +267,7 @@ df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita po
             <span class="step-num">1</span>
             <div>
               <strong data-i18n="start.s1.title">Download DataPyn</strong>
-              <p style="margin:4px 0 0;color:var(--text-muted);font-size:0.9rem" data-i18n="start.s1.desc">Get the installer for your OS from the downloads page.</p>
+              <p style="margin:4px 0 0;color:var(--text-muted);font-size:0.9rem" data-i18n="start.s1.desc">Get the latest Tauri installer for your operating system. The Python runtime is included.</p>
             </div>
           </div>
           <div class="step">
@@ -338,16 +281,14 @@ df.plot(kind=<span class="str">'bar'</span>, title=<span class="str">'Receita po
             <span class="step-num">3</span>
             <div>
               <strong data-i18n="start.s3.title">Enable Pynia (optional)</strong>
-              <p style="margin:4px 0 0;color:var(--text-muted);font-size:0.9rem" data-i18n="start.s3.desc">Sign in to Copilot or add API keys in Settings → AI.</p>
+              <p style="margin:4px 0 0;color:var(--text-muted);font-size:0.9rem" data-i18n="start.s3.desc">Open the Pynia panel, choose Claude, Cursor, GitHub Copilot, or Codex, and follow the agent setup instructions.</p>
             </div>
           </div>
           <div class="step">
             <span class="step-num">4</span>
             <div>
               <strong data-i18n="start.s4.title">Run SQL and Python</strong>
-              <p style="margin:4px 0 0;color:var(--text-muted);font-size:0.9rem" data-i18n="start.s4.desc">Create blocks, execute with Ctrl+Enter, and use Pynia from the chat panel.</p>
-              <pre><code>git clone https://github.com/natharuc/datapyn.git
-cd datapyn</code></pre>
+              <p style="margin:4px 0 0;color:var(--text-muted);font-size:0.9rem" data-i18n="start.s4.desc">Create SQL and Python blocks, execute with F5, and continue your analysis with the results and Pynia panels.</p>
             </div>
           </div>
         </div>
@@ -410,6 +351,7 @@ cd datapyn</code></pre>
     </div>
   </footer>
 
+  <script src="js/releases.js"></script>
   <script src="js/site.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {

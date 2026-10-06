@@ -1,8 +1,10 @@
 # DataPyn - Documentacao Oficial
 
-> **IDE moderna para consultas SQL com Python integrado**
+> **IDE desktop Tauri para consultas SQL com Python integrado**
 
 DataPyn e uma ferramenta de produtividade para analistas de dados, desenvolvedores e DBAs que precisam executar queries SQL e manipular resultados com Python de forma integrada e eficiente.
+
+A aplicação padrão usa **Tauri 2, Rust, React/TypeScript e kernels Python isolados por sessão**. A distribuição PyQt6 é histórica e tem instaladores, versão e canal de atualização independentes. Para instalar o app atual, use [Downloads](https://datapyn.page/downloads.html) e tags `tauri-vX.Y.Z`.
 
 ---
 
@@ -13,6 +15,7 @@ DataPyn e uma ferramenta de produtividade para analistas de dados, desenvolvedor
 | [README.md](README.md) | Este arquivo - visao geral |
 | [FEATURES.md](FEATURES.md) | Lista completa de funcionalidades |
 | [GETTING_STARTED.md](GETTING_STARTED.md) | Guia de inicio rapido |
+| [INSTALL.md](INSTALL.md) | Instalação e atualização Tauri |
 | [EXAMPLES.md](EXAMPLES.md) | Exemplos praticos de uso |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Arquitetura tecnica |
 | [SHORTCUTS.md](SHORTCUTS.md) | Atalhos de teclado |
@@ -95,26 +98,35 @@ Arraste arquivos diretamente para a interface:
 - Historico de execucoes
 - Workspaces salvos/restaurados automaticamente
 
+### 5. Pynia por sessão
+
+Converse com **Claude, Cursor, GitHub Copilot ou Codex** no painel Pynia. Agentes usam instalação e autenticação próprias via ACP. Cada aba mantém contexto e histórico; a engrenagem **Agentes e configuração** permite preparar e selecionar o agente. Ferramentas integradas consultam dados, editam blocos e geram gráficos.
+
 ---
 
 ## Bancos Suportados
 
 | Banco | Driver | Autenticacao |
 |-------|--------|--------------|
-| SQL Server | ODBC Driver 17/18 | Windows Auth, SQL Auth |
-| MySQL | mysql-connector | Usuario/Senha |
-| MariaDB | mariadb-connector | Usuario/Senha |
+| SQL Server | pyodbc + ODBC Microsoft nativo | Windows Auth, SQL Auth, Microsoft Entra |
+| MySQL | PyMySQL | Usuario/Senha |
+| MariaDB | PyMySQL | Usuario/Senha |
 | PostgreSQL | psycopg2 | Usuario/Senha |
 | SQLite | sqlite3 (built-in) | Arquivo local |
+| Databricks | databricks-sql-connector | PAT ou OAuth, catálogo/schema |
 
 ---
 
 ## Requisitos do Sistema
 
-- **Sistema Operacional**: Windows 10/11, Linux, macOS
-- **Python**: 3.8 ou superior
-- **RAM**: 4GB minimo, 8GB recomendado
-- **Espaco em disco**: 500MB
+- **Sistema Operacional**: Windows 10/11 x64, Linux x64 com base Ubuntu 22.04+, macOS 14+ Apple Silicon.
+- **Pacotes**: Setup/ZIP no Windows, DEB/AppImage/tar.gz no Linux, DMG no macOS.
+- **Runtime**: Python e bibliotecas de análise embutidos; Python e Node.js externos não são necessários para usar o app instalado.
+- **Desenvolvimento**: Node.js 22, Rust 1.90+, Python 3.12+, uv e dependências nativas da plataforma.
+- **Drivers nativos**: Setup Windows prepara WebView2 e ODBC; SQL Server no Linux/macOS exige ODBC Microsoft e unixODBC.
+- **Memória e disco**: dependem do volume de dados e pacotes instalados. Cada sessão tem seu próprio kernel Python.
+
+Consulte [INSTALL.md](INSTALL.md) para instalação, armazenamento e atualização assinada.
 
 ---
 
@@ -126,9 +138,10 @@ MIT License - Uso livre para projetos pessoais e comerciais.
 
 ## Links Uteis
 
-- [Repositorio GitHub](https://github.com/seu-usuario/datapyn)
-- [Reportar Bug](https://github.com/seu-usuario/datapyn/issues)
-- [Solicitar Feature](https://github.com/seu-usuario/datapyn/issues)
+- [Downloads Tauri](https://datapyn.page/downloads.html)
+- [Repositorio GitHub](https://github.com/natharuc/datapyn)
+- [Reportar Bug](https://github.com/natharuc/datapyn/issues)
+- [Solicitar Feature](https://github.com/natharuc/datapyn/issues)
 
 ---
 

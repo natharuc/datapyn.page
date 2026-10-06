@@ -1,6 +1,6 @@
 # Quick Reference / Cheat Sheet
 
-Referencia rapida do DataPyn.
+Referência rápida do DataPyn Tauri. Instale pelo [canal Tauri](https://datapyn.page/downloads.html); consulte [SHORTCUTS.md](SHORTCUTS.md) para os atalhos atuais.
 
 ---
 
@@ -8,7 +8,7 @@ Referencia rapida do DataPyn.
 
 | Acao | Atalho |
 |------|--------|
-| Executar bloco | `F5` |
+| Executar bloco ou seleção | `F5` / `Ctrl+Enter` |
 | Executar todos | `Ctrl+F5` |
 | Executar e avancar | `Shift+Enter` |
 | Nova aba | `Ctrl+T` |
@@ -25,8 +25,8 @@ Referencia rapida do DataPyn.
 | Variavel | Descricao |
 |----------|-----------|
 | `df` | DataFrame com ultimo resultado SQL |
-| `conn` | Conexao ativa (SQLAlchemy) |
-| `cursor` | Cursor da conexao |
+| `db_engine` | Engine SQLAlchemy da conexão da sessão |
+| `db_type`, `db_database`, `db_host`, `db_username` | Contexto da conexão da sessão |
 
 ---
 
@@ -34,7 +34,7 @@ Referencia rapida do DataPyn.
 
 ```python
 # Ver todas as tabelas
-df = pd.read_sql("SELECT * FROM INFORMATION_SCHEMA.TABLES", conn)
+df = pd.read_sql("SELECT * FROM INFORMATION_SCHEMA.TABLES", db_engine)
 
 # Exportar para CSV
 df.to_csv('resultado.csv', index=False)
